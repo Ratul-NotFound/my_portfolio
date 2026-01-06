@@ -361,12 +361,12 @@ const Portfolio = () => {
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-100 mb-6 md:mb-8" id="contact-heading">
               <span className="text-green-400 font-mono">{'> '}</span>
-              Let's architect solutions together
+              Let&apos;s architect solutions together
             </h2>
             <p className="text-base sm:text-lg md:text-lg text-slate-400 mb-10 md:mb-12 px-4 font-mono leading-relaxed">
               <span className="text-cyan-400">if</span> (yourProject <span className="text-green-400">involves</span> {'{'}
               <span className="text-blue-400">AI</span>, <span className="text-purple-400">optimization</span>, <span className="text-yellow-400">architecture</span> {'}'})<br />
-              &nbsp;&nbsp;<span className="text-cyan-400">return</span> <span className="text-yellow-400">let's.collaborate</span>();
+              &nbsp;&nbsp;<span className="text-cyan-400">return</span> <span className="text-yellow-400">let&apos;s.collaborate</span>();
             </p>
             
             <a href="mailto:m.h.ratul18@gmail.com" className="inline-flex items-center gap-3 px-9 md:px-12 py-4 md:py-5 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 hover:from-indigo-500 hover:via-purple-500 hover:to-cyan-500 text-white rounded-xl font-bold text-base md:text-lg transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/50 hover:-translate-y-1 active:translate-y-0 shadow-xl shadow-indigo-500/30">
