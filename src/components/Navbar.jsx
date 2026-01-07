@@ -1,120 +1,180 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
+import { Menu, X, Terminal, Code2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+      
+      // Track active section
+      const sections = ['hero', 'about', 'projects', 'skills', 'contact'];
+      const current = sections.find(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top <= 100 && rect.bottom >= 100;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
+    };
+
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    const element = document.getElementById(id);
+    if (element) {
+      const offsetTop = element.offsetTop - 80;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      });
+    }
     setMobileMenuOpen(false);
   };
 
+  const navItems = [
+    { id: 'hero', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${
-        scrolled
-          ? 'bg-slate-950/93 backdrop-blur-2xl border-slate-700/50 py-3 md:py-3.5 shadow-2xl shadow-indigo-500/15'
-          : 'bg-gradient-to-b from-slate-950/60 to-slate-950/0 border-transparent py-6 md:py-8'
-      }`}
-      role="navigation"
-      aria-label="Main navigation"
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-10 flex justify-between items-center">
-        <Link
-          href="/"
-          className="font-bold text-xl md:text-2xl tracking-tight text-slate-100 flex items-center gap-3 cursor-pointer hover:text-indigo-300 transition-colors duration-300 group"
-        >
-          <div className="w-10 h-10 md:w-11 md:h-11 bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600 rounded-lg flex items-center justify-center text-base md:text-lg shadow-lg shadow-indigo-500/50 group-hover:shadow-indigo-500/70 transition-all duration-300">
-            <span className="text-white font-mono font-black text-xl">λ</span>
-          </div>
-          <span className="font-black">Ratul</span>
-          <span className="text-indigo-400 font-mono text-xs md:text-sm font-bold">dev</span>
-        </Link>
-
-        <div className="hidden md:flex items-center gap-0.5 xl:gap-1 text-sm font-semibold text-slate-400">
-          {['About', 'Projects', 'Skills', 'Contact'].map((item) => (
-            <button
-              key={item}
-              onClick={() => scrollTo(item.toLowerCase())}
-              className="relative px-4 py-2 hover:text-indigo-300 transition-colors duration-300 group rounded-lg hover:bg-slate-900/40"
-              aria-label={`Navigate to ${item}`}
+    <>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-slate-900/80 backdrop-blur-xl border-b border-slate-800 shadow-lg shadow-black/20' 
+          : 'bg-transparent'
+      }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            {/* Logo */}
+            <button 
+              onClick={() => scrollTo('hero')}
+              className="group flex items-center gap-2 md:gap-3 relative"
             >
-              {item}
-              <span className="absolute bottom-1.5 left-4 right-4 h-0.5 bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg blur opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative bg-slate-900 p-1.5 md:p-2 rounded-lg border border-slate-700 group-hover:border-cyan-500 transition-colors">
+                  <Terminal className="w-4 h-4 md:w-5 md:h-5 text-cyan-400" />
+                </div>
+              </div>
+              <div className="flex flex-col items-start">
+                <span className="text-sm md:text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                  Ratul
+                </span>
+                <span className="text-[10px] md:text-xs text-slate-400 font-mono">
+                  Developer
+                </span>
+              </div>
+              {/* Pulse effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-lg blur-sm opacity-0 group-hover:opacity-100 transition-opacity -z-10"></div>
             </button>
-          ))}
-          <Link
-            href="/achievements"
-            className="relative px-4 py-2 hover:text-indigo-300 transition-colors duration-300 group rounded-lg hover:bg-slate-900/40"
-            aria-label="View achievements and awards"
-          >
-            Achievements
-            <span className="absolute bottom-1.5 left-4 right-4 h-0.5 bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-          </Link>
-          <div className="w-px h-6 bg-slate-700/40 mx-1"></div>
-          <a
-            href="mailto:m.h.ratul18@gmail.com"
-            className="px-6 py-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 text-white rounded-lg hover:from-indigo-500 hover:via-purple-500 hover:to-cyan-500 transition-all duration-300 font-bold text-sm shadow-lg shadow-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/60 hover:-translate-y-0.5"
-            aria-label="Hire me via email"
-          >
-            Get In Touch
-          </a>
-        </div>
 
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-slate-300 hover:text-indigo-400 transition-colors duration-200 p-2"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollTo(item.id)}
+                  className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg ${
+                    activeSection === item.id
+                      ? 'text-cyan-400'
+                      : 'text-slate-300 hover:text-white'
+                  }`}
+                >
+                  {item.label}
+                  {activeSection === item.id && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-cyan-400 rounded-full"></span>
+                  )}
+                </button>
+              ))}
+            </div>
 
-      {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-slate-950/95 backdrop-blur-xl border-b border-slate-800/80 animate-in fade-in slide-in-from-top-2 shadow-2xl shadow-slate-900/50">
-          <div className="px-4 py-6 space-y-2">
-            {['About', 'Projects', 'Skills', 'Contact'].map((item) => (
-              <button
-                key={item}
-                onClick={() => scrollTo(item.toLowerCase())}
-                className="w-full text-left px-5 py-3 text-slate-300 hover:text-indigo-300 hover:bg-slate-800/50 rounded-lg transition-all duration-200 font-semibold text-base"
-                aria-label={`Navigate to ${item}`}
+            {/* CTA & Menu Button */}
+            <div className="flex items-center gap-2 md:gap-4">
+              <Link
+                href="/achievements"
+                className="hidden sm:flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/50 hover:border-purple-400 rounded-lg text-xs md:text-sm font-medium text-purple-300 hover:text-purple-200 transition-all hover:shadow-lg hover:shadow-purple-500/20"
               >
-                {item}
-              </button>
-            ))}
-            <Link
-              href="/achievements"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-left px-5 py-3 text-slate-300 hover:text-indigo-300 hover:bg-slate-800/50 rounded-lg transition-all duration-200 font-semibold text-base block"
-              aria-label="View achievements and awards"
-            >
-              Achievements
-            </Link>
-            <div className="pt-3 border-t border-slate-800/50 mt-4">
-              <a
-                href="mailto:m.h.ratul18@gmail.com"
-                className="block w-full px-5 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg hover:from-indigo-500 hover:to-indigo-600 transition-all duration-200 font-semibold text-center shadow-lg shadow-indigo-500/25"
-                aria-label="Hire me via email"
-                onClick={() => setMobileMenuOpen(false)}
+                <Sparkles className="w-3 h-3 md:w-4 md:h-4" />
+                <span className="hidden md:inline">Achievements</span>
+              </Link>
+
+              <button
+                onClick={() => scrollTo('contact')}
+                className="hidden sm:flex items-center gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-lg text-xs md:text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-cyan-500/30"
               >
                 Hire Me
-              </a>
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 text-slate-400 hover:text-cyan-300 transition-colors"
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
         </div>
-      )}
-    </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 shadow-xl">
+            <div className="max-w-7xl mx-auto px-4 py-4 space-y-2">
+              {navItems.map((item, index) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollTo(item.id)}
+                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                    activeSection === item.id
+                      ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                  }`}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  {item.label}
+                </button>
+              ))}
+              
+              <Link
+                href="/achievements"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 w-full px-4 py-3 bg-purple-600/20 border border-purple-500/50 rounded-lg text-sm font-medium text-purple-300 hover:bg-purple-600/30 transition-all"
+              >
+                <Sparkles className="w-4 h-4" />
+                Achievements
+              </Link>
+
+              <button
+                onClick={() => {
+                  scrollTo('contact');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full px-4 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-lg text-sm font-semibold text-white mt-2"
+              >
+                Hire Me
+              </button>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Spacer */}
+      <div className="h-16 md:h-20"></div>
+    </>
   );
 }

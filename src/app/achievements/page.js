@@ -1,7 +1,6 @@
 'use client';
-
 import React, { useState } from 'react';
-import { Award, Users, Trophy, Calendar, Download, ImageIcon, X, Github, Linkedin, Mail } from 'lucide-react';
+import { Award, Users, Trophy, Calendar, Download, ImageIcon, X, Github, Linkedin, Mail, Sparkles, Star, TrendingUp, Target } from 'lucide-react';
 import Link from 'next/link';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -10,15 +9,31 @@ export default function Achievements() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const programs = [];
+  // Sample data - replace with your actual achievements
+  const programs = [
+    {
+      id: 1,
+      title: "Vice President - DIUCPC",
+      role: "Vice President",
+      organization: "Daffodil International University Computer & Programming Club",
+      date: "2023 - Present",
+      type: "leadership",
+      description: "Leading technical initiatives, organizing programming contests, and mentoring 500+ students in competitive programming and software development.",
+      photo: null,
+      image: "VP"
+    },
+    // Add more achievements here
+  ];
 
-  const certificates = [];
+  const certificates = [
+    // Add your certificates here
+  ];
 
   const stats = [
-    { number: '0', label: 'Achievements' },
-    { number: '0', label: 'Certificates' },
-    { number: '0', label: 'Programs' },
-    { number: '0', label: 'Total Hours' },
+    { number: programs.length.toString(), label: 'Achievements', icon: Trophy },
+    { number: certificates.length.toString(), label: 'Certificates', icon: Award },
+    { number: programs.filter(p => p.type === 'program').length.toString(), label: 'Programs', icon: Target },
+    { number: '500+', label: 'Students Mentored', icon: Users },
   ];
 
   const filteredPrograms = activeCategory === 'all' 
@@ -26,7 +41,7 @@ export default function Achievements() {
     : programs.filter(p => p.type === activeCategory);
 
   const categories = [
-    { id: 'all', label: 'All Programs', count: programs.length },
+    { id: 'all', label: 'All', count: programs.length },
     { id: 'program', label: 'Programs', count: programs.filter(p => p.type === 'program').length },
     { id: 'leadership', label: 'Leadership', count: programs.filter(p => p.type === 'leadership').length },
     { id: 'volunteer', label: 'Volunteer', count: programs.filter(p => p.type === 'volunteer').length },
@@ -34,239 +49,260 @@ export default function Achievements() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden">
-      {/* Bold Animated Background */}
-      <div className="fixed inset-0 z-0">
-        {/* Base gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
-        
-        {/* Large indigo orb - top left */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-indigo-500 rounded-full blur-3xl opacity-20" />
-        
-        {/* Large purple orb - bottom right */}
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full blur-3xl opacity-20" />
-        
-        {/* Cyan orb - center right */}
-        <div className="absolute top-1/2 right-0 w-80 h-80 bg-cyan-500 rounded-full blur-3xl opacity-15 transform -translate-y-1/2" />
-        
-        {/* Grid pattern background */}
-        <div className="absolute inset-0 opacity-[0.05]" style={{
-          backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(79, 70, 229, 0.5) 25%, rgba(79, 70, 229, 0.5) 26%, transparent 27%, transparent 74%, rgba(79, 70, 229, 0.5) 75%, rgba(79, 70, 229, 0.5) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(79, 70, 229, 0.5) 25%, rgba(79, 70, 229, 0.5) 26%, transparent 27%, transparent 74%, rgba(79, 70, 229, 0.5) 75%, rgba(79, 70, 229, 0.5) 76%, transparent 77%, transparent)',
-          backgroundSize: '50px 50px'
-        }} />
-      </div>
-
+    <div className="min-h-screen bg-slate-900 text-white relative overflow-hidden">
       <Navbar />
 
-      <div className="relative z-10 pt-24 pb-20">
+      {/* Animated Background */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+        <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 -right-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-20"></div>
+      </div>
+
+      {/* Content */}
+      <main className="relative z-10 pt-20">
         {/* Hero Section */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 lg:px-12">
-          <div className="mb-14 md:mb-20 px-3 md:px-6">
-            <div className="flex items-center gap-4 mb-6">
-              <Trophy className="text-yellow-400" size={32} />
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">Leadership & Achievements</h2>
+        <section className="py-20 px-4">
+          <div className="max-w-7xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-sm text-purple-300 mb-6">
+              <Sparkles className="w-4 h-4" />
+              Leadership & Recognition
             </div>
-            <p className="text-slate-400 text-base md:text-lg max-w-4xl leading-relaxed">
-              As Vice President of DIUCPC, I&apos;ve led numerous programs, mentored 500+ students, and organized 15+ events at national and international levels. Here&apos;s a showcase of key initiatives and recognition.
+            
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                Achievements & Impact
+              </span>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto">
+              As Vice President of DIUCPC, I've led numerous programs, mentored 500+ students, 
+              and organized 15+ events at national and international levels.
             </p>
           </div>
+        </section>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-20 px-3 md:px-6">
-            {stats.map((stat, i) => (
-              <div key={i} className="p-5 md:p-6 bg-gradient-to-br from-indigo-950/40 to-purple-950/40 border border-indigo-500/30 rounded-lg text-center hover:border-indigo-400/50 transition-colors">
-                <p className="text-3xl md:text-4xl font-bold text-indigo-300">{stat.number}</p>
-                <p className="text-xs md:text-sm text-slate-400 mt-2">{stat.label}</p>
-              </div>
-            ))}
+        {/* Stats */}
+        <section className="py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat, i) => (
+                <div
+                  key={i}
+                  className="group p-6 bg-slate-800/30 backdrop-blur-sm border border-slate-700 hover:border-purple-500/50 rounded-2xl transition-all hover:scale-105"
+                >
+                  <stat.icon className="w-8 h-8 text-purple-400 mb-4" />
+                  <div className="text-3xl font-bold text-white mb-1">{stat.number}</div>
+                  <div className="text-sm text-slate-400">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-3 md:gap-4 mb-12 px-3 md:px-6">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-5 md:px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-200 whitespace-nowrap ${
-                  activeCategory === cat.id
-                    ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/50'
-                    : 'bg-slate-800/50 text-slate-300 border border-slate-700 hover:border-indigo-500/50'
-                }`}
-              >
-                {cat.label}
-                <span className="ml-2 text-xs opacity-70">({cat.count})</span>
-              </button>
-            ))}
+        {/* Category Filter */}
+        <section className="py-8 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-3">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all ${
+                    activeCategory === cat.id
+                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30'
+                      : 'bg-slate-800/50 text-slate-300 border border-slate-700 hover:border-purple-500/50'
+                  }`}
+                >
+                  {cat.label} ({cat.count})
+                </button>
+              ))}
+            </div>
           </div>
+        </section>
 
-          {/* Programs Grid */}
-          <div className="px-3 md:px-6 mb-20">
+        {/* Programs Grid */}
+        <section className="py-12 px-4">
+          <div className="max-w-7xl mx-auto">
             {filteredPrograms.length === 0 ? (
-              <div className="text-center py-16 bg-gradient-to-br from-slate-800/30 to-slate-900/30 border border-slate-700/50 rounded-lg">
-                <Trophy size={48} className="mx-auto text-slate-600 mb-4" />
-                <p className="text-slate-400 text-lg mb-2">No programs yet</p>
-                <p className="text-slate-500 text-sm">Add your achievements, programs, and certifications here</p>
+              <div className="text-center py-20">
+                <Trophy className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-slate-400 mb-2">No achievements yet</h3>
+                <p className="text-slate-500">Add your achievements, programs, and certifications here</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-7">
+              <div className="grid md:grid-cols-2 gap-8">
                 {filteredPrograms.map((prog, i) => (
-              <div
-                key={i}
-                className="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 rounded-lg overflow-hidden hover:border-indigo-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20"
-              >
-                {/* Image Section */}
-                <div className="relative h-48 md:h-56 bg-gradient-to-br from-slate-900 to-slate-800 overflow-hidden group">
-                  {prog.photo ? (
-                    <div className="w-full h-full cursor-pointer" onClick={() => setSelectedImage(prog.photo)}>
-                      <img 
-                        src={prog.photo} 
-                        alt={prog.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors duration-300"></div>
+                  <div
+                    key={prog.id}
+                    className="group bg-slate-800/30 backdrop-blur-sm border border-slate-700 hover:border-purple-500/50 rounded-2xl overflow-hidden transition-all hover:scale-[1.02]"
+                  >
+                    {/* Image Section */}
+                    <div className="relative aspect-video bg-slate-800">
+                      {prog.photo ? (
+                        <button
+                          onClick={() => setSelectedImage(prog.photo)}
+                          className="w-full h-full"
+                        >
+                          <img
+                            src={prog.photo}
+                            alt={prog.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </button>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="text-center">
+                            <ImageIcon className="w-16 h-16 text-slate-600 mx-auto mb-2" />
+                            <p className="text-slate-500 text-sm">Photo coming soon</p>
+                            <p className="text-2xl font-bold text-slate-600 mt-2">{prog.image}</p>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Type Badge */}
+                      <div className="absolute top-4 left-4">
+                        <span className="px-3 py-1 bg-purple-600 rounded-lg text-xs font-semibold text-white">
+                          {prog.type.charAt(0).toUpperCase() + prog.type.slice(1)}
+                        </span>
+                      </div>
                     </div>
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-                      <ImageIcon size={40} className="text-slate-600" />
-                      <p className="text-sm text-slate-500 text-center px-4">Photo coming soon</p>
-                      <span className="text-4xl">{prog.image}</span>
-                    </div>
-                  )}
-                </div>
 
-                {/* Content Section */}
-                <div className="p-5 md:p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      prog.type === 'award' ? 'bg-yellow-500/20 text-yellow-300' :
-                      prog.type === 'leadership' ? 'bg-indigo-500/20 text-indigo-300' :
-                      prog.type === 'program' ? 'bg-purple-500/20 text-purple-300' :
-                      'bg-cyan-500/20 text-cyan-300'
-                    }`}>
-                      {prog.type.charAt(0).toUpperCase() + prog.type.slice(1)}
-                    </span>
+                    {/* Content */}
+                    <div className="p-6 space-y-4">
+                      <h3 className="text-2xl font-bold text-white group-hover:text-purple-300 transition-colors">
+                        {prog.title}
+                      </h3>
+                      
+                      <div className="space-y-2 text-sm">
+                        <p className="text-purple-300 font-semibold">{prog.role}</p>
+                        <p className="text-slate-400">{prog.organization}</p>
+                        <p className="flex items-center gap-2 text-slate-500">
+                          <Calendar className="w-4 h-4" />
+                          {prog.date}
+                        </p>
+                      </div>
+
+                      <p className="text-slate-300">{prog.description}</p>
+                    </div>
                   </div>
-
-                  <h3 className="text-lg md:text-xl font-bold text-white mb-1">{prog.title}</h3>
-                  <p className="text-indigo-400 font-semibold text-sm mb-3">{prog.role}</p>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-sm text-slate-400">
-                      <Users size={16} />
-                      <span>{prog.organization}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-slate-400">
-                      <Calendar size={16} />
-                      <span>{prog.date}</span>
-                    </div>
-                  </div>
-
-                  <p className="text-slate-300 text-sm leading-relaxed">{prog.description}</p>
-                </div>
-              </div>
                 ))}
               </div>
             )}
           </div>
+        </section>
 
-          {/* Certificates Section */}
-          <div className="mb-20 px-3 md:px-6">
-            <div className="flex items-center gap-3 mb-8">
-              <Award className="text-indigo-400" size={28} />
-              <h3 className="text-2xl md:text-3xl font-bold">Certificates & Credentials</h3>
-            </div>
+        {/* Certificates Section */}
+        <section className="py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Certificates & Credentials
+              </span>
+            </h2>
 
             {certificates.length === 0 ? (
-              <div className="text-center py-16 bg-gradient-to-br from-indigo-950/30 to-purple-950/30 border border-indigo-500/30 rounded-lg">
-                <Award size={48} className="mx-auto text-indigo-600 mb-4" />
-                <p className="text-slate-400 text-lg mb-2">No certificates yet</p>
-                <p className="text-slate-500 text-sm">Upload your professional certifications and credentials</p>
+              <div className="text-center py-20 bg-slate-800/30 backdrop-blur-sm border border-slate-700 rounded-2xl">
+                <Award className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-slate-400 mb-2">No certificates yet</h3>
+                <p className="text-slate-500">Upload your professional certifications and credentials</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="grid md:grid-cols-3 gap-6">
                 {certificates.map((cert, i) => (
-                <div
-                  key={i}
-                  className="group bg-gradient-to-br from-indigo-950/40 to-purple-950/40 border border-indigo-500/30 rounded-lg overflow-hidden hover:border-indigo-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20"
-                >
-                  {/* Certificate Image */}
-                  <div className="relative h-40 bg-gradient-to-br from-indigo-900 to-purple-900 overflow-hidden">
-                    {cert.photo ? (
-                      <div className="w-full h-full cursor-pointer" onClick={() => setSelectedImage(cert.photo)}>
-                        <img 
-                          src={cert.photo} 
-                          alt={cert.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/5 transition-colors duration-300"></div>
-                      </div>
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-indigo-950/50 to-purple-950/50">
-                        <Award size={32} className="text-indigo-400/50" />
-                        <p className="text-xs text-indigo-400/70 text-center px-2">Certificate</p>
-                      </div>
-                    )}
-                  </div>
+                  <div
+                    key={i}
+                    className="group bg-slate-800/30 backdrop-blur-sm border border-slate-700 hover:border-purple-500/50 rounded-2xl overflow-hidden transition-all hover:scale-105"
+                  >
+                    <div className="relative aspect-video bg-slate-800">
+                      {cert.photo ? (
+                        <button
+                          onClick={() => setSelectedImage(cert.photo)}
+                          className="w-full h-full"
+                        >
+                          <img
+                            src={cert.photo}
+                            alt={cert.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Award className="w-16 h-16 text-slate-600" />
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Certificate Info */}
-                  <div className="p-4">
-                    <h4 className="text-sm md:text-base font-bold text-white mb-1 group-hover:text-indigo-300 transition-colors line-clamp-2">
-                      {cert.name}
-                    </h4>
-                    <p className="text-xs text-slate-400 mb-2">{cert.issuer}</p>
-                    <div className="flex items-center justify-between pt-2 border-t border-indigo-500/20">
-                      <p className="text-xs text-indigo-400 font-semibold">{cert.date}</p>
+                    <div className="p-4">
+                      <h4 className="font-bold text-white mb-1">{cert.name}</h4>
+                      <p className="text-sm text-slate-400">{cert.issuer}</p>
+                      <p className="text-xs text-slate-500 mt-2">{cert.date}</p>
                       {cert.photo && (
-                        <Download size={14} className="text-slate-500 group-hover:text-indigo-400 transition-colors" />
+                        <button className="mt-3 text-sm text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                          <Download className="w-4 h-4" />
+                          Download
+                        </button>
                       )}
                     </div>
                   </div>
-                </div>
                 ))}
               </div>
             )}
           </div>
+        </section>
 
-          {/* CTA Section */}
-          <div className="text-center p-8 md:p-12 bg-gradient-to-r from-indigo-950/30 to-purple-950/30 border border-indigo-500/30 rounded-lg mb-20 md:mb-28 mx-3 md:mx-6">
-            <h3 className="text-2xl md:text-4xl font-bold mb-4">Want to collaborate?</h3>
-            <p className="text-slate-400 mb-8 max-w-3xl mx-auto text-lg leading-relaxed">
-              I&apos;m always open to discussing new initiatives, partnerships, or mentoring opportunities. Let&apos;s build something amazing together!
-            </p>
-            <Link
-              href="/#contact"
-              className="inline-flex items-center gap-2 px-10 md:px-12 py-4 md:py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-200 hover:scale-105\"
-            >
-              Get in Touch
-            </Link>
+        {/* CTA Section */}
+        <section className="py-20 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="p-12 bg-gradient-to-br from-purple-900/30 to-pink-900/30 backdrop-blur-sm border border-purple-500/30 rounded-3xl">
+              <Star className="w-16 h-16 text-purple-400 mx-auto mb-6" />
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Want to collaborate?
+                </span>
+              </h2>
+              <p className="text-slate-400 text-lg mb-8">
+                I'm always open to discussing new initiatives, partnerships, or mentoring opportunities.
+              </p>
+              
+              <a
+                href="mailto:m.h.ratul18@gmail.com"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-semibold transition-all hover:shadow-lg hover:shadow-purple-500/30"
+              >
+                <Mail className="w-5 h-5" />
+                Get in Touch
+              </a>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
 
       <Footer />
 
       {/* Image Modal */}
       {selectedImage && (
-        <div 
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedImage(null)}
         >
-          <div 
-            className="relative max-w-4xl w-full max-h-[90vh] rounded-lg overflow-hidden"
+          <button
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-4 right-4 p-2 bg-slate-900/80 hover:bg-slate-800 rounded-lg transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          
+          <div
+            className="max-w-4xl w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <img 
-              src={selectedImage} 
-              alt="Full view"
-              className="w-full h-full object-contain"
+            <img
+              src={selectedImage}
+              alt="Achievement"
+              className="w-full h-auto rounded-lg"
             />
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 bg-slate-900/80 hover:bg-slate-800 p-2 rounded-lg transition-colors backdrop-blur-sm"
-              aria-label="Close image"
-            >
-              <X size={24} className="text-white" />
-            </button>
           </div>
         </div>
       )}
