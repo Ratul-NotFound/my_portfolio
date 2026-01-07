@@ -67,7 +67,7 @@ export default function Achievements() {
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">Leadership & Achievements</h2>
             </div>
             <p className="text-slate-400 text-base md:text-lg max-w-4xl leading-relaxed">
-              As Vice President of DIUCPC, I've led numerous programs, mentored 500+ students, and organized 15+ events at national and international levels. Here's a showcase of key initiatives and recognition.
+              As Vice President of DIUCPC, I&apos;ve led numerous programs, mentored 500+ students, and organized 15+ events at national and international levels. Here&apos;s a showcase of key initiatives and recognition.
             </p>
           </div>
 
@@ -231,7 +231,7 @@ export default function Achievements() {
           <div className="text-center p-8 md:p-12 bg-gradient-to-r from-indigo-950/30 to-purple-950/30 border border-indigo-500/30 rounded-lg mb-20 md:mb-28 mx-3 md:mx-6">
             <h3 className="text-2xl md:text-4xl font-bold mb-4">Want to collaborate?</h3>
             <p className="text-slate-400 mb-8 max-w-3xl mx-auto text-lg leading-relaxed">
-              I'm always open to discussing new initiatives, partnerships, or mentoring opportunities. Let's build something amazing together!
+              I&apos;m always open to discussing new initiatives, partnerships, or mentoring opportunities. Let&apos;s build something amazing together!
             </p>
             <Link
               href="/#contact"

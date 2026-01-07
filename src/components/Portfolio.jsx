@@ -121,7 +121,7 @@ const Portfolio = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
               </span>
-              <code className="text-green-300">system.status === 'open_to_collaborate'</code>
+              <code className="text-green-300">system.status === &apos;open_to_collaborate&apos;</code>
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-black text-slate-100 tracking-tight leading-tight mt-8">
