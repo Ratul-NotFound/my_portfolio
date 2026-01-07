@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Award, Users, Trophy, Calendar, Download, ImageIcon, X, Github, Linkedin, Mail, Sparkles, Star, Target, Medal, Crown, Heart, ChevronRight, Search, ExternalLink, MapPin, BookOpen } from 'lucide-react';
@@ -51,7 +52,7 @@ export default function Achievements() {
       title: "Vice President - DIUCPC",
       role: "Vice President",
       organization: "Daffodil International University Computer & Programming Club",
-      date: "Jan 2024 - Present",
+      date: "Jan 2023 - Present",
       location: "Dhaka, Bangladesh",
       type: "leadership",
       description: "Leading technical initiatives and organizing programming contests. Managed 15+ national events and coordinated with international organizations.",
@@ -66,13 +67,13 @@ export default function Achievements() {
     },
     {
       id: 2,
-      title: "International Collegiate Programming Contest (ICPC) Asia Dhaka Regional 2024",
-      role: "Volunteer",
-      organization: "(ICPC)",
-      date: "Dec 2024",
+      title: "National Programming Contest",
+      role: "Contestant & Mentor",
+      organization: "Bangladesh Olympiad in Informatics",
+      date: "Mar 2023",
       location: "Dhaka, Bangladesh",
       type: "program",
-      description: "Participated in (ICPC) 2024, competing against 200+ teams. Later mentored junior participants.",
+      description: "Participated in National Programming Contest 2023, competing against 200+ teams. Later mentored junior participants.",
       fullDescription: "The National Programming Contest was a prestigious event where I competed in algorithmic problem-solving.\n\n• Competition: Solved 6 out of 10 problems in 5 hours\n• Ranking: Top 15% among 200+ teams\n• Topics: Dynamic programming, graph algorithms\n• Mentoring: Conducted workshops for 50+ students\n• Impact: Helped 10 students qualify for next year",
       images: [
         "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80",
