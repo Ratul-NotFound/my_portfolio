@@ -58,8 +58,8 @@ export default function Achievements() {
       description: "Leading technical initiatives and organizing programming contests. Managed 15+ national events and coordinated with international organizations.",
       fullDescription: "As Vice President of DIUCPC, I've been instrumental in transforming the club into one of the leading tech communities in Bangladesh.\n\n• Strategic Planning: Developing annual roadmaps for technical events\n• Team Leadership: Managing 25+ core members\n• Event Management: Organizing hackathons and competitions\n• Industry Partnerships: Building relationships with tech companies\n• Mentorship: Conducting training sessions and code reviews\n• Community Building: Growing from 200 to 500+ active members",
       images: [
-        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
-        "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=800&q=80",
+        "/vp.jpg?w=800&q=70",
+        "/cpc1.jpg?w=800&q=80",
         "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80"
       ],
       highlights: ["500+ Students", "15+ Events", "National Recognition"],
@@ -67,16 +67,16 @@ export default function Achievements() {
     },
     {
       id: 2,
-      title: "National Programming Contest",
-      role: "Contestant & Mentor",
-      organization: "Bangladesh Olympiad in Informatics",
-      date: "Mar 2023",
+      title: "ICPC Dhaka Regional Contest 2024",
+      role: "Co-Lead Volunteer",
+      organization: "ICPC",
+      date: "Dec 202d",
       location: "Dhaka, Bangladesh",
       type: "program",
-      description: "Participated in National Programming Contest 2023, competing against 200+ teams. Later mentored junior participants.",
-      fullDescription: "The National Programming Contest was a prestigious event where I competed in algorithmic problem-solving.\n\n• Competition: Solved 6 out of 10 problems in 5 hours\n• Ranking: Top 15% among 200+ teams\n• Topics: Dynamic programming, graph algorithms\n• Mentoring: Conducted workshops for 50+ students\n• Impact: Helped 10 students qualify for next year",
+      description: "Participated in ICPC Dhaka Regional Contest 2024",
+      fullDescription: "The ICPC Dhaka Regional Contest 2024 was a prestigious event where I Served as voulnetter.\n\n• Competition: Worked As corud Controll head\n• Ranking: T\n• Topics: \n• Mentoring: Conducted workshops for 50+ students\n• Impact: Helped 10 students qualify for next year",
       images: [
-        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80",
+        "icpc1.jpg?w=800&q=80",
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"
       ],
       highlights: ["Top 15%", "6/10 Solved", "50+ Trained"],
