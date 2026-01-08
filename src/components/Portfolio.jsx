@@ -152,11 +152,11 @@ const Portfolio = () => {
       category: "SaaS • ML",
       description: "LLM-powered resume analyzer with ATS optimization engine. Processes 50+ resumes weekly with 92% accuracy rate using Gemini Pro API.",
       tech: ["Next.js 14", "Gemini API", "Stripe", "TypeScript", "Tailwind"],
-      links: { live: "https://cv-maker-ai-three.vercel.app/", code: "https://github.com/ratul-notfound/cv-maker-ai" },
+      links: { live: "https://cv-maker-ai-v1.vercel.app", code: "https://github.com/ratul-notfound/cv-maker-ai" },
       icon: Brain,
       gradient: "from-purple-600 to-pink-600",
       metrics: ["500+ Users", "92% ATS Score", "ML-Powered", "15ms Response"],
-      image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80",
+      image: "/cv-maker.jpeg?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
     },
     {
@@ -169,7 +169,7 @@ const Portfolio = () => {
       icon: Globe,
       gradient: "from-orange-600 to-red-600",
       metrics: ["10K+ Users", "99.9% Uptime", "Real-time Sync", "PWA Ready"],
-      image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
+      image: "/orivo.jpeg?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
     },
     {
@@ -195,7 +195,7 @@ const Portfolio = () => {
       icon: Cpu,
       gradient: "from-blue-600 to-cyan-600",
       metrics: ["100+ Hours", "92% Accuracy", "NLP Pipeline", "Auto Summary"],
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+      image: "/lecture-ai.jpeg?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/8637/8637099.png"
     }
   ];

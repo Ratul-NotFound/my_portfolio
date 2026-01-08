@@ -10,6 +10,12 @@ export const metadata = {
     description: 'Full Stack Developer & AI Engineer Portfolio',
     type: 'website',
   }
+  ,
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg'
+  }
 }
 
 export const viewport = {

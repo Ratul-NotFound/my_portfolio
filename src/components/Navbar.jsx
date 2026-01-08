@@ -89,10 +89,10 @@ export default function Navbar() {
               
               <div className="flex flex-col">
                 <span className="text-base md:text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  Ratul.dev
+                  Ratul
                 </span>
                 <span className="text-[10px] md:text-xs text-slate-500 font-mono tracking-wider">
-                  {'>'} Full Stack Engineer
+                  {'>'} Ai Automation Engineer
                 </span>
               </div>
 
