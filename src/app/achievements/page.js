@@ -56,13 +56,13 @@ export default function Achievements() {
       location: "Dhaka, Bangladesh",
       type: "leadership",
       description: "Leading technical initiatives and organizing programming contests. Managed 15+ national events and coordinated with international organizations.",
-      fullDescription: "As Vice President of DIUCPC, I've been instrumental in transforming the club into one of the leading tech communities in Bangladesh.\n\n• Strategic Planning: Developing annual roadmaps for technical events\n• Team Leadership: Managing 25+ core members\n• Event Management: Organizing hackathons and competitions\n• Industry Partnerships: Building relationships with tech companies\n• Mentorship: Conducting training sessions and code reviews\n• Community Building: Growing from 200 to 500+ active members",
+      fullDescription: "As Vice President of DIUCPC, I've been instrumental in transforming the club into one of the leading tech communities in Bangladesh.\n\n• Strategic Planning: Developing annual roadmaps for technical events\n• Team Leadership: Managing 27+ core members\n• Event Management: Organizing hackathons and competitions\n• Industry Partnerships: Building relationships with tech companies\n• Mentorship: Conducting training sessions and code reviews\n• Community Building: Growing from 200 to 500+ active members",
       images: [
         "/vp.jpg?w=800&q=70",
         "/cpc1.jpg?w=800&q=80",
-        "https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=800&q=80"
+        "/cpc2.jpg?w=800&q=80"
       ],
-      highlights: ["500+ Students", "15+ Events", "National Recognition"],
+      highlights: ["6000+ Students", "30+ Events", "National Recognition"],
       tags: ["Leadership", "Event Management", "Public Speaking"]
     },
     {
@@ -87,14 +87,14 @@ export default function Achievements() {
       title: "Tech Workshop Organizer",
       role: "Lead Organizer",
       organization: "DIU Department of CSE",
-      date: "Aug 2023",
+      date: "Nov 2025",
       location: "Daffodil Smart City, Dhaka",
       type: "volunteer",
       description: "Organized 3-day intensive workshop on Full Stack Web Development. Trained 100+ students with hands-on projects.",
       fullDescription: "Led organization of comprehensive Full Stack workshop:\n\n• Planning: Curriculum covering React, Node.js, MongoDB\n• Logistics: Coordinated venue for 100+ participants\n• Teaching: Delivered lectures and live coding\n• Mentoring: One-on-one guidance during sessions\n• Resources: Created detailed documentation\n• Feedback: 4.8/5 satisfaction rating",
       images: [
-        "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80",
-        "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80"
+        "/tech1.jpg?w=800&q=80",
+        "/tech2.jpg?w=800&q=80"
       ],
       highlights: ["100+ Attendees", "4.8/5 Rating", "Full Stack"],
       tags: ["Web Development", "Teaching", "React"]
@@ -122,7 +122,7 @@ export default function Achievements() {
       id: 1,
       name: "AWS Certified Solutions Architect",
       issuer: "Amazon Web Services",
-      date: "Dec 2023",
+      date: "Dec 2025",
       credentialId: "AWS-SA-2023-12345",
       description: "Professional certification demonstrating expertise in designing distributed systems on AWS.",
       photo: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
