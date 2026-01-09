@@ -115,6 +115,7 @@ export default function Achievements() {
       highlights: ["$2,000 Prize", "200+ Users", "AI-Powered"],
       tags: ["Innovation", "AI", "EdTech", "Award"]
     }
+    
   ];
 
   const certificates = [
@@ -153,7 +154,7 @@ export default function Achievements() {
   const stats = [
     { number: programs.length.toString(), label: 'Achievements', icon: Trophy, gradient: 'from-purple-600 to-pink-600' },
     { number: certificates.length.toString(), label: 'Certificates', icon: Award, gradient: 'from-cyan-600 to-blue-600' },
-    { number: '500+', label: 'Students', icon: Users, gradient: 'from-green-600 to-emerald-600' },
+    { number: '1000+', label: 'Students', icon: Users, gradient: 'from-green-600 to-emerald-600' },
     { number: '15+', label: 'Events', icon: Target, gradient: 'from-orange-600 to-red-600' },
   ];
 
@@ -207,7 +208,7 @@ export default function Achievements() {
           <div className="max-w-7xl mx-auto text-center">
             <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-purple-500/10 border border-purple-500/30 rounded-full text-sm text-purple-300 mb-8 font-mono animate-pulse">
               <Sparkles className="w-4 h-4" />
-              <span>achievements.portfolio</span>
+              <span>achievements</span>
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none">
               <span className="block text-slate-200 mb-4">Leadership &</span>

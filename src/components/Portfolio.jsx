@@ -198,6 +198,7 @@ const Portfolio = () => {
       image: "/lecture-ai.jpeg?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/8637/8637099.png"
     }
+    
   ];
 
   if (!isMounted) return null;
