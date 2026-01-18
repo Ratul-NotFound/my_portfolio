@@ -450,18 +450,17 @@ const Portfolio = () => {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="group relative p-8 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden"
+                  className="group relative p-2 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-lg transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden"
                 >
                   <div className="relative z-10">
-                    <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-purple-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                      <item.icon className="w-8 h-8 text-cyan-400" />
+                    <div className="w-8 h-8 bg-gradient-to-br from-cyan-500/20 to-purple-600/10 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <item.icon className="w-4 h-4 text-cyan-400" />
                     </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
-                    <p className="text-slate-400 mb-6 leading-relaxed">{item.desc}</p>
-                    
-                    <div className="flex flex-wrap gap-2">
+                    <h3 className="text-base md:text-lg font-bold text-white mb-1 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
+                    <p className="text-slate-400 mb-2 leading-relaxed text-xs">{item.desc}</p>
+                    <div className="flex flex-wrap gap-0.5">
                       {item.skills.map((skill, j) => (
-                        <span key={j} className="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-xs text-slate-400 group-hover:border-cyan-500/30 transition-colors">
+                        <span key={j} className="px-1 py-0.5 bg-slate-800/50 border border-slate-700 rounded text-[10px] text-slate-400 group-hover:border-cyan-500/30 transition-colors">
                           {skill}
                         </span>
                       ))}
