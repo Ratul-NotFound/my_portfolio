@@ -335,22 +335,19 @@ const Portfolio = () => {
                 </div>
               </div>
 
-              <div className="relative animate-float">
+              <div className="relative">
                 <div className="relative aspect-square max-w-lg mx-auto">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl"></div>
-                  
                   <div className="relative bg-slate-900/90 backdrop-blur-2xl border border-slate-700 rounded-3xl p-8 space-y-6 hover:border-cyan-500/50 transition-all duration-500">
-                    <div className="relative aspect-square rounded-2xl overflow-hidden border-4 border-slate-700 group">
+                    <div className="relative aspect-square rounded-2xl overflow-hidden border-4 border-slate-700 group shadow-xl hover:shadow-cyan-500/30 transition-shadow duration-500">
                       <img
                         src="/profile.jpg"
                         alt="Mahmud Hasan Ratul"
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                         onError={(e) => {
                           e.target.src = "/profile.jpg";
                         }}
                       />
-                      
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent animate-scan pointer-events-none"></div>
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
 
@@ -499,15 +496,18 @@ const Portfolio = () => {
                   onMouseLeave={() => setActiveProject(null)}
                   className="group relative bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-cyan-500/10"
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-800" style={{ maxHeight: '180px' }}>
-                    <img 
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition-transform duration-700" style={{ maxHeight: '180px' }}
-                      onError={(e) => {
-                        e.target.src = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80";
-                      }}
-                    />
+                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
+                    <div className="flex items-center justify-center w-full h-full aspect-[16/10] overflow-hidden">
+                      <img 
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                        style={{ aspectRatio: '16/10', maxWidth: '100%', maxHeight: '100%' }}
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80';
+                        }}
+                      />
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
                     <div className="absolute top-3 right-3 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-1.5 group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-xl">
                       <img 
