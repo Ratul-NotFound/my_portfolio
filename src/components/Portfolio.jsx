@@ -1,8 +1,10 @@
 ﻿/* eslint-disable @next/next/no-img-element */
 'use client';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+const MemoNavbar = React.memo(Navbar);
+const MemoFooter = React.memo(Footer);
 import { 
   Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2, 
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
@@ -98,21 +100,16 @@ const Portfolio = () => {
     setCodeLines(linesArray);
 
     let animationFrame;
-    let particlesCache = particles;
-    let codeLinesCache = codeLines;
     const animate = () => {
-      particlesCache = particlesCache.map(p => ({
+      setParticles(prev => prev.map(p => ({
         ...p,
         y: (p.y + p.speed) % 110,
         x: p.x + Math.sin(Date.now() * 0.001 + p.id) * 0.05
-      }));
-      codeLinesCache = codeLinesCache.map(line => ({
+      })));
+      setCodeLines(prev => prev.map(line => ({
         ...line,
         y: (line.y + line.speed) % 110
-      }));
-      // Batch state update for smoother animation
-      setParticles(particlesCache);
-      setCodeLines(codeLinesCache);
+      })));
       animationFrame = window.requestAnimationFrame(animate);
     };
     animationFrame = window.requestAnimationFrame(animate);
@@ -124,14 +121,14 @@ const Portfolio = () => {
     };
   }, [isMounted]);
 
-  const stats = [
+  const stats = useMemo(() => ([
     { value: "3+", label: "Years", desc: "Experience", icon: TrendingUp },
     { value: "15+", label: "Projects", desc: "Deployed", icon: Rocket },
     { value: "10K+", label: "Users", desc: "Active", icon: Star },
     { value: "2K+", label: "Commits", desc: "GitHub", icon: Code2 }
-  ];
+  ]), []);
 
-  const techStack = {
+  const techStack = useMemo(() => ({
     frontend: [
       { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
       { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
@@ -162,9 +159,9 @@ const Portfolio = () => {
       { name: "GitHub", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
       { name: "Linux", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" }
     ]
-  };
+  }), []);
 
-  const projects = [
+  const projects = useMemo(() => ([
     {
       id: 1,
       title: "CV Maker AI",
@@ -218,13 +215,16 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/8637/8637099.png"
     }
     
-  ];
+  ]), []);
 
+  const handleSetActiveTech = useCallback((id) => setActiveTech(id), []);
+  const handleSetActiveProject = useCallback((id) => setActiveProject(id), []);
+  const handleClearActiveProject = useCallback(() => setActiveProject(null), []);
   if (!isMounted) return null;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
-      <Navbar />
+      <MemoNavbar />
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
@@ -511,8 +511,8 @@ const Portfolio = () => {
               {projects.map((project) => (
                 <div
                   key={project.id}
-                  onMouseEnter={() => setActiveProject(project.id)}
-                  onMouseLeave={() => setActiveProject(null)}
+                  onMouseEnter={() => handleSetActiveProject(project.id)}
+                  onMouseLeave={handleClearActiveProject}
                   className="group relative bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-cyan-500/10"
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
@@ -662,7 +662,7 @@ const Portfolio = () => {
                 ].map(tech => (
                   <button
                     key={tech.id}
-                    onClick={() => setActiveTech(tech.id)}
+                    onClick={() => handleSetActiveTech(tech.id)}
                     className={`group relative flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${
                       activeTech === tech.id
                         ? 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30'
@@ -829,7 +829,7 @@ const Portfolio = () => {
         </section>
       </main>
 
-      <Footer />
+      <MemoFooter />
     </div>
   );
 };
