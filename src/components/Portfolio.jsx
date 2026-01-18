@@ -1,6 +1,6 @@
 ﻿/* eslint-disable @next/next/no-img-element */
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { 
@@ -14,6 +14,7 @@ const Portfolio = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [activeTech, setActiveTech] = useState('all');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const mousePosRef = useRef({ x: 0, y: 0 });
   const [particles, setParticles] = useState([]);
   const [codeLines, setCodeLines] = useState([]);
   const [typedText, setTypedText] = useState('');
@@ -32,23 +33,35 @@ const Portfolio = () => {
       }, 100);
       return () => clearTimeout(timeout);
     } else if (typedText.length === fullText.length) {
-      setTimeout(() => {
+      const timeout1 = setTimeout(() => {
         setIsTyping(false);
-        setTimeout(() => {
+        const timeout2 = setTimeout(() => {
           setTypedText('');
           setIsTyping(true);
         }, 2000);
+        return () => clearTimeout(timeout2);
       }, 2000);
+      return () => clearTimeout(timeout1);
     }
   }, [typedText, isTyping, fullText.length]);
 
   useEffect(() => {
     if (!isMounted) return;
 
+    // Throttle mousemove using requestAnimationFrame
+    let ticking = false;
     const handleMouse = (e) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      setMousePos({ x, y });
+      mousePosRef.current = {
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100
+      };
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setMousePos(mousePosRef.current);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     const particlesArray = Array.from({ length: 80 }, (_, i) => ({
@@ -84,23 +97,29 @@ const Portfolio = () => {
     }));
     setCodeLines(linesArray);
 
-    const interval = setInterval(() => {
-      setParticles(prev => prev.map(p => ({
+    let animationFrame;
+    let particlesCache = particles;
+    let codeLinesCache = codeLines;
+    const animate = () => {
+      particlesCache = particlesCache.map(p => ({
         ...p,
         y: (p.y + p.speed) % 110,
         x: p.x + Math.sin(Date.now() * 0.001 + p.id) * 0.05
-      })));
-      
-      setCodeLines(prev => prev.map(line => ({
+      }));
+      codeLinesCache = codeLinesCache.map(line => ({
         ...line,
         y: (line.y + line.speed) % 110
-      })));
-    }, 50);
+      }));
+      // Batch state update for smoother animation
+      setParticles(particlesCache);
+      setCodeLines(codeLinesCache);
+      animationFrame = window.requestAnimationFrame(animate);
+    };
+    animationFrame = window.requestAnimationFrame(animate);
 
     window.addEventListener('mousemove', handleMouse);
-    
     return () => {
-      clearInterval(interval);
+      window.cancelAnimationFrame(animationFrame);
       window.removeEventListener('mousemove', handleMouse);
     };
   }, [isMounted]);
