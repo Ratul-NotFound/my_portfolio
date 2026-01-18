@@ -277,9 +277,9 @@ const Portfolio = () => {
 
       <main className="relative z-10">
         {/* Hero */}
-        <section id="hero" className="min-h-screen flex items-center justify-center px-4 pt-20">
+        <section id="hero" className="min-h-screen flex items-center justify-center px-2 pt-10">
           <div className="max-w-7xl mx-auto w-full">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
               <div className="space-y-8 animate-slide-up">
                 <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-full text-sm hover:border-cyan-500/50 transition-all duration-300 cursor-default group">
                   <span className="relative flex h-3 w-3">
@@ -426,9 +426,9 @@ const Portfolio = () => {
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-20 md:py-32 px-4">
+        <section id="about" className="py-10 md:py-16 px-2">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 md:mb-20">
+            <div className="text-center mb-8 md:mb-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-sm text-cyan-300 mb-6">
                 <Sparkles className="w-4 h-4" />
                 About Me
@@ -443,7 +443,7 @@ const Portfolio = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid md:grid-cols-3 gap-3 md:gap-4">
               {[
                 {
                   icon: Code2,
@@ -490,9 +490,9 @@ const Portfolio = () => {
         </section>
 
         {/* Projects Section */}
-        <section id="projects" className="py-20 md:py-32 px-4 relative">
+        <section id="projects" className="py-10 md:py-16 px-2 relative">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 md:mb-20">
+            <div className="text-center mb-8 md:mb-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-sm text-purple-300 mb-6 animate-pulse">
                 <Rocket className="w-4 h-4" />
                 <span className="font-mono">Case Studies</span>
@@ -507,7 +507,7 @@ const Portfolio = () => {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            <div className="grid md:grid-cols-2 gap-3 md:gap-4">
               {projects.map((project) => (
                 <div
                   key={project.id}
@@ -618,7 +618,7 @@ const Portfolio = () => {
               ))}
             </div>
 
-            <div className="text-center mt-12 md:mt-16">
+            <div className="text-center mt-6 md:mt-8">
               <a
                 href="https://github.com/ratul-notfound"
                 target="_blank"
@@ -634,9 +634,9 @@ const Portfolio = () => {
         </section>
 
         {/* Skills Section */}
-        <section id="skills" className="py-20 md:py-32 px-4 relative">
+        <section id="skills" className="py-10 md:py-16 px-2 relative">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16 md:mb-20">
+            <div className="text-center mb-8 md:mb-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-sm text-cyan-300 mb-6 animate-pulse">
                 <Zap className="w-4 h-4" />
                 <span className="font-mono">Tech Stack</span>
