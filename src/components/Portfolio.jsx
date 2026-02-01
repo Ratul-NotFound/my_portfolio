@@ -228,7 +228,7 @@ const Portfolio = () => {
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
+        <div className="absolute inset-0 bg-slate-950"></div>
         <div className="absolute top-0 -left-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
@@ -293,11 +293,11 @@ const Portfolio = () => {
                 <div className="space-y-4">
                   <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-none">
                     <span className="block text-slate-200 mb-2">Building</span>
-                    <span className="block bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
+                    <span className="block text-cyan-400">
                       Scalable
                     </span>
                     <span className="block text-slate-200 mb-2">Systems</span>
-                    <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
+                    <span className="block text-purple-400">
                       with AI
                     </span>
                   </h1>
@@ -317,11 +317,10 @@ const Portfolio = () => {
                 <div className="flex flex-wrap gap-4">
                   <a
                     href="#projects"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl font-semibold transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-semibold transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden"
                   >
                     <span className="relative z-10">Explore Projects</span>
                     <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   </a>
                   
                   <a
@@ -356,7 +355,7 @@ const Portfolio = () => {
 
               <div className="relative">
                 <div className="relative aspect-square max-w-lg mx-auto">
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl"></div>
+                  <div className="absolute inset-0 bg-cyan-500/10 rounded-3xl blur-3xl"></div>
                   <div className="relative bg-slate-900/90 backdrop-blur-2xl border border-slate-700 rounded-3xl p-8 space-y-6 hover:border-cyan-500/50 transition-all duration-500">
                     <div className="relative aspect-square rounded-2xl overflow-hidden border-4 border-slate-700 group shadow-xl hover:shadow-cyan-500/30 transition-shadow duration-500">
                       <img
@@ -433,11 +432,9 @@ const Portfolio = () => {
                 <Sparkles className="w-4 h-4" />
                 About Me
               </div>
-              <h2 className="text-4xl md:text-6xl font-black mb-6">
-                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <h2 className="text-4xl md:text-6xl font-black mb-6 text-cyan-400">
                   Passionate Developer
-                </span>
-              </h2>
+                </h2>
               <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto">
                 Building scalable systems and leveraging AI to solve real-world problems
               </p>
@@ -497,10 +494,8 @@ const Portfolio = () => {
                 <Rocket className="w-4 h-4" />
                 <span className="font-mono">Case Studies</span>
               </div>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                  Featured Work
-                </span>
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 text-purple-400">
+                Featured Work
               </h2>
               <p className="text-lg md:text-xl text-slate-400">
                 Real-world applications with measurable impact
@@ -562,7 +557,7 @@ const Portfolio = () => {
                           href={project.links.live}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl transition-all hover:scale-105 shadow-xl shadow-cyan-500/50"
+                          className="p-2 bg-cyan-600 hover:bg-cyan-500 rounded-xl transition-all hover:scale-105 shadow-xl shadow-cyan-500/50"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <ExternalLink className="w-5 h-5 text-white" />
@@ -594,7 +589,7 @@ const Portfolio = () => {
                       {project.tech.map((tech, j) => (
                         <span 
                           key={j} 
-                          className="px-3 py-1.5 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-lg text-xs font-medium text-cyan-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 transition-all cursor-default"
+                          className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-xs font-medium text-cyan-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 transition-all cursor-default"
                         >
                           {tech}
                         </span>
@@ -641,11 +636,9 @@ const Portfolio = () => {
                 <Zap className="w-4 h-4" />
                 <span className="font-mono">Tech Stack</span>
               </div>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
-                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 text-cyan-400">
                   Technologies
-                </span>
-              </h2>
+                </h2>
               <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
                 Modern tools and frameworks I use to craft exceptional digital experiences
               </p>
@@ -665,7 +658,7 @@ const Portfolio = () => {
                     onClick={() => handleSetActiveTech(tech.id)}
                     className={`group relative flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${
                       activeTech === tech.id
-                        ? 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30'
+                        ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-500/30'
                         : 'text-slate-400 hover:text-white hover:bg-slate-800'
                     }`}
                   >
@@ -784,7 +777,7 @@ const Portfolio = () => {
 
                 <div className="space-y-4">
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-black">
-                    <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    <span className="text-cyan-400">
                       Let&apos;s Build Something
                     </span>
                     <br />
@@ -797,7 +790,7 @@ const Portfolio = () => {
 
                 <a
                   href="mailto:m.h.ratul18@gmail.com"
-                  className="group/btn inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden relative"
+                  className="group/btn inline-flex items-center gap-3 px-10 py-5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden relative"
                 >
                   <Mail className="w-6 h-6 relative z-10" />
                   <span className="relative z-10">Start Conversation</span>
