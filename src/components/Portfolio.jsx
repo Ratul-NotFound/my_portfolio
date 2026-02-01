@@ -5,10 +5,10 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 const MemoNavbar = React.memo(Navbar);
 const MemoFooter = React.memo(Footer);
-import { 
-  Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2, 
+import {
+  Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2,
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
-  Star, Cpu, Network, Award, TrendingUp, Coffee, Rocket, 
+  Star, Cpu, Network, Award, TrendingUp, Coffee, Rocket,
   Circle, ChevronRight
 } from 'lucide-react';
 
@@ -22,7 +22,7 @@ const Portfolio = () => {
   const [typedText, setTypedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [activeProject, setActiveProject] = useState(null);
-  
+
   const fullText = "Building scalable systems with precision...";
 
   useEffect(() => {
@@ -214,7 +214,7 @@ const Portfolio = () => {
       image: "/lecture-ai.jpeg?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/8637/8637099.png"
     }
-    
+
   ]), []);
 
   const handleSetActiveTech = useCallback((id) => setActiveTech(id), []);
@@ -228,7 +228,7 @@ const Portfolio = () => {
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-slate-950"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
         <div className="absolute top-0 -left-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
@@ -301,7 +301,7 @@ const Portfolio = () => {
                       with AI
                     </span>
                   </h1>
-                  
+
                   <div className="flex items-center gap-2 text-lg md:text-xl text-slate-400 font-mono h-8">
                     <Terminal className="w-5 h-5 text-cyan-400" />
                     <span className="text-cyan-400">$</span>
@@ -317,12 +317,13 @@ const Portfolio = () => {
                 <div className="flex flex-wrap gap-4">
                   <a
                     href="#projects"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-semibold transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl font-semibold transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden"
                   >
                     <span className="relative z-10">Explore Projects</span>
                     <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   </a>
-                  
+
                   <a
                     href="/resume.pdf"
                     download
@@ -355,7 +356,7 @@ const Portfolio = () => {
 
               <div className="relative">
                 <div className="relative aspect-square max-w-lg mx-auto">
-                  <div className="absolute inset-0 bg-cyan-500/10 rounded-3xl blur-3xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl"></div>
                   <div className="relative bg-slate-900/90 backdrop-blur-2xl border border-slate-700 rounded-3xl p-8 space-y-6 hover:border-cyan-500/50 transition-all duration-500">
                     <div className="relative aspect-square rounded-2xl overflow-hidden border-4 border-slate-700 group shadow-xl hover:shadow-cyan-500/30 transition-shadow duration-500">
                       <img
@@ -380,8 +381,8 @@ const Portfolio = () => {
 
                       <div className="flex flex-wrap gap-2">
                         {['Full Stack', 'AI/ML', 'DevOps', 'System Design'].map((tag, i) => (
-                          <span 
-                            key={tag} 
+                          <span
+                            key={tag}
                             className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-slate-600 hover:border-cyan-500 rounded-lg text-sm text-slate-300 hover:text-cyan-300 transition-all cursor-default hover:scale-105"
                             style={{ animationDelay: `${i * 100}ms` }}
                           >
@@ -432,9 +433,11 @@ const Portfolio = () => {
                 <Sparkles className="w-4 h-4" />
                 About Me
               </div>
-                <h2 className="text-4xl md:text-6xl font-black mb-6 text-cyan-400">
+              <h2 className="text-4xl md:text-6xl font-black mb-6">
+                <span className="text-cyan-400">
                   Passionate Developer
-                </h2>
+                </span>
+              </h2>
               <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto">
                 Building scalable systems and leveraging AI to solve real-world problems
               </p>
@@ -471,7 +474,7 @@ const Portfolio = () => {
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
                     <p className="text-slate-400 mb-6 leading-relaxed">{item.desc}</p>
-                    
+
                     <div className="flex flex-wrap gap-2">
                       {item.skills.map((skill, j) => (
                         <span key={j} className="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-xs text-slate-400 group-hover:border-cyan-500/30 transition-colors">
@@ -494,8 +497,10 @@ const Portfolio = () => {
                 <Rocket className="w-4 h-4" />
                 <span className="font-mono">Case Studies</span>
               </div>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 text-purple-400">
-                Featured Work
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
+                <span className="text-purple-400">
+                  Featured Work
+                </span>
               </h2>
               <p className="text-lg md:text-xl text-slate-400">
                 Real-world applications with measurable impact
@@ -512,7 +517,7 @@ const Portfolio = () => {
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
                     <div className="flex items-center justify-center w-full h-full aspect-[16/10] overflow-hidden">
-                      <img 
+                      <img
                         src={project.image}
                         alt={project.title}
                         className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
@@ -524,7 +529,7 @@ const Portfolio = () => {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
                     <div className="absolute top-3 right-3 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-1.5 group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-xl">
-                      <img 
+                      <img
                         src={project.logo}
                         alt={`${project.title} logo`}
                         className="w-full h-full object-contain"
@@ -538,9 +543,8 @@ const Portfolio = () => {
                         {project.category}
                       </span>
                     </div>
-                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-2 transition-all duration-500 ${
-                      activeProject === project.id ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-                    }`}>
+                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-2 transition-all duration-500 ${activeProject === project.id ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+                      }`}>
                       {project.links.code && (
                         <a
                           href={project.links.code}
@@ -557,7 +561,7 @@ const Portfolio = () => {
                           href={project.links.live}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-cyan-600 hover:bg-cyan-500 rounded-xl transition-all hover:scale-105 shadow-xl shadow-cyan-500/50"
+                          className="p-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl transition-all hover:scale-105 shadow-xl shadow-cyan-500/50"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <ExternalLink className="w-5 h-5 text-white" />
@@ -575,8 +579,8 @@ const Portfolio = () => {
 
                     <div className="grid grid-cols-2 gap-3">
                       {project.metrics.map((metric, j) => (
-                        <div 
-                          key={j} 
+                        <div
+                          key={j}
                           className="relative group/metric p-3 bg-slate-800/30 backdrop-blur-sm border border-slate-700 hover:border-cyan-500/50 rounded-xl text-center transition-all hover:scale-105 cursor-default overflow-hidden"
                         >
                           <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover/metric:opacity-10 transition-opacity`}></div>
@@ -587,28 +591,26 @@ const Portfolio = () => {
 
                     <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-800">
                       {project.tech.map((tech, j) => (
-                        <span 
-                          key={j} 
-                          className="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-xs font-medium text-cyan-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 transition-all cursor-default"
+                        <span
+                          key={j}
+                          className="px-3 py-1.5 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-lg text-xs font-medium text-cyan-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 transition-all cursor-default"
                         >
                           {tech}
                         </span>
                       ))}
                     </div>
 
-                    <div className={`flex items-center gap-2 text-sm font-bold transition-all duration-300 ${
-                      activeProject === project.id 
-                        ? 'text-cyan-400 translate-x-2' 
-                        : 'text-transparent'
-                    }`}>
+                    <div className={`flex items-center gap-2 text-sm font-bold transition-all duration-300 ${activeProject === project.id
+                      ? 'text-cyan-400 translate-x-2'
+                      : 'text-transparent'
+                      }`}>
                       <span>View Project</span>
                       <ChevronRight className="w-4 h-4" />
                     </div>
                   </div>
 
-                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${project.gradient} transform transition-transform duration-500 ${
-                    activeProject === project.id ? 'scale-x-100' : 'scale-x-0'
-                  }`}></div>
+                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${project.gradient} transform transition-transform duration-500 ${activeProject === project.id ? 'scale-x-100' : 'scale-x-0'
+                    }`}></div>
                 </div>
               ))}
             </div>
@@ -636,9 +638,11 @@ const Portfolio = () => {
                 <Zap className="w-4 h-4" />
                 <span className="font-mono">Tech Stack</span>
               </div>
-                <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 text-cyan-400">
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
+                <span className="text-cyan-400">
                   Technologies
-                </h2>
+                </span>
+              </h2>
               <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
                 Modern tools and frameworks I use to craft exceptional digital experiences
               </p>
@@ -656,15 +660,14 @@ const Portfolio = () => {
                   <button
                     key={tech.id}
                     onClick={() => handleSetActiveTech(tech.id)}
-                    className={`group relative flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${
-                      activeTech === tech.id
-                        ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-500/30'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                    }`}
+                    className={`group relative flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${activeTech === tech.id
+                      ? 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      }`}
                   >
                     <tech.icon className="w-4 h-4" />
                     <span>{tech.label}</span>
-                    
+
                     {activeTech === tech.id && (
                       <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-full"></span>
                     )}
@@ -676,14 +679,14 @@ const Portfolio = () => {
             <div className="space-y-8">
               {Object.entries(techStack).map(([category, skills]) => (
                 (activeTech === 'all' || activeTech === category) && (
-                  <div 
-                    key={category} 
+                  <div
+                    key={category}
                     className="group relative animate-slide-up"
                   >
                     <div className="relative overflow-hidden mb-6">
                       <div className="flex items-center gap-4 p-6 bg-gradient-to-r from-slate-900/80 to-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-2xl">
                         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
-                        
+
                         <div className="relative">
                           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-purple-500 rounded-xl blur opacity-50 group-hover:opacity-100 transition-opacity"></div>
                           <div className="relative w-14 h-14 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -708,7 +711,7 @@ const Portfolio = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                       {skills.map((skill, i) => (
                         <div
@@ -716,14 +719,14 @@ const Portfolio = () => {
                           className="group/card relative p-6 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 cursor-default overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
-                          
+
                           <div className="relative z-10 flex flex-col items-center gap-4">
                             <div className="relative w-16 h-16 flex items-center justify-center">
                               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
-                              
+
                               <div className="relative w-full h-full p-2 bg-slate-800/50 rounded-xl border border-slate-700 group-hover/card:border-slate-600 transition-all group-hover/card:scale-110">
-                                <img 
-                                  src={skill.icon} 
+                                <img
+                                  src={skill.icon}
                                   alt={skill.name}
                                   className="w-full h-full object-contain filter group-hover/card:drop-shadow-[0_0_8px_rgba(6,182,212,0.5)] transition-all duration-500"
                                   onError={(e) => {
@@ -766,7 +769,7 @@ const Portfolio = () => {
           <div className="max-w-4xl mx-auto">
             <div className="relative p-12 md:p-16 bg-gradient-to-br from-slate-900/80 to-slate-900/50 backdrop-blur-2xl border border-slate-800 rounded-3xl overflow-hidden group hover:border-cyan-500/50 transition-all duration-500">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
+
               <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
               <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
 
@@ -777,7 +780,7 @@ const Portfolio = () => {
 
                 <div className="space-y-4">
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-black">
-                    <span className="text-cyan-400">
+                    <span className="text-purple-400">
                       Let&apos;s Build Something
                     </span>
                     <br />
@@ -790,12 +793,12 @@ const Portfolio = () => {
 
                 <a
                   href="mailto:m.h.ratul18@gmail.com"
-                  className="group/btn inline-flex items-center gap-3 px-10 py-5 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden relative"
+                  className="group/btn inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden relative"
                 >
                   <Mail className="w-6 h-6 relative z-10" />
                   <span className="relative z-10">Start Conversation</span>
                   <ArrowRight className="w-6 h-6 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
-                  
+
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
                 </a>
 

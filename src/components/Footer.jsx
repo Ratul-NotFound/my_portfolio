@@ -31,7 +31,7 @@ export default function Footer() {
   return (
     <footer className="relative mt-20 border-t border-slate-800 bg-slate-900/50 backdrop-blur-sm">
       {/* Animated Gradient Line */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-cyan-500/30"></div>
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">

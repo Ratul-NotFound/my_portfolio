@@ -152,10 +152,10 @@ export default function Achievements() {
   ];
 
   const stats = [
-    { number: programs.length.toString(), label: 'Achievements', icon: Trophy, gradient: 'purple-600' },
-    { number: certificates.length.toString(), label: 'Certificates', icon: Award, gradient: 'cyan-600' },
-    { number: '1000+', label: 'Students', icon: Users, gradient: 'green-600' },
-    { number: '15+', label: 'Events', icon: Target, gradient: 'orange-600' },
+    { number: programs.length.toString(), label: 'Achievements', icon: Trophy, gradient: 'from-purple-600 to-pink-600' },
+    { number: certificates.length.toString(), label: 'Certificates', icon: Award, gradient: 'from-cyan-600 to-blue-600' },
+    { number: '1000+', label: 'Students', icon: Users, gradient: 'from-green-600 to-emerald-600' },
+    { number: '15+', label: 'Events', icon: Target, gradient: 'from-orange-600 to-red-600' },
   ];
 
   const filteredPrograms = programs.filter(prog => {
@@ -193,7 +193,7 @@ export default function Achievements() {
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-slate-950"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
         <div className="absolute top-0 -left-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 -right-40 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyMzYsNzIsMTUzLDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
@@ -212,7 +212,7 @@ export default function Achievements() {
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none">
               <span className="block text-slate-200 mb-4">Leadership &</span>
-              <span className="block text-purple-400">Recognition</span>
+              <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Recognition</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-400 max-w-4xl mx-auto">Building communities and making impact through technology</p>
           </div>
@@ -223,8 +223,9 @@ export default function Achievements() {
           <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {stats.map((stat, i) => (
               <div key={i} className="group relative p-6 md:p-8 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-purple-500/50 rounded-2xl transition-all hover:scale-105 cursor-default overflow-hidden">
+                <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
                 <div className="relative z-10">
-                  <div className={`w-14 h-14 bg-${stat.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all shadow-lg`}>
+                  <div className={`w-14 h-14 bg-gradient-to-br ${stat.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all shadow-lg`}>
                     <stat.icon className="w-7 h-7 text-white" />
                   </div>
                   <div className="text-4xl font-black text-white mb-2 font-mono">{stat.number}</div>
@@ -244,7 +245,7 @@ export default function Achievements() {
             </div>
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {categories.map((cat) => (
-                <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${activeCategory === cat.id ? 'bg-purple-600 text-white shadow-xl scale-105' : 'bg-slate-900/50 text-slate-300 border border-slate-800 hover:scale-105'}`}>
+                <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${activeCategory === cat.id ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl scale-105' : 'bg-slate-900/50 text-slate-300 border border-slate-800 hover:scale-105'}`}>
                   <cat.icon className="w-4 h-4" />
                   <span>{cat.label}</span>
                   <span className={`px-2 py-0.5 rounded-full text-xs font-mono ${activeCategory === cat.id ? 'bg-white/20' : 'bg-slate-800'}`}>{cat.count}</span>
@@ -288,13 +289,13 @@ export default function Achievements() {
                           )}
                         </>
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/20 to-pink-900/20">
                           <ImageIcon className="w-16 h-16 text-slate-700" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-slate-900/40"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
                       <div className="absolute top-6 left-6">
-                        <span className="px-4 py-2 bg-purple-600 rounded-xl text-xs font-bold text-white shadow-lg capitalize">{prog.type}</span>
+                        <span className="px-4 py-2 bg-purple-600/90 backdrop-blur-xl rounded-xl text-xs font-bold text-white shadow-lg capitalize">{prog.type}</span>
                       </div>
                     </div>
 
@@ -333,12 +334,12 @@ export default function Achievements() {
                       {prog.tags && (
                         <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-800">
                           {prog.tags.map((tag, j) => (
-                            <span key={j} className="px-3 py-1.5 bg-purple-500/10 border border-purple-500/30 rounded-lg text-xs font-medium text-purple-300">#{tag.toLowerCase().replace(' ', '_')}</span>
+                            <span key={j} className="px-3 py-1.5 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg text-xs font-medium text-purple-300">#{tag.toLowerCase().replace(' ', '_')}</span>
                           ))}
                         </div>
                       )}
                     </div>
-                    <div className="h-1 bg-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div className="h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                   </div>
                 ))}
               </div>
@@ -354,7 +355,7 @@ export default function Achievements() {
                 <Award className="w-4 h-4" />
                 <span>certificates.collection</span>
               </div>
-              <h2 className="text-5xl font-black mb-6 text-cyan-400">Professional Credentials</h2>
+              <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Professional Credentials</h2>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -401,17 +402,19 @@ export default function Achievements() {
         {/* CTA */}
         <section className="py-32 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="relative p-16 bg-slate-900/80 backdrop-blur-2xl border border-purple-500/30 rounded-3xl overflow-hidden group">
+            <div className="relative p-16 bg-gradient-to-br from-purple-900/30 to-pink-900/20 backdrop-blur-2xl border border-purple-500/30 rounded-3xl overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative z-10 text-center space-y-8">
                 <Star className="w-20 h-20 text-purple-400 mx-auto" />
                 <div className="space-y-4">
-                  <h2 className="text-5xl font-black text-purple-400">Let&apos;s Collaborate</h2>
+                  <h2 className="text-5xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Let&apos;s Collaborate</h2>
                   <p className="text-xl text-slate-400">Open to initiatives and partnerships</p>
                 </div>
-                <a href="mailto:m.h.ratul18@gmail.com" className="inline-flex items-center gap-3 px-10 py-5 bg-purple-600 hover:bg-purple-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:scale-105 overflow-hidden relative">
+                <a href="mailto:m.h.ratul18@gmail.com" className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:scale-105 overflow-hidden relative">
                   <Mail className="w-6 h-6 relative z-10" />
                   <span className="relative z-10 font-mono">send_message()</span>
                   <ChevronRight className="w-6 h-6 relative z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 </a>
                 <div className="flex justify-center gap-4 pt-4">
                   {[
@@ -442,6 +445,7 @@ export default function Achievements() {
           </a>
           <div className="max-w-6xl w-full" onClick={(e) => e.stopPropagation()}>
             <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 blur-3xl"></div>
               <img src={selectedImage} alt="Achievement" className="relative w-full h-auto rounded-2xl shadow-2xl border border-slate-800" />
             </div>
           </div>
