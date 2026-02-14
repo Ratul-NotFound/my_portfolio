@@ -1,4 +1,5 @@
 ﻿import './globals.css'
+import { ThemeProvider } from '../context/ThemeContext'
 
 export const metadata = {
   title: 'Mahmud Hasan Ratul | Full Stack & AI Engineer',
@@ -26,9 +27,11 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className="antialiased">
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Terminal, Code2, Sparkles, ChevronRight, Home, User, Briefcase, Wrench, Mail, Award } from 'lucide-react';
+import { Menu, X, Terminal, Code2, Sparkles, ChevronRight, Home, User, Briefcase, Wrench, Mail, Award, Sun, Moon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -10,6 +11,8 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('');
   const pathname = usePathname();
   const isAchievementsPage = pathname === '/achievements';
+  const { theme, toggleTheme } = useTheme();
+  const isLight = theme === 'light';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,8 +66,10 @@ export default function Navbar() {
     <>
       {/* Command Bar Style Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-          ? 'bg-slate-900/95 backdrop-blur-2xl border-b border-slate-800/50 shadow-2xl shadow-black/20'
-          : 'bg-transparent'
+        ? isLight
+          ? 'bg-white/90 backdrop-blur-2xl border-b border-slate-200 shadow-lg shadow-slate-200/50'
+          : 'bg-slate-900/95 backdrop-blur-2xl border-b border-slate-800/50 shadow-2xl shadow-black/20'
+        : 'bg-transparent'
         }`}>
         {/* Top Border Animation */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50"></div>
@@ -78,7 +83,10 @@ export default function Navbar() {
                 <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-xl blur-md opacity-0 group-hover:opacity-75 transition-all duration-500"></div>
 
                 {/* Icon Container */}
-                <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 p-2 md:p-2.5 rounded-xl border border-slate-700 group-hover:border-cyan-500 transition-all duration-300 shadow-lg">
+                <div className={`relative p-2 md:p-2.5 rounded-xl border transition-all duration-300 shadow-lg ${isLight
+                  ? 'bg-gradient-to-br from-slate-100 to-white border-slate-200 group-hover:border-cyan-500'
+                  : 'bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700 group-hover:border-cyan-500'
+                  }`}>
                   <Terminal className="w-5 h-5 md:w-6 md:h-6 text-cyan-400 group-hover:scale-110 transition-transform" />
 
                   {/* Scan Line */}
@@ -90,7 +98,7 @@ export default function Navbar() {
                 <span className="text-base md:text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Ratul
                 </span>
-                <span className="text-[10px] md:text-xs text-slate-500 font-mono tracking-wider">
+                <span className={`text-[10px] md:text-xs font-mono tracking-wider ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>
                   {'>'} Ai Automation Engineer
                 </span>
               </div>
@@ -106,7 +114,11 @@ export default function Navbar() {
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
                   className={`group relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeSection === item.id && !isAchievementsPage
-                      ? 'text-cyan-400 bg-cyan-500/10'
+                    ? isLight
+                      ? 'text-cyan-600 bg-cyan-50'
+                      : 'text-cyan-400 bg-cyan-500/10'
+                    : isLight
+                      ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                     }`}
                 >
@@ -123,13 +135,17 @@ export default function Navbar() {
               ))}
 
               {/* Divider */}
-              <div className="w-[1px] h-8 bg-slate-700 mx-2"></div>
+              <div className={`w-[1px] h-8 mx-2 ${isLight ? 'bg-slate-200' : 'bg-slate-700'}`}></div>
 
               {/* Achievements Badge */}
               <Link
                 href="/achievements"
                 className={`group relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${isAchievementsPage
-                    ? 'text-purple-400 bg-purple-500/10'
+                  ? isLight
+                    ? 'text-purple-600 bg-purple-50'
+                    : 'text-purple-400 bg-purple-500/10'
+                  : isLight
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                     : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                   }`}
               >
@@ -147,6 +163,22 @@ export default function Navbar() {
 
             {/* CTA & Mobile Menu */}
             <div className="flex items-center gap-3">
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                className={`relative p-2.5 rounded-xl border transition-all duration-300 hover:scale-110 group ${isLight
+                  ? 'bg-slate-100 border-slate-200 hover:border-purple-400 hover:bg-purple-50'
+                  : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500 hover:bg-slate-800'
+                  }`}
+                aria-label={`Switch to ${isLight ? 'dark' : 'light'} mode`}
+              >
+                {isLight ? (
+                  <Moon className="w-4 h-4 md:w-5 md:h-5 text-purple-500 group-hover:rotate-12 transition-transform" />
+                ) : (
+                  <Sun className="w-4 h-4 md:w-5 md:h-5 text-yellow-400 group-hover:rotate-45 transition-transform" />
+                )}
+              </button>
+
               {/* Hire Me Button */}
               <button
                 onClick={() => scrollTo('contact')}
@@ -159,7 +191,7 @@ export default function Navbar() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden relative p-2 text-slate-400 hover:text-cyan-300 transition-colors"
+                className={`md:hidden relative p-2 transition-colors ${isLight ? 'text-slate-500 hover:text-slate-900' : 'text-slate-400 hover:text-cyan-300'}`}
                 aria-label="Toggle menu"
               >
                 <div className="relative w-6 h-6">
@@ -177,12 +209,18 @@ export default function Navbar() {
         {/* Mobile Menu - Slide Down */}
         <div className={`md:hidden overflow-hidden transition-all duration-500 ${mobileMenuOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
           }`}>
-          <div className="bg-slate-900/98 backdrop-blur-2xl border-b border-slate-800 shadow-2xl">
+          <div className={`backdrop-blur-2xl border-b shadow-2xl ${isLight
+            ? 'bg-white/98 border-slate-200'
+            : 'bg-slate-900/98 border-slate-800'
+            }`}>
             <div className="max-w-7xl mx-auto px-4 py-6 space-y-2">
               {/* Terminal Header */}
-              <div className="flex items-center gap-2 px-4 py-2 mb-4 bg-slate-800/50 rounded-lg border border-slate-700">
+              <div className={`flex items-center gap-2 px-4 py-2 mb-4 rounded-lg border ${isLight
+                ? 'bg-slate-50 border-slate-200'
+                : 'bg-slate-800/50 border-slate-700'
+                }`}>
                 <Terminal className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-mono text-slate-400">Navigation Menu</span>
+                <span className={`text-sm font-mono ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Navigation Menu</span>
               </div>
 
               {navItems.map((item, index) => (
@@ -190,7 +228,11 @@ export default function Navbar() {
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
                   className={`w-full group flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${activeSection === item.id && !isAchievementsPage
-                      ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
+                    ? isLight
+                      ? 'bg-cyan-50 text-cyan-700 border border-cyan-200'
+                      : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
+                    : isLight
+                      ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/50 border border-transparent'
                     }`}
                   style={{
@@ -205,14 +247,18 @@ export default function Navbar() {
               ))}
 
               {/* Divider */}
-              <div className="h-[1px] bg-slate-800 my-3"></div>
+              <div className={`h-[1px] my-3 ${isLight ? 'bg-slate-200' : 'bg-slate-800'}`}></div>
 
               {/* Achievements Link */}
               <Link
                 href="/achievements"
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-medium transition-all ${isAchievementsPage
-                    ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30'
+                  ? isLight
+                    ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                    : 'bg-purple-500/10 text-purple-400 border border-purple-500/30'
+                  : isLight
+                    ? 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
                     : 'bg-slate-800/30 text-slate-300 hover:bg-slate-800/50 border border-slate-700'
                   }`}
               >
