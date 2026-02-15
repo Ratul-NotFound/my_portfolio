@@ -1,4 +1,6 @@
-﻿@tailwind base;
+﻿@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -23,6 +25,18 @@
     --text-primary: 15, 23, 42;
     --text-secondary: 51, 65, 85;
     --muted: 100, 116, 139;
+  }
+
+  [data-theme='hacker'] {
+    --bg-main: 0, 4, 0;
+    --surface-1: 0, 10, 2;
+    --surface-2: 0, 18, 4;
+    --border: 0, 60, 10;
+    --text-primary: 0, 255, 65;
+    --text-secondary: 0, 180, 50;
+    --muted: 0, 120, 30;
+    --accent-cyan: 0, 255, 65;
+    --accent-purple: 0, 200, 50;
   }
 
   * {
@@ -366,6 +380,424 @@
 [data-theme='light'] .group:hover .rounded-2xl,
 [data-theme='light'] .group:hover .rounded-3xl {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(6, 182, 212, 0.08);
+}
+
+/* ========== HACKER / MATRIX THEME OVERRIDES ========== */
+[data-theme='hacker'] body {
+  background-color: #000400 !important;
+  color: #00ff41 !important;
+  font-family: 'Fira Code', 'JetBrains Mono', 'Source Code Pro', 'Consolas', monospace !important;
+}
+
+[data-theme='hacker'] * {
+  border-color: rgba(0, 255, 65, 0.15) !important;
+  font-family: inherit;
+}
+
+/* Hacker: backgrounds - pitch black with green tinted cards */
+[data-theme='hacker'] .bg-slate-950,
+[data-theme='hacker'] .bg-slate-900 {
+  background-color: rgba(0, 8, 2, 0.95) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.05), inset 0 1px 0 rgba(0, 255, 65, 0.1) !important;
+  border: 1px solid rgba(0, 255, 65, 0.15) !important;
+}
+
+[data-theme='hacker'] .bg-slate-900\/98,
+[data-theme='hacker'] .bg-slate-900\/95,
+[data-theme='hacker'] .bg-slate-900\/90,
+[data-theme='hacker'] .bg-slate-900\/80,
+[data-theme='hacker'] .bg-slate-900\/50,
+[data-theme='hacker'] .bg-slate-900\/30 {
+  background-color: rgba(0, 10, 2, 0.9) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.04), inset 0 1px 0 rgba(0, 255, 65, 0.08) !important;
+  border-color: rgba(0, 255, 65, 0.12) !important;
+}
+
+[data-theme='hacker'] .bg-slate-800 {
+  background-color: rgba(0, 14, 3, 0.9) !important;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.04) !important;
+  border: 1px solid rgba(0, 255, 65, 0.12) !important;
+}
+
+[data-theme='hacker'] .bg-slate-800\/50,
+[data-theme='hacker'] .bg-slate-800\/30 {
+  background-color: rgba(0, 12, 3, 0.85) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.03) !important;
+  border-color: rgba(0, 255, 65, 0.1) !important;
+}
+
+[data-theme='hacker'] .bg-slate-700 {
+  background-color: rgba(0, 18, 4, 0.85) !important;
+  border: 1px solid rgba(0, 255, 65, 0.1) !important;
+}
+
+[data-theme='hacker'] .bg-slate-700\/50 {
+  background-color: rgba(0, 16, 4, 0.8) !important;
+  border-color: rgba(0, 255, 65, 0.08) !important;
+}
+
+[data-theme='hacker'] .bg-slate-600,
+[data-theme='hacker'] .bg-slate-600\/50 {
+  background-color: rgba(0, 20, 5, 0.75) !important;
+  border-color: rgba(0, 255, 65, 0.08) !important;
+}
+
+/* Hacker: hover states */
+[data-theme='hacker'] .hover\:bg-slate-800:hover,
+[data-theme='hacker'] .hover\:bg-slate-700:hover {
+  background-color: rgba(0, 20, 5, 0.95) !important;
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.1), inset 0 0 15px rgba(0, 255, 65, 0.03) !important;
+}
+
+/* Hacker: text colors */
+[data-theme='hacker'] .text-white { color: #00ff41 !important; }
+[data-theme='hacker'] .text-slate-200 { color: #00e639 !important; }
+[data-theme='hacker'] .text-slate-300 { color: #00cc32 !important; }
+[data-theme='hacker'] .text-slate-400 { color: #00b32c !important; }
+[data-theme='hacker'] .text-slate-500 { color: #009926 !important; }
+[data-theme='hacker'] .text-slate-600 { color: #00801f !important; }
+[data-theme='hacker'] .text-slate-700 { color: #006619 !important; }
+
+[data-theme='hacker'] .placeholder-slate-500::placeholder {
+  color: rgba(0, 255, 65, 0.3) !important;
+}
+
+/* Hacker: border overrides */
+[data-theme='hacker'] .border-slate-800,
+[data-theme='hacker'] .border-slate-700 {
+  border-color: rgba(0, 255, 65, 0.15) !important;
+}
+
+[data-theme='hacker'] .border-slate-600 {
+  border-color: rgba(0, 255, 65, 0.2) !important;
+}
+
+/* Hacker: gradient text - bright green glow */
+[data-theme='hacker'] .gradient-text {
+  background: linear-gradient(90deg, #00ff41, #00cc32, #39ff14, #00ff41) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+[data-theme='hacker'] .bg-gradient-to-r.from-cyan-400,
+[data-theme='hacker'] .bg-clip-text {
+  background: linear-gradient(90deg, #00ff41, #39ff14, #00e639) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+/* Hacker: accent color overrides */
+[data-theme='hacker'] .text-cyan-400,
+[data-theme='hacker'] .text-cyan-300,
+[data-theme='hacker'] .text-cyan-500 {
+  color: #00ff41 !important;
+}
+
+[data-theme='hacker'] .text-purple-400,
+[data-theme='hacker'] .text-purple-300,
+[data-theme='hacker'] .text-purple-500 {
+  color: #00cc32 !important;
+}
+
+[data-theme='hacker'] .text-pink-400,
+[data-theme='hacker'] .text-pink-300,
+[data-theme='hacker'] .text-pink-500 {
+  color: #39ff14 !important;
+}
+
+[data-theme='hacker'] .text-blue-400,
+[data-theme='hacker'] .text-blue-500 {
+  color: #00e639 !important;
+}
+
+[data-theme='hacker'] .text-yellow-400,
+[data-theme='hacker'] .text-yellow-500 {
+  color: #39ff14 !important;
+}
+
+[data-theme='hacker'] .text-green-400,
+[data-theme='hacker'] .text-green-500 {
+  color: #00ff41 !important;
+}
+
+[data-theme='hacker'] .text-red-500 {
+  color: #ff0040 !important;
+}
+
+/* Hacker: gradient backgrounds */
+[data-theme='hacker'] .bg-gradient-to-r.from-cyan-600.to-purple-600,
+[data-theme='hacker'] .bg-gradient-to-r.from-cyan-500.to-purple-500 {
+  background: linear-gradient(90deg, #00802a, #00b32c) !important;
+}
+
+[data-theme='hacker'] .bg-gradient-to-r.from-purple-600.to-pink-600 {
+  background: linear-gradient(90deg, #006619, #009926) !important;
+}
+
+[data-theme='hacker'] .from-slate-900 {
+  --tw-gradient-from: #000a02 !important;
+}
+
+[data-theme='hacker'] .from-slate-900\/80 {
+  --tw-gradient-from: rgba(0, 10, 2, 0.8) !important;
+}
+
+[data-theme='hacker'] .via-slate-900 {
+  --tw-gradient-stops: var(--tw-gradient-from), #000a02, var(--tw-gradient-to) !important;
+}
+
+[data-theme='hacker'] .via-slate-900\/60 {
+  --tw-gradient-stops: var(--tw-gradient-from), rgba(0, 10, 2, 0.6), var(--tw-gradient-to) !important;
+}
+
+[data-theme='hacker'] .to-slate-900 {
+  --tw-gradient-to: #000a02 !important;
+}
+
+[data-theme='hacker'] .from-slate-950 {
+  --tw-gradient-from: #000400 !important;
+}
+
+[data-theme='hacker'] .to-slate-950 {
+  --tw-gradient-to: #000400 !important;
+}
+
+[data-theme='hacker'] .from-slate-800 {
+  --tw-gradient-from: #000e03 !important;
+}
+
+[data-theme='hacker'] .to-slate-800 {
+  --tw-gradient-to: #000e03 !important;
+}
+
+/* Hacker: black bg overrides */
+[data-theme='hacker'] .bg-black\/90,
+[data-theme='hacker'] .bg-black\/70,
+[data-theme='hacker'] .bg-black\/50 {
+  background-color: rgba(0, 4, 0, 0.85) !important;
+}
+
+/* Hacker: buttons with green glow */
+[data-theme='hacker'] .hover\:border-cyan-500:hover {
+  border-color: #00ff41 !important;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3) !important;
+}
+
+[data-theme='hacker'] .hover\:border-purple-500:hover,
+[data-theme='hacker'] .hover\:border-purple-500\/50:hover {
+  border-color: #00cc32 !important;
+  box-shadow: 0 0 15px rgba(0, 204, 50, 0.25) !important;
+}
+
+[data-theme='hacker'] .hover\:border-cyan-500\/50:hover {
+  border-color: rgba(0, 255, 65, 0.5) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.2) !important;
+}
+
+/* Hacker: glow utilities */
+[data-theme='hacker'] .glow-cyan {
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.4), 0 0 60px rgba(0, 255, 65, 0.2) !important;
+}
+
+[data-theme='hacker'] .glow-purple {
+  box-shadow: 0 0 30px rgba(0, 200, 50, 0.35), 0 0 60px rgba(0, 200, 50, 0.15) !important;
+}
+
+[data-theme='hacker'] .glow-pink {
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.3), 0 0 60px rgba(57, 255, 20, 0.1) !important;
+}
+
+/* Hacker: glass effects */
+[data-theme='hacker'] .glass {
+  background: rgba(0, 10, 2, 0.6) !important;
+  backdrop-filter: blur(24px) saturate(120%) !important;
+  border-color: rgba(0, 255, 65, 0.12) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.05), inset 0 1px 0 rgba(0, 255, 65, 0.08) !important;
+}
+
+[data-theme='hacker'] .glass-hover:hover {
+  background: rgba(0, 14, 3, 0.8) !important;
+  border-color: rgba(0, 255, 65, 0.25) !important;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.08) !important;
+}
+
+/* Hacker: scrollbar */
+[data-theme='hacker'] ::-webkit-scrollbar-track {
+  background: #000400 !important;
+}
+
+[data-theme='hacker'] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #00ff41, #009926) !important;
+  border: 2px solid #000400 !important;
+  border-radius: 10px !important;
+}
+
+[data-theme='hacker'] ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #39ff14, #00cc32) !important;
+}
+
+/* Hacker: selection */
+[data-theme='hacker'] ::selection,
+[data-theme='hacker'] ::-moz-selection {
+  background: rgba(0, 255, 65, 0.3) !important;
+  color: #000400 !important;
+}
+
+/* Hacker: input & form elements */
+[data-theme='hacker'] input,
+[data-theme='hacker'] textarea {
+  background-color: rgba(0, 8, 2, 0.8) !important;
+  color: #00ff41 !important;
+  border-color: rgba(0, 255, 65, 0.2) !important;
+  caret-color: #00ff41 !important;
+}
+
+[data-theme='hacker'] input::placeholder,
+[data-theme='hacker'] textarea::placeholder {
+  color: rgba(0, 255, 65, 0.3) !important;
+}
+
+[data-theme='hacker'] input:focus,
+[data-theme='hacker'] textarea:focus {
+  background-color: rgba(0, 10, 2, 0.95) !important;
+  border-color: rgba(0, 255, 65, 0.5) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.15) !important;
+}
+
+/* Hacker: code blocks - extra green glow */
+[data-theme='hacker'] pre {
+  background: rgba(0, 8, 2, 0.9) !important;
+  border-color: rgba(0, 255, 65, 0.2) !important;
+  box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.03) !important;
+}
+
+[data-theme='hacker'] code {
+  background: rgba(0, 12, 3, 0.7) !important;
+  color: #00ff41 !important;
+}
+
+/* Hacker: focus ring */
+[data-theme='hacker'] *:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.5) !important;
+}
+
+/* Hacker: text shadow for CRT glow effect */
+[data-theme='hacker'] .text-shadow-lg {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.6), 0 0 30px rgba(0, 255, 65, 0.3), 0 0 60px rgba(0, 255, 65, 0.15) !important;
+}
+
+[data-theme='hacker'] .text-shadow {
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4), 0 0 20px rgba(0, 255, 65, 0.2) !important;
+}
+
+/* Hacker: card rounded borders */
+[data-theme='hacker'] .rounded-2xl,
+[data-theme='hacker'] .rounded-3xl,
+[data-theme='hacker'] .rounded-xl {
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.03), inset 0 0 10px rgba(0, 255, 65, 0.02) !important;
+}
+
+/* Hacker: badge colors overrides */
+[data-theme='hacker'] .bg-cyan-500\/10,
+[data-theme='hacker'] .bg-purple-500\/10 {
+  background-color: rgba(0, 255, 65, 0.08) !important;
+}
+
+[data-theme='hacker'] .border-cyan-500\/30,
+[data-theme='hacker'] .border-purple-500\/30 {
+  border-color: rgba(0, 255, 65, 0.2) !important;
+}
+
+/* Hacker: shadows */
+[data-theme='hacker'] .shadow-lg,
+[data-theme='hacker'] .shadow-xl,
+[data-theme='hacker'] .shadow-2xl {
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.06), 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Hacker: skeleton */
+[data-theme='hacker'] .skeleton {
+  background: rgba(0, 255, 65, 0.08) !important;
+}
+
+/* Hacker: nav specific */
+[data-theme='hacker'] nav {
+  border-bottom-color: rgba(0, 255, 65, 0.15) !important;
+}
+
+/* Hacker: purple button overrides */
+[data-theme='hacker'] .bg-purple-600,
+[data-theme='hacker'] .bg-purple-600\/90 {
+  background-color: rgba(0, 130, 30, 0.9) !important;
+}
+
+/* Hacker: gradient buttons */
+[data-theme='hacker'] .from-cyan-600 {
+  --tw-gradient-from: #006619 !important;
+}
+
+[data-theme='hacker'] .to-purple-600 {
+  --tw-gradient-to: #009926 !important;
+}
+
+[data-theme='hacker'] .from-purple-600 {
+  --tw-gradient-from: #004d13 !important;
+}
+
+[data-theme='hacker'] .to-pink-600 {
+  --tw-gradient-to: #006619 !important;
+}
+
+/* Hacker: special scanline effect overlay */
+[data-theme='hacker'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.015) 2px,
+    rgba(0, 255, 65, 0.015) 4px
+  );
+}
+
+/* Hacker: CRT vignette effect */
+[data-theme='hacker'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Hacker: animate blink green cursor */
+[data-theme='hacker'] .animate-blink {
+  background-color: #00ff41 !important;
+}
+
+/* Hacker: white backgrounds in gradient text used for buttons */
+[data-theme='hacker'] .bg-white\/20 {
+  background-color: rgba(0, 255, 65, 0.15) !important;
+}
+
+/* Hacker: fill overrides */
+[data-theme='hacker'] .fill-red-500 {
+  fill: #ff0040 !important;
+}
+
+/* Hacker: green ping dots */
+[data-theme='hacker'] .bg-green-400 {
+  background-color: #00ff41 !important;
+}
+
+[data-theme='hacker'] .bg-green-500 {
+  background-color: #00cc32 !important;
 }
 
 @layer components {

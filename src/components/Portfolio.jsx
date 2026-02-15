@@ -16,6 +16,7 @@ import {
 const Portfolio = () => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
+  const isHacker = theme === 'hacker';
   const [isMounted, setIsMounted] = useState(false);
   const [activeTech, setActiveTech] = useState('all');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -231,16 +232,22 @@ const Portfolio = () => {
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-br from-blue-50 via-indigo-50/60 to-purple-50/50' : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'}`}></div>
-        <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isLight ? 'bg-gradient-to-br from-cyan-300/25 to-blue-300/20 animate-pulse' : 'bg-cyan-500/10 animate-pulse'}`}></div>
-        <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isLight ? 'bg-gradient-to-tl from-purple-300/25 to-indigo-300/20 animate-pulse' : 'bg-purple-500/10 animate-pulse'}`} style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+        <div className={`absolute inset-0 ${isHacker ? 'bg-[#000400]' : isLight ? 'bg-gradient-to-br from-blue-50 via-indigo-50/60 to-purple-50/50' : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'}`}></div>
+        <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00ff41]/5 animate-pulse' : isLight ? 'bg-gradient-to-br from-cyan-300/25 to-blue-300/20 animate-pulse' : 'bg-cyan-500/10 animate-pulse'}`}></div>
+        <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00cc32]/5 animate-pulse' : isLight ? 'bg-gradient-to-tl from-purple-300/25 to-indigo-300/20 animate-pulse' : 'bg-purple-500/10 animate-pulse'}`} style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
         {isLight && (
           <>
             <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-gradient-to-br from-pink-300/15 to-rose-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
             <div className="absolute bottom-1/3 left-1/3 w-80 h-80 bg-gradient-to-tr from-cyan-300/15 to-teal-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '6s' }}></div>
           </>
         )}
-        <div className={`absolute inset-0 ${isLight ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNikiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" : "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"}`}></div>
+        {isHacker && (
+          <>
+            <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-[#00ff41]/3 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
+            <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-[#009926]/4 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '6s' }}></div>
+          </>
+        )}
+        <div className={`absolute inset-0 ${isHacker ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgwLDI1NSw2NSwwLjA2KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-60" : isLight ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNikiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" : "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"}`}></div>
 
         {particles.map(p => (
           <div
@@ -251,9 +258,9 @@ const Portfolio = () => {
               top: `${p.y}%`,
               width: `${p.size}px`,
               height: `${p.size}px`,
-              opacity: isLight ? p.opacity * 0.5 : p.opacity,
-              background: p.color === 'cyan' ? (isLight ? 'linear-gradient(135deg, #06b6d4, #0891b2)' : '#06b6d4') : p.color === 'purple' ? (isLight ? 'linear-gradient(135deg, #8b5cf6, #7c3aed)' : '#8b5cf6') : (isLight ? 'linear-gradient(135deg, #ec4899, #db2777)' : '#ec4899'),
-              boxShadow: `0 0 ${p.size * 6}px ${p.color === 'cyan' ? (isLight ? 'rgba(6, 182, 212, 0.5)' : 'rgba(6, 182, 212, 0.6)') : p.color === 'purple' ? (isLight ? 'rgba(139, 92, 246, 0.5)' : 'rgba(139, 92, 246, 0.6)') : (isLight ? 'rgba(236, 72, 153, 0.5)' : 'rgba(236, 72, 153, 0.6)')}`
+              opacity: isHacker ? p.opacity * 0.7 : isLight ? p.opacity * 0.5 : p.opacity,
+              background: isHacker ? '#00ff41' : p.color === 'cyan' ? (isLight ? 'linear-gradient(135deg, #06b6d4, #0891b2)' : '#06b6d4') : p.color === 'purple' ? (isLight ? 'linear-gradient(135deg, #8b5cf6, #7c3aed)' : '#8b5cf6') : (isLight ? 'linear-gradient(135deg, #ec4899, #db2777)' : '#ec4899'),
+              boxShadow: isHacker ? `0 0 ${p.size * 8}px rgba(0, 255, 65, 0.6)` : `0 0 ${p.size * 6}px ${p.color === 'cyan' ? (isLight ? 'rgba(6, 182, 212, 0.5)' : 'rgba(6, 182, 212, 0.6)') : p.color === 'purple' ? (isLight ? 'rgba(139, 92, 246, 0.5)' : 'rgba(139, 92, 246, 0.6)') : (isLight ? 'rgba(236, 72, 153, 0.5)' : 'rgba(236, 72, 153, 0.6)')}`
             }}
           />
         ))}
@@ -265,10 +272,10 @@ const Portfolio = () => {
             style={{
               left: `${line.x}%`,
               top: `${line.y}%`,
-              color: isLight ? '#0e7490' : '#06b6d4',
-              opacity: isLight ? line.opacity * 0.45 : line.opacity,
-              textShadow: isLight ? '0 0 10px rgba(6, 182, 212, 0.35), 0 1px 2px rgba(0,0,0,0.1)' : '0 0 10px rgba(6, 182, 212, 0.5)',
-              fontWeight: isLight ? '600' : '400'
+              color: isHacker ? '#00ff41' : isLight ? '#0e7490' : '#06b6d4',
+              opacity: isHacker ? line.opacity * 0.7 : isLight ? line.opacity * 0.45 : line.opacity,
+              textShadow: isHacker ? '0 0 10px rgba(0, 255, 65, 0.6), 0 0 20px rgba(0, 255, 65, 0.3)' : isLight ? '0 0 10px rgba(6, 182, 212, 0.35), 0 1px 2px rgba(0,0,0,0.1)' : '0 0 10px rgba(6, 182, 212, 0.5)',
+              fontWeight: isHacker ? '500' : isLight ? '600' : '400'
             }}
           >
             {line.text}
@@ -276,7 +283,7 @@ const Portfolio = () => {
         ))}
 
         <div
-          className={`absolute w-[500px] h-[500px] bg-gradient-radial rounded-full blur-3xl pointer-events-none transition-all duration-700 ${isLight ? 'from-cyan-300/15 via-blue-200/8 to-transparent' : 'from-cyan-500/10 to-transparent'}`}
+          className={`absolute w-[500px] h-[500px] bg-gradient-radial rounded-full blur-3xl pointer-events-none transition-all duration-700 ${isHacker ? 'from-[#00ff41]/8 to-transparent' : isLight ? 'from-cyan-300/15 via-blue-200/8 to-transparent' : 'from-cyan-500/10 to-transparent'}`}
           style={{
             left: `${mousePos.x}%`,
             top: `${mousePos.y}%`,

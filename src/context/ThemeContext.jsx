@@ -4,7 +4,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext({
     theme: 'dark',
     toggleTheme: () => { },
+    setTheme: () => { },
 });
+
+const THEMES = ['dark', 'light', 'hacker'];
 
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState('dark');
@@ -12,7 +15,7 @@ export function ThemeProvider({ children }) {
 
     useEffect(() => {
         const stored = localStorage.getItem('portfolio-theme');
-        if (stored === 'light' || stored === 'dark') {
+        if (THEMES.includes(stored)) {
             setTheme(stored);
         } else if (typeof window !== 'undefined') {
             const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
@@ -27,10 +30,20 @@ export function ThemeProvider({ children }) {
         root.setAttribute('data-theme', theme);
         document.body?.setAttribute('data-theme', theme);
         localStorage.setItem('portfolio-theme', theme);
+
+        // Set font family for hacker theme
+        if (theme === 'hacker') {
+            document.body.style.fontFamily = "'Fira Code', 'JetBrains Mono', 'Source Code Pro', 'Cascadia Code', 'Consolas', monospace";
+        } else {
+            document.body.style.fontFamily = '';
+        }
     }, [theme, mounted]);
 
     const toggleTheme = () => {
-        setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+        setTheme(prev => {
+            const idx = THEMES.indexOf(prev);
+            return THEMES[(idx + 1) % THEMES.length];
+        });
     };
 
     // Prevent flash of wrong theme
@@ -39,7 +52,7 @@ export function ThemeProvider({ children }) {
     }
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
             {children}
         </ThemeContext.Provider>
     );
