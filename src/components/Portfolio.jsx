@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 const MemoNavbar = React.memo(Navbar);
 const MemoFooter = React.memo(Footer);
+import { useTheme } from '../context/ThemeContext';
 import {
   Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2,
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
@@ -13,6 +14,8 @@ import {
 } from 'lucide-react';
 
 const Portfolio = () => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
   const [isMounted, setIsMounted] = useState(false);
   const [activeTech, setActiveTech] = useState('all');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -228,10 +231,10 @@ const Portfolio = () => {
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
-        <div className="absolute top-0 -left-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+        <div className={`absolute inset-0 ${isLight ? 'bg-gradient-to-br from-slate-50 via-white to-slate-50' : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'}`}></div>
+        <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl animate-pulse ${isLight ? 'bg-cyan-500/8' : 'bg-cyan-500/10'}`}></div>
+        <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl animate-pulse ${isLight ? 'bg-purple-500/8' : 'bg-purple-500/10'}`} style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+        <div className={`absolute inset-0 ${isLight ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wMykiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20" : "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"}`}></div>
 
         {particles.map(p => (
           <div
@@ -242,9 +245,9 @@ const Portfolio = () => {
               top: `${p.y}%`,
               width: `${p.size}px`,
               height: `${p.size}px`,
-              opacity: p.opacity,
+              opacity: isLight ? p.opacity * 0.4 : p.opacity,
               background: p.color === 'cyan' ? '#06b6d4' : p.color === 'purple' ? '#8b5cf6' : '#ec4899',
-              boxShadow: `0 0 ${p.size * 4}px ${p.color === 'cyan' ? 'rgba(6, 182, 212, 0.6)' : p.color === 'purple' ? 'rgba(139, 92, 246, 0.6)' : 'rgba(236, 72, 153, 0.6)'}`
+              boxShadow: `0 0 ${p.size * 4}px ${p.color === 'cyan' ? (isLight ? 'rgba(6, 182, 212, 0.3)' : 'rgba(6, 182, 212, 0.6)') : p.color === 'purple' ? (isLight ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.6)') : (isLight ? 'rgba(236, 72, 153, 0.3)' : 'rgba(236, 72, 153, 0.6)')}`
             }}
           />
         ))}
@@ -256,9 +259,9 @@ const Portfolio = () => {
             style={{
               left: `${line.x}%`,
               top: `${line.y}%`,
-              color: '#06b6d4',
-              opacity: line.opacity,
-              textShadow: '0 0 10px rgba(6, 182, 212, 0.5)'
+              color: isLight ? '#0891b2' : '#06b6d4',
+              opacity: isLight ? line.opacity * 0.4 : line.opacity,
+              textShadow: isLight ? '0 0 5px rgba(6, 182, 212, 0.2)' : '0 0 10px rgba(6, 182, 212, 0.5)'
             }}
           >
             {line.text}
@@ -266,7 +269,7 @@ const Portfolio = () => {
         ))}
 
         <div
-          className="absolute w-[500px] h-[500px] bg-gradient-radial from-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none transition-all duration-700"
+          className={`absolute w-[500px] h-[500px] bg-gradient-radial rounded-full blur-3xl pointer-events-none transition-all duration-700 ${isLight ? 'from-cyan-500/5 to-transparent' : 'from-cyan-500/10 to-transparent'}`}
           style={{
             left: `${mousePos.x}%`,
             top: `${mousePos.y}%`,
