@@ -177,25 +177,31 @@ export default function Navbar() {
             {/* CTA & Mobile Menu */}
             <div className="flex items-center gap-3">
               {/* Theme Toggle Button */}
-              <button
-                onClick={toggleTheme}
-                className={`relative p-2.5 rounded-xl border transition-all duration-300 hover:scale-110 group ${isHacker
-                  ? 'bg-[#000a02] border-[#00ff41]/20 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.2)]'
-                  : isLight
-                    ? 'bg-slate-100 border-slate-200 hover:border-purple-400 hover:bg-purple-50'
-                    : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500 hover:bg-slate-800'
-                  }`}
-                aria-label={`Switch theme (current: ${theme})`}
-                title={theme === 'dark' ? 'Switch to Light' : theme === 'light' ? 'Switch to Hacker' : 'Switch to Dark'}
-              >
-                {theme === 'hacker' ? (
-                  <MonitorDot className="w-4 h-4 md:w-5 md:h-5 text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.8)] transition-all" />
-                ) : theme === 'light' ? (
-                  <Moon className="w-4 h-4 md:w-5 md:h-5 text-purple-500 group-hover:rotate-12 transition-transform" />
-                ) : (
-                  <Sun className="w-4 h-4 md:w-5 md:h-5 text-yellow-400 group-hover:rotate-45 transition-transform" />
-                )}
-              </button>
+              <div className="relative group/theme">
+                <button
+                  onClick={toggleTheme}
+                  className={`relative flex items-center gap-2 px-3 py-2 rounded-xl border transition-all duration-300 hover:scale-105 ${isHacker
+                    ? 'bg-[#000a02] border-[#00ff41]/20 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.15)]'
+                    : isLight
+                      ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-sm hover:shadow-md'
+                      : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500 hover:bg-slate-800'
+                    }`}
+                  aria-label={`Switch theme (current: ${theme})`}
+                  title={theme === 'dark' ? 'Switch to Light' : theme === 'light' ? 'Switch to Hacker' : 'Switch to Dark'}
+                >
+                  <div className="relative w-5 h-5 md:w-[22px] md:h-[22px]">
+                    {/* Dark icon */}
+                    <Sun className={`absolute inset-0 w-full h-full text-yellow-400 transition-all duration-300 ${theme === 'dark' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50'}`} />
+                    {/* Light icon */}
+                    <Moon className={`absolute inset-0 w-full h-full text-indigo-500 transition-all duration-300 ${theme === 'light' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'}`} />
+                    {/* Hacker icon */}
+                    <Terminal className={`absolute inset-0 w-full h-full text-[#00ff41] transition-all duration-300 ${theme === 'hacker' ? 'opacity-100 rotate-0 scale-100 drop-shadow-[0_0_4px_rgba(0,255,65,0.6)]' : 'opacity-0 rotate-90 scale-50'}`} />
+                  </div>
+                  <span className={`hidden lg:block text-xs font-medium ${isHacker ? 'text-[#00ff41]/80 font-mono' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    {theme === 'dark' ? 'Dark' : theme === 'light' ? 'Light' : 'Hack'}
+                  </span>
+                </button>
+              </div>
 
               {/* Hire Me Button */}
               <button

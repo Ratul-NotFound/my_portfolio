@@ -227,7 +227,7 @@ const Portfolio = () => {
   if (!isMounted) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
+    <div className={`min-h-screen ${isHacker ? 'bg-[#000600] text-[#00ff41]' : isLight ? 'bg-gradient-to-br from-blue-50 via-indigo-50/60 to-purple-50/50 text-slate-900' : 'bg-slate-950 text-white'} relative overflow-hidden`}>
       <MemoNavbar />
 
       {/* Background */}
@@ -298,43 +298,43 @@ const Portfolio = () => {
           <div className="max-w-7xl mx-auto w-full">
             <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
               <div className="space-y-8 animate-slide-up">
-                <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-full text-sm hover:border-cyan-500/50 transition-all duration-300 cursor-default group">
+                <div className={`inline-flex items-center gap-3 px-5 py-2.5 backdrop-blur-xl border rounded-full text-sm transition-all duration-300 cursor-default group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 hover:border-[#00ff41]/50' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500/50'}`}>
                   <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isHacker ? 'bg-[#00ff41]' : 'bg-green-400'} opacity-75`}></span>
+                    <span className={`relative inline-flex rounded-full h-3 w-3 ${isHacker ? 'bg-[#00ff41]' : 'bg-green-500'}`}></span>
                   </span>
-                  <span className="text-slate-300 font-mono text-xs md:text-sm">system.status = <span className="text-green-400">&quot;available&quot;</span></span>
-                  <Coffee className="w-4 h-4 text-slate-400 group-hover:text-cyan-400 transition-colors" />
+                  <span className={`font-mono text-xs md:text-sm ${isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>system.status = <span className={isHacker ? 'text-[#00ff41]' : 'text-green-400'}>&quot;available&quot;</span></span>
+                  <Coffee className={`w-4 h-4 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover:text-[#00ff41]' : isLight ? 'text-slate-400 group-hover:text-indigo-500' : 'text-slate-400 group-hover:text-cyan-400'}`} />
                 </div>
 
                 <div className="space-y-4">
                   <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-none">
-                    <span className="block text-slate-200 mb-2">Building</span>
-                    <span className="block text-cyan-400">
+                    <span className={`block mb-2 ${isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>Building</span>
+                    <span className={`block ${isHacker ? 'text-[#00ff41] drop-shadow-[0_0_10px_rgba(0,255,65,0.5)]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>
                       Scalable
                     </span>
-                    <span className="block text-slate-200 mb-2">Systems</span>
-                    <span className="block text-purple-400">
+                    <span className={`block mb-2 ${isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>Systems</span>
+                    <span className={`block ${isHacker ? 'text-[#33ff66] drop-shadow-[0_0_10px_rgba(0,255,65,0.4)]' : isLight ? 'text-purple-600' : 'text-purple-400'}`}>
                       with AI
                     </span>
                   </h1>
 
-                  <div className="flex items-center gap-2 text-lg md:text-xl text-slate-400 font-mono h-8">
-                    <Terminal className="w-5 h-5 text-cyan-400" />
-                    <span className="text-cyan-400">$</span>
+                  <div className={`flex items-center gap-2 text-lg md:text-xl font-mono h-8 ${isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    <Terminal className={`w-5 h-5 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
+                    <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}>$</span>
                     <span>{typedText}</span>
-                    <span className="w-2 h-5 bg-cyan-400 animate-blink"></span>
+                    <span className={`w-2 h-5 animate-blink ${isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_rgba(0,255,65,0.6)]' : isLight ? 'bg-indigo-500' : 'bg-cyan-400'}`}></span>
                   </div>
 
-                  <p className="text-base md:text-lg lg:text-xl text-slate-400 max-w-2xl leading-relaxed">
-                    Full Stack Engineer & AI Researcher specializing in <span className="text-cyan-400 font-semibold">high-performance applications</span>, <span className="text-purple-400 font-semibold">machine learning</span>, and <span className="text-pink-400 font-semibold">scalable architecture</span>.
+                  <p className={`text-base md:text-lg lg:text-xl max-w-2xl leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+                    Full Stack Engineer & AI Researcher specializing in <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>high-performance applications</span>, <span className={`font-semibold ${isHacker ? 'text-[#33ff66]' : isLight ? 'text-purple-600' : 'text-purple-400'}`}>machine learning</span>, and <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-pink-600' : 'text-pink-400'}`}>scalable architecture</span>.
                   </p>
                 </div>
 
                 <div className="flex flex-wrap gap-4">
                   <a
                     href="#projects"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl font-semibold transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden"
+                    className={`group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 overflow-hidden ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'}`}
                   >
                     <span className="relative z-10">Explore Projects</span>
                     <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
@@ -344,7 +344,7 @@ const Portfolio = () => {
                   <a
                     href="/resume.pdf"
                     download
-                    className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-800/50 hover:bg-slate-800 backdrop-blur-xl border border-slate-700 hover:border-cyan-500 rounded-xl font-semibold transition-all hover:shadow-lg hover:scale-105"
+                    className={`group inline-flex items-center gap-3 px-8 py-4 backdrop-blur-xl border rounded-xl font-semibold transition-all hover:shadow-lg hover:scale-105 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 text-[#00ff41]/70 hover:border-[#00ff41] hover:text-[#00ff41]' : isLight ? 'bg-white/70 border-slate-200 text-slate-700 hover:border-indigo-400 hover:bg-white' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500 text-white'}`}
                   >
                     <Download className="w-5 h-5 group-hover:animate-bounce" />
                     <span>Resume</span>
@@ -362,10 +362,10 @@ const Portfolio = () => {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group p-4 bg-slate-800/30 backdrop-blur-xl border border-slate-700 hover:border-cyan-500 rounded-xl transition-all hover:scale-110"
+                      className={`group p-4 backdrop-blur-xl border rounded-xl transition-all hover:scale-110 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.15)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-lg shadow-sm' : 'bg-slate-800/30 border-slate-700 hover:border-cyan-500'}`}
                       aria-label={social.label}
                     >
-                      <social.icon className="w-6 h-6 text-slate-400 group-hover:text-cyan-400 transition-colors" />
+                      <social.icon className={`w-6 h-6 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover:text-[#00ff41]' : isLight ? 'text-slate-500 group-hover:text-indigo-600' : 'text-slate-400 group-hover:text-cyan-400'}`} />
                     </a>
                   ))}
                 </div>
@@ -373,9 +373,9 @@ const Portfolio = () => {
 
               <div className="relative">
                 <div className="relative aspect-square max-w-lg mx-auto">
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl"></div>
-                  <div className="relative bg-slate-900/90 backdrop-blur-2xl border border-slate-700 rounded-3xl p-8 space-y-6 hover:border-cyan-500/50 transition-all duration-500">
-                    <div className="relative aspect-square rounded-2xl overflow-hidden border-4 border-slate-700 group shadow-xl hover:shadow-cyan-500/30 transition-shadow duration-500">
+                  <div className={`absolute inset-0 rounded-3xl blur-3xl ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-r from-indigo-300/30 via-purple-300/20 to-pink-300/20' : 'bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20'}`}></div>
+                  <div className={`relative backdrop-blur-2xl border rounded-3xl p-8 space-y-6 transition-all duration-500 ${isHacker ? 'bg-[#000a02]/90 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-slate-900/90 border-slate-700 hover:border-cyan-500/50'}`}>
+                    <div className={`relative aspect-square rounded-2xl overflow-hidden border-4 group shadow-xl transition-shadow duration-500 ${isHacker ? 'border-[#00ff41]/20 hover:shadow-[0_0_20px_rgba(0,255,65,0.15)]' : isLight ? 'border-slate-200 hover:shadow-indigo-300/30' : 'border-slate-700 hover:shadow-cyan-500/30'}`}>
                       <img
                         src="/profile.jpg"
                         alt="Mahmud Hasan Ratul"
@@ -384,14 +384,14 @@ const Portfolio = () => {
                           e.target.src = "/profile.jpg";
                         }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]' : isLight ? 'from-white' : 'from-slate-900'} via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
                     </div>
 
                     <div className="space-y-4">
                       <div>
-                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">Mahmud Hasan Ratul</h3>
-                        <p className="text-slate-400 flex items-center gap-2 text-sm md:text-base">
-                          <MapPin className="w-4 h-4 text-cyan-400" />
+                        <h3 className={`text-2xl md:text-3xl font-bold mb-2 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>Mahmud Hasan Ratul</h3>
+                        <p className={`flex items-center gap-2 text-sm md:text-base ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                          <MapPin className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
                           Dhaka, Bangladesh • GMT+6
                         </p>
                       </div>
@@ -400,7 +400,7 @@ const Portfolio = () => {
                         {['Full Stack', 'AI/ML', 'DevOps', 'System Design'].map((tag, i) => (
                           <span
                             key={tag}
-                            className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-slate-600 hover:border-cyan-500 rounded-lg text-sm text-slate-300 hover:text-cyan-300 transition-all cursor-default hover:scale-105"
+                            className={`px-4 py-2 backdrop-blur-xl border rounded-lg text-sm transition-all cursor-default hover:scale-105 ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/70 hover:border-[#00ff41]/40 hover:text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600 hover:border-indigo-400' : 'bg-slate-800/50 border-slate-600 text-slate-300 hover:border-cyan-500 hover:text-cyan-300'}`}
                             style={{ animationDelay: `${i * 100}ms` }}
                           >
                             {tag}
@@ -410,12 +410,12 @@ const Portfolio = () => {
 
                       <div className="flex items-center gap-4 pt-2">
                         <div className="flex items-center gap-2">
-                          <Circle className="w-2 h-2 fill-green-500 text-green-500" />
-                          <span className="text-xs text-slate-400">Available</span>
+                          <Circle className={`w-2 h-2 ${isHacker ? 'fill-[#00ff41] text-[#00ff41]' : 'fill-green-500 text-green-500'}`} />
+                          <span className={`text-xs ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Available</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Coffee className="w-4 h-4 text-slate-400" />
-                          <span className="text-xs text-slate-400">Fueled by coffee</span>
+                          <Coffee className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]/40' : isLight ? 'text-slate-400' : 'text-slate-400'}`} />
+                          <span className={`text-xs ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Fueled by coffee</span>
                         </div>
                       </div>
                     </div>
@@ -428,13 +428,13 @@ const Portfolio = () => {
               {stats.map((stat, i) => (
                 <div
                   key={i}
-                  className="group relative p-6 md:p-8 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl transition-all hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden"
+                  className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl transition-all hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
                 >
                   <div className="relative z-10">
-                    <stat.icon className="w-8 h-8 md:w-10 md:h-10 text-cyan-400 mb-4 group-hover:scale-110 transition-transform" />
-                    <div className="text-3xl md:text-4xl font-black text-white mb-2 group-hover:text-cyan-400 transition-colors">{stat.value}</div>
-                    <div className="text-sm md:text-base font-semibold text-slate-300 mb-1">{stat.label}</div>
-                    <div className="text-xs text-slate-500">{stat.desc}</div>
+                    <stat.icon className={`w-8 h-8 md:w-10 md:h-10 mb-4 group-hover:scale-110 transition-transform ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
+                    <div className={`text-3xl md:text-4xl font-black mb-2 transition-colors ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-400'}`}>{stat.value}</div>
+                    <div className={`text-sm md:text-base font-semibold mb-1 ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-700' : 'text-slate-300'}`}>{stat.label}</div>
+                    <div className={`text-xs ${isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>{stat.desc}</div>
                   </div>
                 </div>
               ))}
@@ -446,16 +446,16 @@ const Portfolio = () => {
         <section id="about" className="py-10 md:py-16 px-2">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8 md:mb-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-sm text-cyan-300 mb-6">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
                 <Sparkles className="w-4 h-4" />
                 About Me
               </div>
               <h2 className="text-4xl md:text-6xl font-black mb-6">
-                <span className="text-cyan-400">
+                <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}>
                   Passionate Developer
                 </span>
               </h2>
-              <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto">
+              <p className={`text-lg md:text-xl max-w-3xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                 Building scalable systems and leveraging AI to solve real-world problems
               </p>
             </div>
@@ -483,18 +483,18 @@ const Portfolio = () => {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="group relative p-8 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden"
+                  className={`group relative p-8 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
                 >
                   <div className="relative z-10">
-                    <div className="w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-purple-600/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                      <item.icon className="w-8 h-8 text-cyan-400" />
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-600/10'}`}>
+                      <item.icon className={`w-8 h-8 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
                     </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">{item.title}</h3>
-                    <p className="text-slate-400 mb-6 leading-relaxed">{item.desc}</p>
+                    <h3 className={`text-xl md:text-2xl font-bold mb-4 transition-colors ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>{item.title}</h3>
+                    <p className={`mb-6 leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{item.desc}</p>
 
                     <div className="flex flex-wrap gap-2">
                       {item.skills.map((skill, j) => (
-                        <span key={j} className="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded-lg text-xs text-slate-400 group-hover:border-cyan-500/30 transition-colors">
+                        <span key={j} className={`px-3 py-1 border rounded-lg text-xs transition-colors ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/60 group-hover:border-[#00ff41]/30' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-500 group-hover:border-indigo-300' : 'bg-slate-800/50 border-slate-700 text-slate-400 group-hover:border-cyan-500/30'}`}>
                           {skill}
                         </span>
                       ))}
@@ -510,16 +510,16 @@ const Portfolio = () => {
         <section id="projects" className="py-10 md:py-16 px-2 relative">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8 md:mb-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-sm text-purple-300 mb-6 animate-pulse">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 animate-pulse ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-purple-50 border-purple-200 text-purple-600' : 'bg-purple-500/10 border-purple-500/30 text-purple-300'}`}>
                 <Rocket className="w-4 h-4" />
                 <span className="font-mono">Case Studies</span>
               </div>
               <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
-                <span className="text-purple-400">
+                <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'}>
                   Featured Work
                 </span>
               </h2>
-              <p className="text-lg md:text-xl text-slate-400">
+              <p className={`text-lg md:text-xl ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                 Real-world applications with measurable impact
               </p>
             </div>
@@ -530,7 +530,7 @@ const Portfolio = () => {
                   key={project.id}
                   onMouseEnter={() => handleSetActiveProject(project.id)}
                   onMouseLeave={handleClearActiveProject}
-                  className="group relative bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.01] hover:shadow-xl hover:shadow-cyan-500/10"
+                  className={`group relative backdrop-blur-xl border rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.01] hover:shadow-xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
                     <div className="flex items-center justify-center w-full h-full aspect-[16/10] overflow-hidden">
@@ -588,29 +588,29 @@ const Portfolio = () => {
                   </div>
                   <div className="p-4 space-y-4">
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-black text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                      <h3 className={`text-2xl md:text-3xl font-black mb-2 transition-colors ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>
                         {project.title}
                       </h3>
-                      <p className="text-slate-300 leading-relaxed">{project.description}</p>
+                      <p className={`leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-300'}`}>{project.description}</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                       {project.metrics.map((metric, j) => (
                         <div
                           key={j}
-                          className="relative group/metric p-3 bg-slate-800/30 backdrop-blur-sm border border-slate-700 hover:border-cyan-500/50 rounded-xl text-center transition-all hover:scale-105 cursor-default overflow-hidden"
+                          className={`relative group/metric p-3 backdrop-blur-sm border rounded-xl text-center transition-all hover:scale-105 cursor-default overflow-hidden ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/10 hover:border-[#00ff41]/30' : isLight ? 'bg-indigo-50/50 border-indigo-200 hover:border-indigo-400' : 'bg-slate-800/30 border-slate-700 hover:border-cyan-500/50'}`}
                         >
                           <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover/metric:opacity-10 transition-opacity`}></div>
-                          <span className="relative text-xs font-bold text-cyan-400">{metric}</span>
+                          <span className={`relative text-xs font-bold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>{metric}</span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-800">
+                    <div className={`flex flex-wrap gap-2 pt-4 border-t ${isHacker ? 'border-[#00ff41]/10' : isLight ? 'border-slate-200' : 'border-slate-800'}`}>
                       {project.tech.map((tech, j) => (
                         <span
                           key={j}
-                          className="px-3 py-1.5 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-lg text-xs font-medium text-cyan-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 transition-all cursor-default"
+                          className={`px-3 py-1.5 border rounded-lg text-xs font-medium transition-all cursor-default ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/70 hover:border-[#00ff41]/40' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600 hover:border-indigo-400 hover:shadow-sm' : 'bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-500/30 text-cyan-300 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20'}`}
                         >
                           {tech}
                         </span>
@@ -637,7 +637,7 @@ const Portfolio = () => {
                 href="https://github.com/ratul-notfound"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-3 px-8 py-4 bg-slate-900/50 hover:bg-slate-800 backdrop-blur-xl border border-slate-800 hover:border-cyan-500 rounded-2xl font-semibold transition-all hover:scale-105 hover:shadow-xl"
+                className={`group inline-flex items-center gap-3 px-8 py-4 backdrop-blur-xl border rounded-2xl font-semibold transition-all hover:scale-105 hover:shadow-xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 text-[#00ff41]/70 hover:border-[#00ff41] hover:text-[#00ff41]' : isLight ? 'bg-white/70 border-slate-200 text-slate-700 hover:border-indigo-400 hover:shadow-indigo-200/50' : 'bg-slate-900/50 hover:bg-slate-800 border-slate-800 hover:border-cyan-500'}`}
               >
                 <Github className="w-5 h-5" />
                 <span>View All Projects on GitHub</span>
@@ -651,22 +651,22 @@ const Portfolio = () => {
         <section id="skills" className="py-10 md:py-16 px-2 relative">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8 md:mb-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-sm text-cyan-300 mb-6 animate-pulse">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 animate-pulse ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
                 <Zap className="w-4 h-4" />
                 <span className="font-mono">Tech Stack</span>
               </div>
               <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
-                <span className="text-cyan-400">
+                <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}>
                   Technologies
                 </span>
               </h2>
-              <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
+              <p className={`text-lg md:text-xl max-w-2xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                 Modern tools and frameworks I use to craft exceptional digital experiences
               </p>
             </div>
 
             <div className="flex justify-center mb-12 md:mb-16">
-              <div className="inline-flex flex-wrap items-center gap-2 md:gap-3 p-2 bg-slate-900/80 backdrop-blur-2xl border border-slate-800 rounded-2xl shadow-2xl">
+              <div className={`inline-flex flex-wrap items-center gap-2 md:gap-3 p-2 backdrop-blur-2xl border rounded-2xl shadow-2xl ${isHacker ? 'bg-[#000a02]/90 border-[#00ff41]/15' : isLight ? 'bg-white/80 border-slate-200' : 'bg-slate-900/80 border-slate-800'}`}>
                 {[
                   { id: 'all', label: 'All', icon: Star },
                   { id: 'frontend', label: 'Frontend', icon: Code2 },
@@ -678,8 +678,8 @@ const Portfolio = () => {
                     key={tech.id}
                     onClick={() => handleSetActiveTech(tech.id)}
                     className={`group relative flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${activeTech === tech.id
-                      ? 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      ? isHacker ? 'bg-[#00ff41]/15 text-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.15)]' : isLight ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30'
+                      : isHacker ? 'text-[#00cc32]/50 hover:text-[#00ff41] hover:bg-[#00ff41]/5' : isLight ? 'text-slate-500 hover:text-indigo-600 hover:bg-indigo-50' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                       }`}
                   >
                     <tech.icon className="w-4 h-4" />
@@ -701,30 +701,30 @@ const Portfolio = () => {
                     className="group relative animate-slide-up"
                   >
                     <div className="relative overflow-hidden mb-6">
-                      <div className="flex items-center gap-4 p-6 bg-gradient-to-r from-slate-900/80 to-slate-900/40 backdrop-blur-xl border border-slate-800 rounded-2xl">
-                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
+                      <div className={`flex items-center gap-4 p-6 bg-gradient-to-r backdrop-blur-xl border rounded-2xl ${isHacker ? 'from-[#000a02]/80 to-[#000a02]/40 border-[#00ff41]/15' : isLight ? 'from-white/80 to-white/40 border-slate-200 shadow-sm' : 'from-slate-900/80 to-slate-900/40 border-slate-800'}`}>
+                        <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent ${isHacker ? 'via-[#00ff41]' : isLight ? 'via-indigo-400' : 'via-cyan-500'} to-transparent`}></div>
 
                         <div className="relative">
                           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-purple-500 rounded-xl blur opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                          <div className="relative w-14 h-14 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                            {category === 'frontend' && <Code2 className="w-7 h-7 text-cyan-400" />}
-                            {category === 'backend' && <Server className="w-7 h-7 text-purple-400" />}
-                            {category === 'ai' && <Brain className="w-7 h-7 text-pink-400" />}
-                            {category === 'infra' && <Globe className="w-7 h-7 text-cyan-400" />}
+                          <div className={`relative w-14 h-14 border rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform ${isHacker ? 'bg-[#000a02] border-[#00ff41]/20' : isLight ? 'bg-white border-slate-200 shadow' : 'bg-slate-900 border-slate-700'}`}>
+                            {category === 'frontend' && <Code2 className={`w-7 h-7 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />}
+                            {category === 'backend' && <Server className={`w-7 h-7 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-500' : 'text-purple-400'}`} />}
+                            {category === 'ai' && <Brain className={`w-7 h-7 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-pink-500' : 'text-pink-400'}`} />}
+                            {category === 'infra' && <Globe className={`w-7 h-7 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />}
                           </div>
                         </div>
 
                         <div className="flex-1">
-                          <h3 className="text-2xl md:text-3xl font-black text-white capitalize mb-1">
+                          <h3 className={`text-2xl md:text-3xl font-black capitalize mb-1 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>
                             {category === 'ai' ? 'AI & Machine Learning' : category === 'infra' ? 'DevOps & Infrastructure' : category}
                           </h3>
-                          <p className="text-sm text-slate-400 font-mono">
+                          <p className={`text-sm font-mono ${isHacker ? 'text-[#00cc32]/50' : isLight ? 'text-slate-400' : 'text-slate-400'}`}>
                             {skills.length} Technologies
                           </p>
                         </div>
 
                         <div className="hidden md:block">
-                          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500/50 to-purple-500/50 rounded-full"></div>
+                          <div className={`w-20 h-1 rounded-full bg-gradient-to-r ${isHacker ? 'from-[#00ff41]/50 to-[#00ff41]/10' : isLight ? 'from-indigo-400/50 to-purple-400/50' : 'from-cyan-500/50 to-purple-500/50'}`}></div>
                         </div>
                       </div>
                     </div>
@@ -733,7 +733,7 @@ const Portfolio = () => {
                       {skills.map((skill, i) => (
                         <div
                           key={i}
-                          className="group/card relative p-6 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-cyan-500/10 cursor-default overflow-hidden"
+                          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
 
@@ -741,7 +741,7 @@ const Portfolio = () => {
                             <div className="relative w-16 h-16 flex items-center justify-center">
                               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
 
-                              <div className="relative w-full h-full p-2 bg-slate-800/50 rounded-xl border border-slate-700 group-hover/card:border-slate-600 transition-all group-hover/card:scale-110">
+                              <div className={`relative w-full h-full p-2 rounded-xl border transition-all group-hover/card:scale-110 ${isHacker ? 'bg-[#000a02] border-[#00ff41]/15 group-hover/card:border-[#00ff41]/30' : isLight ? 'bg-white border-slate-200 group-hover/card:border-indigo-300 shadow-sm' : 'bg-slate-800/50 border-slate-700 group-hover/card:border-slate-600'}`}>
                                 <img
                                   src={skill.icon}
                                   alt={skill.name}
@@ -756,7 +756,7 @@ const Portfolio = () => {
                             </div>
 
                             <div className="text-center">
-                              <span className="text-sm font-semibold text-slate-300 group-hover/card:text-cyan-300 transition-colors block">
+                              <span className={`text-sm font-semibold transition-colors block ${isHacker ? 'text-[#00cc32]/70 group-hover/card:text-[#00ff41]' : isLight ? 'text-slate-600 group-hover/card:text-indigo-600' : 'text-slate-300 group-hover/card:text-cyan-300'}`}>
                                 {skill.name}
                               </span>
                             </div>
@@ -773,8 +773,8 @@ const Portfolio = () => {
             </div>
 
             <div className="text-center mt-16">
-              <div className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-full text-sm text-slate-400">
-                <Sparkles className="w-4 h-4 text-cyan-400" />
+              <div className={`inline-flex items-center gap-2 px-6 py-3 backdrop-blur-xl border rounded-full text-sm ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 text-[#00cc32]/60' : isLight ? 'bg-white/70 border-slate-200 text-slate-500' : 'bg-slate-900/50 border-slate-800 text-slate-400'}`}>
+                <Sparkles className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-400' : 'text-cyan-400'}`} />
                 <span>Always learning and exploring new technologies</span>
               </div>
             </div>

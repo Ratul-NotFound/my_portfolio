@@ -214,20 +214,33 @@
 }
 
 [data-theme='light'] .glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(24px) saturate(180%);
-  border-color: rgba(203, 213, 225, 0.4);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06),
-              0 1px 4px rgba(0, 0, 0, 0.04),
-              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(200%);
+  border-color: rgba(203, 213, 225, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06),
+              0 2px 8px rgba(0, 0, 0, 0.04),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 [data-theme='light'] .glass-hover:hover {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: rgba(6, 182, 212, 0.3);
-  box-shadow: 0 8px 24px rgba(6, 182, 212, 0.12),
-              0 2px 8px rgba(0, 0, 0, 0.06),
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 12px 40px rgba(6, 182, 212, 0.12),
+              0 4px 12px rgba(0, 0, 0, 0.06),
               inset 0 1px 0 rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+}
+
+/* Light: enhanced card hover lift effect */
+[data-theme='light'] .group:hover {
+  transform: translateY(-2px);
+}
+
+/* Light: subtle warm tint on backdrop blur */
+[data-theme='light'] .backdrop-blur-xl,
+[data-theme='light'] .backdrop-blur-2xl {
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.02) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.02) !important;
 }
 
 [data-theme='light'] ::-webkit-scrollbar-track {
@@ -384,14 +397,23 @@
 
 /* ========== HACKER / MATRIX THEME OVERRIDES ========== */
 [data-theme='hacker'] body {
-  background-color: #000400 !important;
+  background-color: #000600 !important;
   color: #00ff41 !important;
   font-family: 'Fira Code', 'JetBrains Mono', 'Source Code Pro', 'Consolas', monospace !important;
+  text-shadow: 0 0 1px rgba(0, 255, 65, 0.15);
 }
 
 [data-theme='hacker'] * {
-  border-color: rgba(0, 255, 65, 0.15) !important;
+  border-color: rgba(0, 255, 65, 0.12) !important;
   font-family: inherit;
+}
+
+/* Hacker: phosphor text glow on headings */
+[data-theme='hacker'] h1,
+[data-theme='hacker'] h2,
+[data-theme='hacker'] h3 {
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.4), 0 0 20px rgba(0, 255, 65, 0.15) !important;
+  letter-spacing: 0.02em;
 }
 
 /* Hacker: backgrounds - pitch black with green tinted cards */
@@ -750,7 +772,7 @@
   --tw-gradient-to: #006619 !important;
 }
 
-/* Hacker: special scanline effect overlay */
+/* Hacker: subtle scanline effect overlay */
 [data-theme='hacker'] body::after {
   content: '';
   position: fixed;
@@ -760,30 +782,68 @@
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    rgba(0, 255, 65, 0.015) 2px,
-    rgba(0, 255, 65, 0.015) 4px
+    transparent 3px,
+    rgba(0, 255, 65, 0.012) 3px,
+    rgba(0, 255, 65, 0.012) 4px
   );
+  animation: scanline-drift 8s linear infinite;
 }
 
-/* Hacker: CRT vignette effect */
+/* Hacker: CRT vignette + subtle flicker */
 [data-theme='hacker'] body::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9998;
-  background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+  animation: crt-flicker 4s ease-in-out infinite;
+}
+
+@keyframes scanline-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 200px; }
+}
+
+@keyframes crt-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.97; }
+  52% { opacity: 1; }
+  80% { opacity: 0.98; }
+  82% { opacity: 1; }
+}
+
+/* Hacker: matrix rain animation for particles */
+@keyframes matrix-drop {
+  0% { transform: translateY(-100vh); opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 0.7; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.matrix-char {
+  animation: matrix-drop linear infinite;
+  font-family: 'Fira Code', monospace;
+  color: #00ff41;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.8), 0 0 20px rgba(0, 255, 65, 0.4);
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* Hacker: animate blink green cursor */
 [data-theme='hacker'] .animate-blink {
   background-color: #00ff41 !important;
+  box-shadow: 0 0 6px #00ff41 !important;
 }
 
 /* Hacker: white backgrounds in gradient text used for buttons */
 [data-theme='hacker'] .bg-white\/20 {
   background-color: rgba(0, 255, 65, 0.15) !important;
+}
+
+[data-theme='hacker'] .bg-white\/10 {
+  background-color: rgba(0, 255, 65, 0.08) !important;
 }
 
 /* Hacker: fill overrides */
@@ -794,10 +854,53 @@
 /* Hacker: green ping dots */
 [data-theme='hacker'] .bg-green-400 {
   background-color: #00ff41 !important;
+  box-shadow: 0 0 6px #00ff41;
 }
 
 [data-theme='hacker'] .bg-green-500 {
   background-color: #00cc32 !important;
+  box-shadow: 0 0 4px #00cc32;
+}
+
+/* Hacker: links get green glow on hover */
+[data-theme='hacker'] a:hover {
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+}
+
+/* Hacker: img borders */
+[data-theme='hacker'] img {
+  border-color: rgba(0, 255, 65, 0.12) !important;
+  filter: saturate(0.6) brightness(0.85) contrast(1.1);
+}
+
+[data-theme='hacker'] img:hover {
+  filter: saturate(0.7) brightness(0.9) contrast(1.15);
+}
+
+/* Hacker: gradient button overrides */
+[data-theme='hacker'] .from-cyan-500 { --tw-gradient-from: #00802a !important; }
+[data-theme='hacker'] .to-purple-500 { --tw-gradient-to: #00b32c !important; }
+[data-theme='hacker'] .from-green-600 { --tw-gradient-from: #006619 !important; }
+[data-theme='hacker'] .to-emerald-600 { --tw-gradient-to: #009926 !important; }
+[data-theme='hacker'] .from-orange-600 { --tw-gradient-from: #005515 !important; }
+[data-theme='hacker'] .to-red-600 { --tw-gradient-to: #007a20 !important; }
+[data-theme='hacker'] .from-cyan-600.to-blue-600 { --tw-gradient-from: #006619 !important; --tw-gradient-to: #009926 !important; }
+
+/* Hacker: hover glow effect on all interactive cards */
+[data-theme='hacker'] .group:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.08), inset 0 0 20px rgba(0, 255, 65, 0.02) !important;
+}
+
+[data-theme='hacker'] .hover\:scale-105:hover,
+[data-theme='hacker'] .hover\:scale-110:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.1), 0 0 60px rgba(0, 255, 65, 0.03) !important;
+}
+
+/* Hacker: backdrop blur tinting */
+[data-theme='hacker'] .backdrop-blur-xl,
+[data-theme='hacker'] .backdrop-blur-2xl {
+  backdrop-filter: blur(20px) saturate(120%) brightness(0.95) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(120%) brightness(0.95) !important;
 }
 
 @layer components {
