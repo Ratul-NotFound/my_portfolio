@@ -192,7 +192,7 @@ export default function Achievements() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
+    <div className={`min-h-screen ${isHacker ? 'bg-[#000600] text-[#00ff41]' : isLight ? 'bg-gradient-to-br from-purple-50 via-fuchsia-50/60 to-pink-50/50 text-slate-900' : 'bg-slate-950 text-white'} relative overflow-hidden`}>
       <Navbar />
 
       {/* Background */}
@@ -222,15 +222,15 @@ export default function Achievements() {
         {/* Hero */}
         <section className="py-20 md:py-32 px-4">
           <div className="max-w-7xl mx-auto text-center">
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-purple-500/10 border border-purple-500/30 rounded-full text-sm text-purple-300 mb-8 font-mono animate-pulse">
+            <div className={`inline-flex items-center gap-3 px-5 py-2.5 border rounded-full text-sm mb-8 font-mono animate-pulse ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-purple-50 border-purple-200 text-purple-600' : 'bg-purple-500/10 border-purple-500/30 text-purple-300'}`}>
               <Sparkles className="w-4 h-4" />
               <span>achievements</span>
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none">
-              <span className="block text-slate-200 mb-4">Leadership &</span>
-              <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Recognition</span>
+              <span className={`block mb-4 ${isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>Leadership &</span>
+              <span className={`block ${isHacker ? 'text-[#00ff41] drop-shadow-[0_0_10px_rgba(0,255,65,0.5)]' : isLight ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 bg-clip-text text-transparent' : 'bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent'}`}>Recognition</span>
             </h1>
-            <p className="text-lg md:text-xl text-slate-400 max-w-4xl mx-auto">Building communities and making impact through technology</p>
+            <p className={`text-lg md:text-xl max-w-4xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Building communities and making impact through technology</p>
           </div>
         </section>
 
@@ -238,14 +238,14 @@ export default function Achievements() {
         <section className="py-12 px-4">
           <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {stats.map((stat, i) => (
-              <div key={i} className="group relative p-6 md:p-8 bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-purple-500/50 rounded-2xl transition-all hover:scale-105 cursor-default overflow-hidden">
+              <div key={i} className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl transition-all hover:scale-105 cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-purple-400 hover:shadow-purple-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-purple-500/50'}`}>
                 <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
                 <div className="relative z-10">
                   <div className={`w-14 h-14 bg-gradient-to-br ${stat.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all shadow-lg`}>
                     <stat.icon className="w-7 h-7 text-white" />
                   </div>
-                  <div className="text-4xl font-black text-white mb-2 font-mono">{stat.number}</div>
-                  <div className="text-sm text-slate-400">{stat.label}</div>
+                  <div className={`text-4xl font-black mb-2 font-mono ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>{stat.number}</div>
+                  <div className={`text-sm ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{stat.label}</div>
                 </div>
               </div>
             ))}
@@ -256,15 +256,15 @@ export default function Achievements() {
         <section className="py-12 px-4">
           <div className="max-w-7xl mx-auto space-y-6">
             <div className="max-w-2xl mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <input type="text" placeholder="Search achievements..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-12 pr-4 py-4 bg-slate-900/50 border border-slate-800 focus:border-purple-500 rounded-xl text-slate-300 placeholder-slate-500 transition-all focus:outline-none font-mono text-sm" />
+              <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 ${isHacker ? 'text-[#00ff41]/40' : isLight ? 'text-slate-400' : 'text-slate-400'}`} />
+              <input type="text" placeholder="Search achievements..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={`w-full pl-12 pr-4 py-4 border rounded-xl transition-all focus:outline-none font-mono text-sm ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 focus:border-[#00ff41] text-[#00ff41] placeholder-[#00ff41]/30' : isLight ? 'bg-white/70 border-slate-200 focus:border-purple-400 text-slate-700 placeholder-slate-400' : 'bg-slate-900/50 border-slate-800 focus:border-purple-500 text-slate-300 placeholder-slate-500'}`} />
             </div>
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {categories.map((cat) => (
-                <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${activeCategory === cat.id ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl scale-105' : 'bg-slate-900/50 text-slate-300 border border-slate-800 hover:scale-105'}`}>
+                <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${activeCategory === cat.id ? isHacker ? 'bg-[#00ff41]/15 text-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.15)] scale-105' : isLight ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl scale-105' : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl scale-105' : isHacker ? 'bg-[#000a02]/80 text-[#00cc32]/50 border border-[#00ff41]/10 hover:scale-105' : isLight ? 'bg-white/70 text-slate-600 border border-slate-200 hover:scale-105' : 'bg-slate-900/50 text-slate-300 border border-slate-800 hover:scale-105'}`}>
                   <cat.icon className="w-4 h-4" />
                   <span>{cat.label}</span>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-mono ${activeCategory === cat.id ? 'bg-white/20' : 'bg-slate-800'}`}>{cat.count}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-mono ${activeCategory === cat.id ? isHacker ? 'bg-[#00ff41]/20' : 'bg-white/20' : isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-slate-100' : 'bg-slate-800'}`}>{cat.count}</span>
                 </button>
               ))}
             </div>
@@ -283,7 +283,7 @@ export default function Achievements() {
             ) : (
               <div className="grid md:grid-cols-2 gap-8">
                 {filteredPrograms.map((prog) => (
-                  <div key={prog.id} className="group bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-purple-500/50 rounded-3xl overflow-hidden transition-all hover:scale-[1.02] hover:shadow-2xl">
+                  <div key={prog.id} className={`group backdrop-blur-xl border rounded-3xl overflow-hidden transition-all hover:scale-[1.02] hover:shadow-2xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_25px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-purple-400 hover:shadow-purple-200/40 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-purple-500/50'}`}>
                     <div className="relative aspect-[16/10] bg-slate-800">
                       {prog.images && prog.images.length > 0 ? (
                         <>
@@ -315,22 +315,22 @@ export default function Achievements() {
                       </div>
                     </div>
 
-                    <div className="p-8 space-y-6">
+                      <div className="p-8 space-y-6">
                       <div>
-                        <h3 className="text-3xl font-black text-white group-hover:text-purple-300 transition-colors mb-3">{prog.title}</h3>
-                        <div className="flex flex-wrap gap-3 text-sm text-slate-400 font-mono mb-3">
-                          <span className="flex items-center gap-1.5"><Award className="w-4 h-4 text-purple-400" />{prog.role}</span>
+                        <h3 className={`text-3xl font-black transition-colors mb-3 ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-purple-600' : 'text-white group-hover:text-purple-300'}`}>{prog.title}</h3>
+                        <div className={`flex flex-wrap gap-3 text-sm font-mono mb-3 ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                          <span className="flex items-center gap-1.5"><Award className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-500' : 'text-purple-400'}`} />{prog.role}</span>
                           <span>•</span>
-                          <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-cyan-400" />{prog.date}</span>
+                          <span className="flex items-center gap-1.5"><Calendar className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />{prog.date}</span>
                         </div>
-                        <p className="text-slate-400 text-sm">{prog.organization}</p>
-                        {prog.location && <p className="flex items-center gap-1.5 text-slate-500 text-xs font-mono mt-1"><MapPin className="w-3 h-3" />{prog.location}</p>}
+                        <p className={`text-sm ${isHacker ? 'text-[#00cc32]/50' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{prog.organization}</p>
+                        {prog.location && <p className={`flex items-center gap-1.5 text-xs font-mono mt-1 ${isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'}`}><MapPin className="w-3 h-3" />{prog.location}</p>}
                       </div>
 
-                      <p className="text-slate-300 leading-relaxed whitespace-pre-line">{expandedCard === prog.id ? prog.fullDescription : prog.description}</p>
+                      <p className={`leading-relaxed whitespace-pre-line ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>{expandedCard === prog.id ? prog.fullDescription : prog.description}</p>
 
                       {prog.fullDescription && prog.fullDescription !== prog.description && (
-                        <button onClick={() => setExpandedCard(expandedCard === prog.id ? null : prog.id)} className="inline-flex items-center gap-2 text-sm font-semibold text-purple-400 hover:text-purple-300">
+                        <button onClick={() => setExpandedCard(expandedCard === prog.id ? null : prog.id)} className={`inline-flex items-center gap-2 text-sm font-semibold ${isHacker ? 'text-[#00ff41] hover:text-[#33ff66]' : isLight ? 'text-purple-600 hover:text-purple-500' : 'text-purple-400 hover:text-purple-300'}`}>
                           <BookOpen className="w-4 h-4" />
                           <span>{expandedCard === prog.id ? 'Show Less' : 'Read Full Story'}</span>
                           <ChevronRight className={`w-4 h-4 transition-transform ${expandedCard === prog.id ? 'rotate-90' : ''}`} />
@@ -340,17 +340,17 @@ export default function Achievements() {
                       {prog.highlights && (
                         <div className="grid grid-cols-2 gap-3">
                           {prog.highlights.map((h, j) => (
-                            <div key={j} className="p-3 bg-slate-800/30 border border-slate-700 hover:border-purple-500/50 rounded-xl text-center transition-all hover:scale-105">
-                              <span className="text-xs font-bold text-purple-400">{h}</span>
+                            <div key={j} className={`p-3 border rounded-xl text-center transition-all hover:scale-105 ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/10 hover:border-[#00ff41]/30' : isLight ? 'bg-purple-50/50 border-purple-200 hover:border-purple-400' : 'bg-slate-800/30 border-slate-700 hover:border-purple-500/50'}`}>
+                              <span className={`text-xs font-bold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'}`}>{h}</span>
                             </div>
                           ))}
                         </div>
                       )}
 
                       {prog.tags && (
-                        <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-800">
+                        <div className={`flex flex-wrap gap-2 pt-4 border-t ${isHacker ? 'border-[#00ff41]/10' : isLight ? 'border-slate-200' : 'border-slate-800'}`}>
                           {prog.tags.map((tag, j) => (
-                            <span key={j} className="px-3 py-1.5 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg text-xs font-medium text-purple-300">#{tag.toLowerCase().replace(' ', '_')}</span>
+                            <span key={j} className={`px-3 py-1.5 border rounded-lg text-xs font-medium ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/70' : isLight ? 'bg-purple-50 border-purple-200 text-purple-600' : 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30 text-purple-300'}`}>#{tag.toLowerCase().replace(' ', '_')}</span>
                           ))}
                         </div>
                       )}
@@ -367,16 +367,16 @@ export default function Achievements() {
         <section className="py-20 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-sm text-cyan-300 mb-6 font-mono animate-pulse">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 font-mono animate-pulse ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
                 <Award className="w-4 h-4" />
                 <span>certificates.collection</span>
               </div>
-              <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Professional Credentials</h2>
+              <h2 className={`text-5xl font-black mb-6 ${isHacker ? 'text-[#00ff41]' : isLight ? 'bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>Professional Credentials</h2>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {certificates.map((cert) => (
-                <div key={cert.id} className="group bg-slate-900/50 backdrop-blur-xl border border-slate-800 hover:border-cyan-500/50 rounded-2xl overflow-hidden transition-all hover:scale-105 hover:shadow-2xl">
+                <div key={cert.id} className={`group backdrop-blur-xl border rounded-2xl overflow-hidden transition-all hover:scale-105 hover:shadow-2xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/40 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}>
                   <div className="relative aspect-video bg-slate-800">
                     <button onClick={() => setSelectedImage(cert.photo)} className="w-full h-full">
                       <img src={cert.photo} alt={cert.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -387,27 +387,27 @@ export default function Achievements() {
                   </div>
                   <div className="p-6 space-y-4">
                     <div>
-                      <h4 className="font-bold text-white text-lg group-hover:text-cyan-300 transition-colors mb-2">{cert.name}</h4>
-                      <p className="text-sm text-slate-400 font-mono">{cert.issuer}</p>
+                      <h4 className={`font-bold text-lg transition-colors mb-2 ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_4px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>{cert.name}</h4>
+                      <p className={`text-sm font-mono ${isHacker ? 'text-[#00cc32]/50' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{cert.issuer}</p>
                     </div>
-                    {cert.description && <p className="text-sm text-slate-400">{cert.description}</p>}
+                    {cert.description && <p className={`text-sm ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{cert.description}</p>}
                     {cert.skills && (
                       <div className="flex flex-wrap gap-2">
                         {cert.skills.map((skill, j) => (
-                          <span key={j} className="px-2 py-1 bg-cyan-500/10 border border-cyan-500/30 rounded text-xs font-medium text-cyan-300">{skill}</span>
+                          <span key={j} className={`px-2 py-1 border rounded text-xs font-medium ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/70' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>{skill}</span>
                         ))}
                       </div>
                     )}
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-                      <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+                    <div className={`flex items-center justify-between pt-4 border-t ${isHacker ? 'border-[#00ff41]/10' : isLight ? 'border-slate-200' : 'border-slate-800'}`}>
+                      <div className={`flex items-center gap-2 text-xs font-mono ${isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>
                         <Calendar className="w-3 h-3" />
                         {cert.date}
                       </div>
-                      <button onClick={() => setSelectedImage(cert.photo)} className="flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 font-semibold">
+                      <button onClick={() => setSelectedImage(cert.photo)} className={`flex items-center gap-2 text-sm font-semibold ${isHacker ? 'text-[#00ff41] hover:text-[#33ff66]' : isLight ? 'text-indigo-600 hover:text-indigo-500' : 'text-cyan-400 hover:text-cyan-300'}`}>
                         <ExternalLink className="w-4 h-4" />View
                       </button>
                     </div>
-                    {cert.credentialId && <div className="text-xs text-slate-600 font-mono truncate">ID: {cert.credentialId}</div>}
+                    {cert.credentialId && <div className={`text-xs font-mono truncate ${isHacker ? 'text-[#00ff41]/20' : isLight ? 'text-slate-400' : 'text-slate-600'}`}>ID: {cert.credentialId}</div>}
                   </div>
                 </div>
               ))}
@@ -418,15 +418,15 @@ export default function Achievements() {
         {/* CTA */}
         <section className="py-32 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="relative p-16 bg-gradient-to-br from-purple-900/30 to-pink-900/20 backdrop-blur-2xl border border-purple-500/30 rounded-3xl overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className={`relative p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40' : isLight ? 'bg-gradient-to-br from-purple-50/80 to-pink-50/60 border-purple-200 shadow-xl' : 'bg-gradient-to-br from-purple-900/30 to-pink-900/20 border-purple-500/30'}`}>
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${isHacker ? 'bg-[#00ff41]/[0.02]' : isLight ? 'bg-gradient-to-br from-purple-100/50 to-pink-100/30' : 'bg-gradient-to-br from-purple-500/10 to-pink-500/10'}`}></div>
               <div className="relative z-10 text-center space-y-8">
-                <Star className="w-20 h-20 text-purple-400 mx-auto" />
+                <Star className={`w-20 h-20 mx-auto ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-500' : 'text-purple-400'}`} />
                 <div className="space-y-4">
-                  <h2 className="text-5xl font-black bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">Let&apos;s Collaborate</h2>
-                  <p className="text-xl text-slate-400">Open to initiatives and partnerships</p>
+                  <h2 className={`text-5xl font-black ${isHacker ? 'text-[#00ff41]' : isLight ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 bg-clip-text text-transparent' : 'bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent'}`}>Let&apos;s Collaborate</h2>
+                  <p className={`text-xl ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Open to initiatives and partnerships</p>
                 </div>
-                <a href="mailto:m.h.ratul18@gmail.com" className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:scale-105 overflow-hidden relative">
+                <a href="mailto:m.h.ratul18@gmail.com" className={`inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-lg transition-all hover:scale-105 overflow-hidden relative ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white hover:shadow-2xl hover:shadow-purple-500/30' : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white hover:shadow-2xl hover:shadow-purple-500/30'}`}>
                   <Mail className="w-6 h-6 relative z-10" />
                   <span className="relative z-10 font-mono">send_message()</span>
                   <ChevronRight className="w-6 h-6 relative z-10" />
@@ -437,8 +437,8 @@ export default function Achievements() {
                     { icon: Github, href: "https://github.com/ratul-notfound" },
                     { icon: Linkedin, href: "https://linkedin.com/in/mahmud-hasan-ratul" }
                   ].map((social, i) => (
-                    <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className="p-5 bg-slate-900/50 hover:bg-slate-800 border border-slate-800 hover:border-purple-500 rounded-xl transition-all hover:scale-110">
-                      <social.icon className="w-7 h-7 text-slate-400 hover:text-purple-400 transition-colors" />
+                    <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className={`p-5 border rounded-xl transition-all hover:scale-110 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.15)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-purple-400 shadow-sm hover:shadow-lg' : 'bg-slate-900/50 hover:bg-slate-800 border-slate-800 hover:border-purple-500'}`}>
+                      <social.icon className={`w-7 h-7 transition-colors ${isHacker ? 'text-[#00ff41]/50 hover:text-[#00ff41]' : isLight ? 'text-slate-500 hover:text-purple-600' : 'text-slate-400 hover:text-purple-400'}`} />
                     </a>
                   ))}
                 </div>

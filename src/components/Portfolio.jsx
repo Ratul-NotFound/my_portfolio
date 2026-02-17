@@ -784,33 +784,33 @@ const Portfolio = () => {
         {/* Contact Section */}
         <section id="contact" className="py-20 md:py-32 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="relative p-12 md:p-16 bg-gradient-to-br from-slate-900/80 to-slate-900/50 backdrop-blur-2xl border border-slate-800 rounded-3xl overflow-hidden group hover:border-cyan-500/50 transition-all duration-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className={`relative p-12 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}>
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isHacker ? 'bg-[#00ff41]/[0.02]' : isLight ? 'bg-gradient-to-br from-indigo-50/50 to-purple-50/30' : 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5'}`}></div>
 
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
-              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+              <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/5' : isLight ? 'bg-indigo-300/20' : 'bg-cyan-500/10'}`}></div>
+              <div className={`absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/3' : isLight ? 'bg-purple-300/20' : 'bg-purple-500/10'}`}></div>
 
               <div className="relative z-10 text-center space-y-8">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                  <Sparkles className="w-10 h-10 text-cyan-400" />
+                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20'}`}>
+                  <Sparkles className={`w-10 h-10 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
                 </div>
 
                 <div className="space-y-4">
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-black">
-                    <span className="text-purple-400">
+                    <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'}>
                       Let&apos;s Build Something
                     </span>
                     <br />
-                    <span className="text-white">Amazing Together</span>
+                    <span className={isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-white'}>Amazing Together</span>
                   </h2>
-                  <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
+                  <p className={`text-lg md:text-xl max-w-2xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                     Have a project in mind? Let&apos;s discuss how we can turn your vision into a scalable, production-ready solution.
                   </p>
                 </div>
 
                 <a
                   href="mailto:m.h.ratul18@gmail.com"
-                  className="group/btn inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl font-bold text-lg transition-all hover:shadow-2xl hover:shadow-cyan-500/40 hover:scale-105 overflow-hidden relative"
+                  className={`group/btn inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-lg transition-all hover:scale-105 overflow-hidden relative ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'}`}
                 >
                   <Mail className="w-6 h-6 relative z-10" />
                   <span className="relative z-10">Start Conversation</span>
@@ -829,10 +829,10 @@ const Portfolio = () => {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group/social p-5 bg-slate-800/50 hover:bg-slate-800 backdrop-blur-xl border border-slate-700 hover:border-cyan-500 rounded-xl transition-all hover:scale-110"
+                      className={`group/social p-5 backdrop-blur-xl border rounded-xl transition-all hover:scale-110 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.15)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm hover:shadow-lg' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500'}`}
                       aria-label={social.label}
                     >
-                      <social.icon className="w-7 h-7 text-slate-400 group-hover/social:text-cyan-400 transition-colors" />
+                      <social.icon className={`w-7 h-7 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover/social:text-[#00ff41]' : isLight ? 'text-slate-500 group-hover/social:text-indigo-600' : 'text-slate-400 group-hover/social:text-cyan-400'}`} />
                     </a>
                   ))}
                 </div>

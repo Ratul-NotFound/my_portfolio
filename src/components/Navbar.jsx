@@ -198,7 +198,7 @@ export default function Navbar() {
                     <Terminal className={`absolute inset-0 w-full h-full text-[#00ff41] transition-all duration-300 ${theme === 'hacker' ? 'opacity-100 rotate-0 scale-100 drop-shadow-[0_0_4px_rgba(0,255,65,0.6)]' : 'opacity-0 rotate-90 scale-50'}`} />
                   </div>
                   <span className={`hidden lg:block text-xs font-medium ${isHacker ? 'text-[#00ff41]/80 font-mono' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                    {theme === 'dark' ? 'Dark' : theme === 'light' ? 'Light' : 'Hack'}
+                    {theme === 'dark' ? 'Dark' : theme === 'light' ? 'Light' : 'Dev'}
                   </span>
                 </button>
               </div>

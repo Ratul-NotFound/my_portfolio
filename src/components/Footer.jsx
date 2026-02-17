@@ -23,13 +23,13 @@ export default function Footer() {
       icon: Linkedin,
       href: "https://linkedin.com/in/mahmud-hasan-ratul",
       label: "LinkedIn",
-      color: "hover:text-blue-400"
+      color: isHacker ? "hover:text-[#00ff41]" : isLight ? "hover:text-blue-600" : "hover:text-blue-400"
     },
     {
       icon: Mail,
       href: "mailto:m.h.ratul18@gmail.com",
       label: "Email",
-      color: "hover:text-cyan-400"
+      color: isHacker ? "hover:text-[#00ff41]" : isLight ? "hover:text-indigo-600" : "hover:text-cyan-400"
     }
   ];
 
