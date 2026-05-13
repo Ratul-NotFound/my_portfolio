@@ -1,6 +1,7 @@
-﻿/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 const MemoNavbar = React.memo(Navbar);
@@ -26,6 +27,9 @@ const Portfolio = () => {
   const [typedText, setTypedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [activeProject, setActiveProject] = useState(null);
+  const [cardTilts, setCardTilts] = useState({});
+  const [spotlightPos, setSpotlightPos] = useState({ x: 50, y: 50 });
+  const [activeSection, setActiveSection] = useState('hero');
 
   const fullText = "Building scalable systems with precision...";
 
@@ -123,6 +127,25 @@ const Portfolio = () => {
       window.cancelAnimationFrame(animationFrame);
       window.removeEventListener('mousemove', handleMouse);
     };
+  }, [isMounted]);
+
+  useEffect(() => {
+    if (!isMounted) return;
+    const handleSectionScroll = () => {
+      const sections = ['hero', 'about', 'projects', 'skills', 'contact'];
+      const current = sections.find(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          return rect.top <= 200 && rect.bottom >= 200;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
+    };
+    window.addEventListener('scroll', handleSectionScroll, { passive: true });
+    handleSectionScroll();
+    return () => window.removeEventListener('scroll', handleSectionScroll);
   }, [isMounted]);
 
   const stats = useMemo(() => ([
@@ -224,6 +247,23 @@ const Portfolio = () => {
   const handleSetActiveTech = useCallback((id) => setActiveTech(id), []);
   const handleSetActiveProject = useCallback((id) => setActiveProject(id), []);
   const handleClearActiveProject = useCallback(() => setActiveProject(null), []);
+
+  const handleProjectMouseMove = useCallback((e, projectId) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setCardTilts(prev => ({ ...prev, [projectId]: { rotateX: y * -12, rotateY: x * 12 } }));
+  }, []);
+
+  const handleProjectMouseLeave = useCallback((projectId) => {
+    setCardTilts(prev => ({ ...prev, [projectId]: { rotateX: 0, rotateY: 0 } }));
+  }, []);
+
+  const handleSpotlightMove = useCallback((e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setSpotlightPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  }, []);
+
   if (!isMounted) return null;
 
   return (
@@ -293,11 +333,32 @@ const Portfolio = () => {
       </div>
 
       <main className="relative z-10">
+        {/* Sticky Section Label */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -16 }}
+            transition={{ duration: 0.3 }}
+            className={`fixed left-5 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col items-center gap-3 section-label ${isHacker ? 'text-[#00ff41]/35' : isLight ? 'text-slate-300' : 'text-slate-600'}`}
+          >
+            <div className={`w-px h-14 ${isHacker ? 'bg-[#00ff41]/20' : isLight ? 'bg-slate-300' : 'bg-slate-700'}`} />
+            <span>{activeSection}</span>
+            <div className={`w-px h-14 ${isHacker ? 'bg-[#00ff41]/20' : isLight ? 'bg-slate-300' : 'bg-slate-700'}`} />
+          </motion.div>
+        </AnimatePresence>
+
         {/* Hero */}
         <section id="hero" className="min-h-screen flex items-center justify-center px-2 pt-10">
           <div className="max-w-7xl mx-auto w-full">
             <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
-              <div className="space-y-8 animate-slide-up">
+              <motion.div
+                className="space-y-8"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
                 <div className={`inline-flex items-center gap-3 px-5 py-2.5 backdrop-blur-xl border rounded-full text-sm transition-all duration-300 cursor-default group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 hover:border-[#00ff41]/50' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500/50'}`}>
                   <span className="relative flex h-3 w-3">
                     <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isHacker ? 'bg-[#00ff41]' : 'bg-green-400'} opacity-75`}></span>
@@ -369,9 +430,14 @@ const Portfolio = () => {
                     </a>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="relative">
+              <motion.div
+                className="relative"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
                 <div className="relative aspect-square max-w-lg mx-auto">
                   <div className={`absolute inset-0 rounded-3xl blur-3xl ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-r from-indigo-300/30 via-purple-300/20 to-pink-300/20' : 'bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20'}`}></div>
                   <div className={`relative backdrop-blur-2xl border rounded-3xl p-8 space-y-6 transition-all duration-500 ${isHacker ? 'bg-[#000a02]/90 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-slate-900/90 border-slate-700 hover:border-cyan-500/50'}`}>
@@ -421,7 +487,7 @@ const Portfolio = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-20">
@@ -444,7 +510,13 @@ const Portfolio = () => {
 
         {/* About Section */}
         <section id="about" className="py-10 md:py-16 px-2">
-          <div className="max-w-7xl mx-auto">
+          <motion.div
+            className="max-w-7xl mx-auto"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
             <div className="text-center mb-8 md:mb-10">
               <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
                 <Sparkles className="w-4 h-4" />
@@ -503,7 +575,7 @@ const Portfolio = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* Projects Section */}
@@ -526,11 +598,21 @@ const Portfolio = () => {
 
             <div className="grid md:grid-cols-2 gap-3 md:gap-4">
               {projects.map((project) => (
-                <div
+                <motion.div
                   key={project.id}
                   onMouseEnter={() => handleSetActiveProject(project.id)}
-                  onMouseLeave={handleClearActiveProject}
-                  className={`group relative backdrop-blur-xl border rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.01] hover:shadow-xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
+                  onMouseLeave={() => { handleClearActiveProject(); handleProjectMouseLeave(project.id); }}
+                  onMouseMove={(e) => handleProjectMouseMove(e, project.id)}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.55, delay: project.id * 0.08 }}
+                  animate={{
+                    rotateX: cardTilts[project.id]?.rotateX || 0,
+                    rotateY: cardTilts[project.id]?.rotateY || 0,
+                  }}
+                  style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
+                  className={`group relative backdrop-blur-xl border rounded-2xl overflow-hidden transition-colors duration-300 hover:shadow-xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
                     <div className="flex items-center justify-center w-full h-full aspect-[16/10] overflow-hidden">
@@ -628,7 +710,7 @@ const Portfolio = () => {
 
                   <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${project.gradient} transform transition-transform duration-500 ${activeProject === project.id ? 'scale-x-100' : 'scale-x-0'
                     }`}></div>
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -731,8 +813,12 @@ const Portfolio = () => {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                       {skills.map((skill, i) => (
-                        <div
+                        <motion.div
                           key={i}
+                          initial={{ opacity: 0, scale: 0.75, y: 20 }}
+                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: i * 0.04, ease: [0.34, 1.56, 0.64, 1] }}
                           className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
@@ -764,7 +850,7 @@ const Portfolio = () => {
 
                           <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
                           <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transform scale-x-0 group-hover/card:scale-x-100 transition-transform duration-500"></div>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
@@ -784,7 +870,15 @@ const Portfolio = () => {
         {/* Contact Section */}
         <section id="contact" className="py-20 md:py-32 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className={`relative p-12 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}>
+            <motion.div
+              className={`relative p-12 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden spotlight-card group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
+              onMouseMove={handleSpotlightMove}
+              style={{ '--spotlight-x': `${spotlightPos.x}px`, '--spotlight-y': `${spotlightPos.y}px` }}
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isHacker ? 'bg-[#00ff41]/[0.02]' : isLight ? 'bg-gradient-to-br from-indigo-50/50 to-purple-50/30' : 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5'}`}></div>
 
               <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/5' : isLight ? 'bg-indigo-300/20' : 'bg-cyan-500/10'}`}></div>
@@ -837,7 +931,7 @@ const Portfolio = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       </main>
