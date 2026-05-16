@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue, useInView } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 const MemoNavbar = React.memo(Navbar);
@@ -11,8 +11,155 @@ import {
   Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2,
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
   Star, Cpu, Network, Award, TrendingUp, Coffee, Rocket,
-  Circle, ChevronRight
+  Circle, ChevronRight, ChevronDown
 } from 'lucide-react';
+
+// ── Clip-path section reveal wrapper ──
+function SectionReveal({ children, delay = 0, className = '' }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)', y: 40 }}
+      animate={isInView ? { opacity: 1, clipPath: 'inset(0 0 0% 0)', y: 0 } : {}}
+      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// ── Scroll-parallax text ──
+function ParallaxHeading({ children, className = '' }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  return (
+    <motion.div ref={ref} style={{ y }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
+// ── Stagger children framer wrapper ──
+const staggerContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+const staggerItem = {
+  hidden: { opacity: 0, y: 32, filter: 'blur(6px)' },
+  show:   { opacity: 1, y: 0,  filter: 'blur(0px)', transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+// ── Section badge component ──
+function SectionBadge({ icon: Icon, label, isHacker, isLight }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, scale: 0.8, y: -12 }}
+      animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 badge-pulse ${
+        isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]'
+        : isLight  ? 'bg-indigo-50 border-indigo-200 text-indigo-600'
+        : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'
+      }`}
+    >
+      <Icon className="w-4 h-4" />
+      <span className="font-mono">{label}</span>
+    </motion.div>
+  );
+}
+
+// ── Draw-on section title line ──
+function SectionTitleLine({ isHacker, isLight }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  return (
+    <motion.div
+      ref={ref}
+      className={`h-[2px] rounded-full mx-auto mb-4 ${
+        isHacker ? 'bg-[#00ff41]/40' : isLight ? 'bg-indigo-300' : 'bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500'
+      }`}
+      initial={{ scaleX: 0, opacity: 0 }}
+      animate={isInView ? { scaleX: 1, opacity: 1 } : {}}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+      style={{ originX: 0, width: '60px' }}
+    />
+  );
+}
+
+// ── CountUp hook ──
+function useCountUp(target, duration = 1800, inView = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    // parse e.g. '10K+' -> numeric=10, suffix='K+'
+    const match = String(target).match(/^([\d.]+)([^\d]*)$/);
+    if (!match) { setCount(target); return; }
+    const numeric = parseFloat(match[1]);
+    const suffix = match[2] || '';
+    if (!numeric) { setCount(target); return; }
+    let start = 0;
+    const step = numeric / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= numeric) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start) + suffix);
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [inView, target, duration]);
+  return count;
+}
+
+// ── StatCard with count-up ──
+function StatCard({ stat, isLight, isHacker }) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.5 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  const displayed = useCountUp(stat.value, 1600, inView);
+  return (
+    <motion.div
+      ref={ref}
+      whileHover={{ y: -6, scale: 1.03 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl cursor-default overflow-hidden card-glow-hover ${
+        isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10'
+        : isLight ? 'bg-white/70 border-slate-200 shadow-sm'
+        : 'bg-slate-900/50 border-slate-800'}`}
+    >
+      <div className="relative z-10">
+        <motion.div whileHover={{ rotate: 12, scale: 1.2 }} transition={{ type: 'spring', stiffness: 400 }}>
+          <stat.icon className={`w-8 h-8 md:w-10 md:h-10 mb-4 ${
+            isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
+        </motion.div>
+        <div className="stat-number text-3xl md:text-4xl font-black mb-2">{displayed || stat.value}</div>
+        <div className={`text-sm md:text-base font-semibold mb-1 ${
+          isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-700' : 'text-slate-300'}`}>{stat.label}</div>
+        <div className={`text-xs ${
+          isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>{stat.desc}</div>
+      </div>
+      {/* corner accent */}
+      <div className={`absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r ${
+        isHacker ? 'from-[#00ff41]/0 via-[#00ff41]/50 to-[#00ff41]/0'
+        : 'from-transparent via-cyan-500/60 to-transparent'
+      } opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/5 group-hover:to-purple-500/5 transition-all duration-500" />
+    </motion.div>
+  );
+}
 
 const Portfolio = () => {
   const { theme } = useTheme();
@@ -30,6 +177,11 @@ const Portfolio = () => {
   const [cardTilts, setCardTilts] = useState({});
   const [spotlightPos, setSpotlightPos] = useState({ x: 50, y: 50 });
   const [activeSection, setActiveSection] = useState('hero');
+  const heroRef = useRef(null);
+  const { scrollY } = useScroll();
+  const heroParallaxY = useTransform(scrollY, [0, 600], [0, -80]);
+  const heroOpacity  = useTransform(scrollY, [0, 400], [1, 0.3]);
+  const blobParallax = useTransform(scrollY, [0, 800], [0, -120]);
 
   const fullText = "Building scalable systems with precision...";
 
@@ -355,29 +507,43 @@ const Portfolio = () => {
             <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
               <motion.div
                 className="space-y-8"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                style={{ y: heroParallaxY, opacity: heroOpacity }}
               >
-                <div className={`inline-flex items-center gap-3 px-5 py-2.5 backdrop-blur-xl border rounded-full text-sm transition-all duration-300 cursor-default group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 hover:border-[#00ff41]/50' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500/50'}`}>
+                {/* Status badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: -16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className={`inline-flex items-center gap-3 px-5 py-2.5 backdrop-blur-xl border rounded-full text-sm transition-all duration-300 cursor-default group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 hover:border-[#00ff41]/50' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500/50'}`}>
                   <span className="relative flex h-3 w-3">
                     <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isHacker ? 'bg-[#00ff41]' : 'bg-green-400'} opacity-75`}></span>
                     <span className={`relative inline-flex rounded-full h-3 w-3 ${isHacker ? 'bg-[#00ff41]' : 'bg-green-500'}`}></span>
                   </span>
                   <span className={`font-mono text-xs md:text-sm ${isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>system.status = <span className={isHacker ? 'text-[#00ff41]' : 'text-green-400'}>&quot;available&quot;</span></span>
                   <Coffee className={`w-4 h-4 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover:text-[#00ff41]' : isLight ? 'text-slate-400 group-hover:text-indigo-500' : 'text-slate-400 group-hover:text-cyan-400'}`} />
-                </div>
+                </motion.div>
 
+                {/* Split-word stagger headline */}
                 <div className="space-y-4">
                   <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-none">
-                    <span className={`block mb-2 ${isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>Building</span>
-                    <span className={`block ${isHacker ? 'text-[#00ff41] drop-shadow-[0_0_10px_rgba(0,255,65,0.5)]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>
-                      Scalable
-                    </span>
-                    <span className={`block mb-2 ${isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>Systems</span>
-                    <span className={`block ${isHacker ? 'text-[#33ff66] drop-shadow-[0_0_10px_rgba(0,255,65,0.4)]' : isLight ? 'text-purple-600' : 'text-purple-400'}`}>
-                      with AI
-                    </span>
+                    {['Building', 'Scalable', 'Systems', 'with AI'].map((word, i) => (
+                      <div key={word} className="word-reveal-wrapper block">
+                        <motion.span
+                          className={`block ${
+                            word === 'Building' || word === 'Systems'
+                              ? isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'
+                              : word === 'Scalable'
+                                ? 'animated-gradient-text'
+                                : 'animated-gradient-text'
+                          } ${word === 'Building' || word === 'Systems' ? 'mb-2' : ''}`}
+                          initial={{ y: '110%', opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.7, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                          {word}
+                        </motion.span>
+                      </div>
+                    ))}
                   </h1>
 
                   <div className={`flex items-center gap-2 text-lg md:text-xl font-mono h-8 ${isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
@@ -492,47 +658,55 @@ const Portfolio = () => {
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-20">
               {stats.map((stat, i) => (
-                <div
+                <motion.div
                   key={i}
-                  className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl transition-all hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
-                  <div className="relative z-10">
-                    <stat.icon className={`w-8 h-8 md:w-10 md:h-10 mb-4 group-hover:scale-110 transition-transform ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
-                    <div className={`text-3xl md:text-4xl font-black mb-2 transition-colors ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-400'}`}>{stat.value}</div>
-                    <div className={`text-sm md:text-base font-semibold mb-1 ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-700' : 'text-slate-300'}`}>{stat.label}</div>
-                    <div className={`text-xs ${isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>{stat.desc}</div>
-                  </div>
-                </div>
+                  <StatCard stat={stat} isLight={isLight} isHacker={isHacker} />
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-10 md:py-16 px-2">
-          <motion.div
-            className="max-w-7xl mx-auto"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            <div className="text-center mb-8 md:mb-10">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
-                <Sparkles className="w-4 h-4" />
-                About Me
-              </div>
-              <h2 className="text-4xl md:text-6xl font-black mb-6">
-                <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}>
-                  Passionate Developer
-                </span>
-              </h2>
-              <p className={`text-lg md:text-xl max-w-3xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+        <section id="about" className="py-10 md:py-16 px-2 relative overflow-hidden">
+          {/* Floating orbs */}
+          <div className={`absolute top-10 left-10 w-72 h-72 rounded-full blur-3xl orb-float ${isHacker ? 'bg-[#00ff41]/4' : isLight ? 'bg-indigo-200/20' : 'bg-cyan-500/8'}`} />
+          <div className={`absolute bottom-10 right-10 w-64 h-64 rounded-full blur-3xl orb-float-delay ${isHacker ? 'bg-[#00ff41]/3' : isLight ? 'bg-purple-200/20' : 'bg-purple-500/8'}`} />
+
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-10">
+              <SectionBadge icon={Sparkles} label="About Me" isHacker={isHacker} isLight={isLight} />
+              <SectionTitleLine isHacker={isHacker} isLight={isLight} />
+              <ParallaxHeading>
+                <h2 className="text-4xl md:text-6xl font-black mb-6">
+                  <span className={`kinetic-underline ${
+                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
+                  }`}>Passionate Developer</span>
+                </h2>
+              </ParallaxHeading>
+              <motion.p
+                className={`text-lg md:text-xl max-w-3xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
                 Building scalable systems and leveraging AI to solve real-world problems
-              </p>
+              </motion.p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-3 md:gap-4">
+            <motion.div
+              className="grid md:grid-cols-3 gap-3 md:gap-4"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: '-60px' }}
+            >
               {[
                 {
                   icon: Code2,
@@ -553,44 +727,96 @@ const Portfolio = () => {
                   skills: ["AWS", "Docker", "Kubernetes", "CI/CD"]
                 }
               ].map((item, i) => (
-                <div
+                <motion.div
                   key={i}
-                  className={`group relative p-8 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
+                  variants={staggerItem}
+                  whileHover={{ y: -8 }}
+                  transition={{ type: 'spring', stiffness: 250, damping: 20 }}
+                  className={`group relative p-8 backdrop-blur-xl border rounded-2xl overflow-hidden card-glow-hover ${
+                    isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10'
+                    : isLight ? 'bg-white/70 border-slate-200 shadow-sm'
+                    : 'bg-slate-900/50 border-slate-800'}`}
                 >
                   <div className="relative z-10">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-600/10'}`}>
+                    <motion.div
+                      className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
+                        isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-600/10'
+                      }`}
+                      whileHover={{ rotate: 8, scale: 1.15 }}
+                      transition={{ type: 'spring', stiffness: 400 }}
+                    >
                       <item.icon className={`w-8 h-8 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
-                    </div>
-                    <h3 className={`text-xl md:text-2xl font-bold mb-4 transition-colors ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>{item.title}</h3>
+                    </motion.div>
+                    <h3 className={`text-xl md:text-2xl font-bold mb-4 kinetic-underline ${
+                      isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'
+                    }`}>{item.title}</h3>
                     <p className={`mb-6 leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{item.desc}</p>
-
                     <div className="flex flex-wrap gap-2">
                       {item.skills.map((skill, j) => (
-                        <span key={j} className={`px-3 py-1 border rounded-lg text-xs transition-colors ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/60 group-hover:border-[#00ff41]/30' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-500 group-hover:border-indigo-300' : 'bg-slate-800/50 border-slate-700 text-slate-400 group-hover:border-cyan-500/30'}`}>
-                          {skill}
-                        </span>
+                        <motion.span
+                          key={j}
+                          whileHover={{ scale: 1.08 }}
+                          className={`px-3 py-1 border rounded-lg text-xs transition-colors ${
+                            isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/60 hover:border-[#00ff41]/40 hover:text-[#00ff41]'
+                            : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-500 hover:border-indigo-400'
+                            : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-cyan-500/50 hover:text-cyan-300'
+                          }`}
+                        >{skill}</motion.span>
                       ))}
                     </div>
                   </div>
-                </div>
+                  {/* bottom accent bar */}
+                  <div className={`absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ${
+                    isHacker ? 'bg-[#00ff41]/50' : 'bg-gradient-to-r from-cyan-500 to-purple-500'
+                  }`} />
+                </motion.div>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </section>
 
-        {/* Projects Section */}
-        <section id="projects" className="py-10 md:py-16 px-2 relative">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-8 md:mb-10">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 animate-pulse ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-purple-50 border-purple-200 text-purple-600' : 'bg-purple-500/10 border-purple-500/30 text-purple-300'}`}>
-                <Rocket className="w-4 h-4" />
-                <span className="font-mono">Case Studies</span>
+        {/* ── Tech Marquee Belt ── */}
+        <div className="py-8 overflow-hidden">
+          {[
+            ['Next.js','React','TypeScript','Node.js','Python','TensorFlow','Docker','AWS','MongoDB','PostgreSQL','Redis','GraphQL','FastAPI','Kubernetes','PyTorch','OpenAI'],
+            ['System Design','CI/CD','Microservices','REST APIs','WebSockets','Redis Cache','JWT Auth','OAuth2','Stripe','Firebase','Vercel','Nginx','Linux','Git','LangChain','Whisper']
+          ].map((row, ri) => (
+            <div key={ri} className="ticker-container mb-3">
+              <div className={`marquee-track ${ri === 0 ? 'marquee-track--left' : 'marquee-track--right'}`}>
+                {[...row, ...row].map((tech, i) => (
+                  <span
+                    key={i}
+                    className={`inline-flex items-center gap-2 mx-3 px-4 py-2 rounded-full border text-sm font-medium whitespace-nowrap transition-colors cursor-default ${
+                      isHacker
+                        ? 'bg-[#000a02]/80 border-[#00ff41]/15 text-[#00cc32]/70 hover:text-[#00ff41] hover:border-[#00ff41]/40'
+                        : isLight
+                          ? 'bg-white/80 border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 shadow-sm'
+                          : 'bg-slate-900/60 border-slate-700 text-slate-400 hover:border-cyan-500/50 hover:text-cyan-300'
+                    }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${isHacker ? 'bg-[#00ff41]' : ri === 0 ? 'bg-cyan-400' : 'bg-purple-400'}`} />
+                    {tech}
+                  </span>
+                ))}
               </div>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
-                <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'}>
-                  Featured Work
-                </span>
-              </h2>
+            </div>
+          ))}
+        </div>
+
+        {/* Projects Section */}
+        <section id="projects" className="py-10 md:py-16 px-2 relative overflow-hidden">
+          <div className={`absolute top-20 right-0 w-96 h-96 rounded-full blur-3xl orb-float ${isHacker ? 'bg-[#00ff41]/4' : isLight ? 'bg-purple-200/15' : 'bg-purple-500/6'}`} />
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-8 md:mb-10">
+              <SectionBadge icon={Rocket} label="Case Studies" isHacker={isHacker} isLight={isLight} />
+              <SectionTitleLine isHacker={isHacker} isLight={isLight} />
+              <ParallaxHeading>
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
+                  <span className={`kinetic-underline ${
+                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'
+                  }`}>Featured Work</span>
+                </h2>
+              </ParallaxHeading>
               <p className={`text-lg md:text-xl ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                 Real-world applications with measurable impact
               </p>
@@ -614,58 +840,57 @@ const Portfolio = () => {
                   style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
                   className={`group relative backdrop-blur-xl border rounded-2xl overflow-hidden transition-colors duration-300 hover:shadow-xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
-                    <div className="flex items-center justify-center w-full h-full aspect-[16/10] overflow-hidden">
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                        style={{ aspectRatio: '16/10', maxWidth: '100%', maxHeight: '100%' }}
-                        onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80';
-                        }}
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-                    <div className="absolute top-3 right-3 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-1.5 group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 shadow-xl">
-                      <img
-                        src={project.logo}
-                        alt={`${project.title} logo`}
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </div>
+                  {/* Image with parallax zoom + slide-up overlay */}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-800 project-img-container">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                      onError={(e) => {
+                        e.target.src = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80';
+                      }}
+                    />
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+
+                    {/* Category badge */}
                     <div className="absolute top-3 left-3">
                       <span className="px-2 py-1 bg-black/50 backdrop-blur-xl border border-white/10 rounded-full text-xs font-bold text-white shadow-lg">
                         {project.category}
                       </span>
                     </div>
-                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-2 transition-all duration-500 ${activeProject === project.id ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
-                      }`}>
-                      {project.links.code && (
-                        <a
-                          href={project.links.code}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 bg-slate-900/90 backdrop-blur-xl hover:bg-slate-800 border border-slate-700 hover:border-cyan-500 rounded-xl transition-all hover:scale-105 shadow-xl"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Github className="w-5 h-5 text-white" />
-                        </a>
-                      )}
-                      {project.links.live && project.links.live !== '#' && (
-                        <a
-                          href={project.links.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl transition-all hover:scale-105 shadow-xl shadow-cyan-500/50"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <ExternalLink className="w-5 h-5 text-white" />
-                        </a>
-                      )}
+
+                    {/* Logo badge */}
+                    <div className="absolute top-3 right-3 w-10 h-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl p-1.5 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-xl">
+                      <img
+                        src={project.logo}
+                        alt={`${project.title} logo`}
+                        className="w-full h-full object-contain"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    </div>
+
+                    {/* Slide-up overlay on hover */}
+                    <div className="project-overlay absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-slate-950 via-slate-900/95 to-transparent">
+                      <p className={`text-lg font-black mb-3 ${
+                        isHacker ? 'text-[#00ff41]' : 'text-white'
+                      }`}>{project.title}</p>
+                      <div className="flex gap-2">
+                        {project.links.code && (
+                          <a href={project.links.code} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800/90 backdrop-blur-xl border border-slate-600 hover:border-cyan-500 rounded-lg text-xs text-white transition-all hover:scale-105"
+                            onClick={(e) => e.stopPropagation()}>
+                            <Github className="w-3.5 h-3.5" /> Code
+                          </a>
+                        )}
+                        {project.links.live && project.links.live !== '#' && (
+                          <a href={project.links.live} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-lg text-xs text-white transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/40"
+                            onClick={(e) => e.stopPropagation()}>
+                            <ExternalLink className="w-3.5 h-3.5" /> Live Demo
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="p-4 space-y-4">
@@ -730,18 +955,19 @@ const Portfolio = () => {
         </section>
 
         {/* Skills Section */}
-        <section id="skills" className="py-10 md:py-16 px-2 relative">
-          <div className="max-w-7xl mx-auto">
+        <section id="skills" className="py-10 md:py-16 px-2 relative overflow-hidden">
+          <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[80px] orb-float-delay ${isHacker ? 'bg-[#00ff41]/4' : isLight ? 'bg-indigo-200/20' : 'bg-cyan-500/6'}`} />
+          <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-8 md:mb-10">
-              <div className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 animate-pulse ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
-                <Zap className="w-4 h-4" />
-                <span className="font-mono">Tech Stack</span>
-              </div>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
-                <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}>
-                  Technologies
-                </span>
-              </h2>
+              <SectionBadge icon={Zap} label="Tech Stack" isHacker={isHacker} isLight={isLight} />
+              <SectionTitleLine isHacker={isHacker} isLight={isLight} />
+              <ParallaxHeading>
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
+                  <span className={`kinetic-underline ${
+                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
+                  }`}>Technologies</span>
+                </h2>
+              </ParallaxHeading>
               <p className={`text-lg md:text-xl max-w-2xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                 Modern tools and frameworks I use to craft exceptional digital experiences
               </p>
@@ -813,13 +1039,18 @@ const Portfolio = () => {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
                       {skills.map((skill, i) => (
-                        <motion.div
+                      <motion.div
                           key={i}
                           initial={{ opacity: 0, scale: 0.75, y: 20 }}
                           whileInView={{ opacity: 1, scale: 1, y: 0 }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.4, delay: i * 0.04, ease: [0.34, 1.56, 0.64, 1] }}
-                          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
+                          whileHover={{ y: -6, scale: 1.06 }}
+                          transition={{ duration: 0.4, delay: i * 0.04, ease: [0.34, 1.56, 0.64, 1], type: 'spring', stiffness: 300, damping: 18 }}
+                          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl cursor-default overflow-hidden card-glow-hover ${
+                            isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10'
+                            : isLight ? 'bg-white/70 border-slate-200 shadow-sm'
+                            : 'bg-slate-900/50 border-slate-800'
+                          }`}
                         >
                           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
 
@@ -871,9 +1102,12 @@ const Portfolio = () => {
         <section id="contact" className="py-20 md:py-32 px-4">
           <div className="max-w-4xl mx-auto">
             <motion.div
-              className={`relative p-12 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden spotlight-card group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
-              onMouseMove={handleSpotlightMove}
-              style={{ '--spotlight-x': `${spotlightPos.x}px`, '--spotlight-y': `${spotlightPos.y}px` }}
+              className={`relative p-12 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden spotlight-card-v2 animated-border-card group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`);
+              }}
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: '-60px' }}

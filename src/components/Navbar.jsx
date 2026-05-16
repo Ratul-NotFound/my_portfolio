@@ -1,10 +1,27 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useSpring, AnimatePresence, useMotionValue, useTransform, useSpring as useSpring2 } from 'framer-motion';
 import { Menu, X, Terminal, ChevronRight, Home, User, Briefcase, Wrench, Mail, Award, Sun, Moon, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from '../context/ThemeContext';
+
+// ── Magnetic hook ──
+function useMagnetic(strength = 0.35) {
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring2(x, { stiffness: 200, damping: 20 });
+  const sy = useSpring2(y, { stiffness: 200, damping: 20 });
+  const handleMouseMove = (e) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    x.set((e.clientX - rect.left - rect.width / 2) * strength);
+    y.set((e.clientY - rect.top - rect.height / 2) * strength);
+  };
+  const handleMouseLeave = () => { x.set(0); y.set(0); };
+  return { ref, sx, sy, handleMouseMove, handleMouseLeave };
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -212,20 +229,33 @@ export default function Navbar() {
                 </span>
               </button>
 
-              {/* Hire Me */}
-              <motion.button
-                onClick={() => scrollTo('contact')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-                className={`hidden sm:flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-sm font-semibold transition-colors overflow-hidden relative ${isHacker
-                  ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)] font-mono'
-                  : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-lg hover:shadow-cyan-500/30'
-                  }`}
-              >
-                <span className="relative z-10 hidden md:inline">Hire Me</span>
-                <ChevronRight className="w-4 h-4 relative z-10" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-700" />
-              </motion.button>
+              {/* Hire Me — magnetic */}
+              {(() => {
+                const { ref: magRef, sx, sy, handleMouseMove: mm, handleMouseLeave: ml } = useMagnetic(0.3);
+                return (
+                  <motion.div
+                    ref={magRef}
+                    onMouseMove={mm}
+                    onMouseLeave={ml}
+                    style={{ x: sx, y: sy }}
+                    className="hidden sm:flex magnetic-btn"
+                  >
+                    <motion.button
+                      onClick={() => scrollTo('contact')}
+                      whileTap={{ scale: 0.97 }}
+                      className={`flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-sm font-semibold transition-colors overflow-hidden relative ${
+                        isHacker
+                          ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)] font-mono'
+                          : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-lg hover:shadow-cyan-500/30'
+                      }`}
+                    >
+                      <span className="relative z-10 hidden md:inline">Hire Me</span>
+                      <ChevronRight className="w-4 h-4 relative z-10" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-700" />
+                    </motion.button>
+                  </motion.div>
+                );
+              })()}
 
               {/* Mobile Menu Button */}
               <button
