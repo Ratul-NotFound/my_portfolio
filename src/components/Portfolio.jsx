@@ -371,6 +371,222 @@ function SectionTitleLine({ isHacker, isLight }) {
   );
 }
 
+// ── WhatIDoCard (Hyper-Creative 3D Interactive Card) ──
+function WhatIDoCard({ item, i, isLight, isHacker }) {
+  const cardRef = useRef(null);
+  
+  // 3D Tilt values using Framer Motion
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { stiffness: 160, damping: 22 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { stiffness: 160, damping: 22 });
+  
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = (e.clientX - rect.left) / width - 0.5;
+    const mouseY = (e.clientY - rect.top) / height - 0.5;
+    
+    x.set(mouseX);
+    y.set(mouseY);
+    
+    const px = Math.round(e.clientX - rect.left);
+    const py = Math.round(e.clientY - rect.top);
+    cardRef.current.style.setProperty('--spot-x', `${px}px`);
+    cardRef.current.style.setProperty('--spot-y', `${py}px`);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  // Determine active thematic coloring scheme
+  const themeColors = {
+    "Full Stack Development": {
+      spotlight: isHacker ? "rgba(0, 255, 65, 0.12)" : isLight ? "rgba(79, 70, 229, 0.12)" : "rgba(34, 211, 238, 0.12)",
+      accent: isHacker ? "#00ff41" : isLight ? "#4f46e5" : "#22d3ee",
+      radial: isHacker ? "from-[#00ff41]/20" : isLight ? "from-indigo-500/20" : "from-cyan-500/20"
+    },
+    "AI & Machine Learning": {
+      spotlight: isHacker ? "rgba(0, 255, 100, 0.12)" : isLight ? "rgba(147, 51, 234, 0.12)" : "rgba(168, 85, 247, 0.12)",
+      accent: isHacker ? "#00ff66" : isLight ? "#9333ea" : "#a855f7",
+      radial: isHacker ? "from-[#00ff66]/20" : isLight ? "from-purple-500/20" : "from-purple-500/20"
+    },
+    "AI Automation": {
+      spotlight: isHacker ? "rgba(0, 200, 255, 0.12)" : isLight ? "rgba(236, 72, 153, 0.12)" : "rgba(244, 63, 94, 0.12)",
+      accent: isHacker ? "#00c8ff" : isLight ? "#ec4899" : "#f43f5e",
+      radial: isHacker ? "from-[#00c8ff]/20" : isLight ? "from-pink-500/20" : "from-rose-500/20"
+    },
+    "Research": {
+      spotlight: isHacker ? "rgba(255, 215, 0, 0.12)" : isLight ? "rgba(245, 158, 11, 0.12)" : "rgba(234, 179, 8, 0.12)",
+      accent: isHacker ? "#ffd700" : isLight ? "#f59e0b" : "#eab308",
+      radial: isHacker ? "from-[#ffd700]/20" : isLight ? "from-amber-500/20" : "from-yellow-500/20"
+    }
+  }[item.title] || {
+    spotlight: "rgba(99, 102, 241, 0.12)",
+    accent: "#6366f1",
+    radial: "from-indigo-500/20"
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+      }}
+      className={`group relative p-8 backdrop-blur-xl border rounded-3xl cursor-default overflow-hidden transition-all duration-500 ${
+        isHacker
+          ? 'bg-[#000401]/85 border-[#00ff41]/10 hover:border-[#00ff41]/35 shadow-[0_0_20px_rgba(0,255,65,0.01)]'
+          : isLight
+            ? 'bg-white/40 border-slate-200/80 shadow-lg shadow-indigo-500/5 hover:border-indigo-400'
+            : 'bg-[#0b0f19]/40 border-slate-900 shadow-2xl hover:border-cyan-500/30'
+      }`}
+    >
+      {/* 3D Glass Refraction Glare */}
+      <div className="absolute inset-0 pointer-events-none z-20 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      
+      {/* Hover Spotlight Glow */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 z-0"
+        style={{
+          backgroundImage: `radial-gradient(circle 140px at var(--spot-x, 50%) var(--spot-y, 50%), ${themeColors.spotlight}, transparent 80%)`
+        }}
+      />
+
+      {/* Decorative Floating SVGs (Role-Specific) */}
+      <div className="absolute inset-0 opacity-15 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none z-0 overflow-hidden">
+        {item.title === "Full Stack Development" && (
+          <svg className="absolute -right-8 -bottom-8 w-48 h-48 text-current animate-float select-none opacity-40 animate-pulse" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="0.8">
+            <rect x="10" y="10" width="80" height="60" rx="4" />
+            <line x1="10" y1="22" x2="90" y2="22" />
+            <circle cx="18" cy="16" r="1.5" />
+            <circle cx="24" cy="16" r="1.5" />
+            <circle cx="30" cy="16" r="1.5" />
+            <rect x="20" y="32" width="20" height="8" rx="1" />
+            <rect x="50" y="32" width="30" height="8" rx="1" />
+            <rect x="20" y="48" width="60" height="12" rx="1" />
+          </svg>
+        )}
+        {item.title === "AI & Machine Learning" && (
+          <svg className="absolute -right-8 -bottom-8 w-48 h-48 text-current select-none opacity-40" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="0.8">
+            <circle cx="50" cy="50" r="12" strokeDasharray="3 3" />
+            <circle cx="20" cy="50" r="5" />
+            <circle cx="80" cy="50" r="5" />
+            <circle cx="50" cy="20" r="5" />
+            <circle cx="50" cy="80" r="5" />
+            <line x1="25" y1="50" x2="38" y2="50" />
+            <line x1="62" y1="50" x2="75" y2="50" />
+            <line x1="50" y1="25" x2="50" y2="38" />
+            <line x1="50" y1="62" x2="50" y2="75" />
+            <line x1="24" y1="46" x2="46" y2="24" strokeDasharray="2 2" />
+            <line x1="54" y1="24" x2="76" y2="46" strokeDasharray="2 2" />
+            <line x1="24" y1="54" x2="46" y2="76" strokeDasharray="2 2" />
+            <line x1="54" y1="76" x2="76" y2="54" strokeDasharray="2 2" />
+          </svg>
+        )}
+        {item.title === "AI Automation" && (
+          <svg className="absolute -right-8 -bottom-8 w-48 h-48 text-current select-none opacity-40" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="0.8">
+            <path d="M 20 30 L 45 30 L 45 70 L 80 70" strokeDasharray="2 2" />
+            <circle cx="20" cy="30" r="4" fill="currentColor" fillOpacity="0.3" />
+            <circle cx="45" cy="30" r="4" />
+            <circle cx="45" cy="70" r="4" />
+            <circle cx="80" cy="70" r="4" fill="currentColor" fillOpacity="0.3" />
+            <polygon points="55,27 63,30 55,33" fill="currentColor" />
+            <polygon points="65,67 73,70 65,73" fill="currentColor" />
+          </svg>
+        )}
+        {item.title === "Research" && (
+          <svg className="absolute -right-8 -bottom-8 w-48 h-48 text-current select-none opacity-40" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="0.8">
+            <ellipse cx="50" cy="50" rx="35" ry="12" transform="rotate(-30 50 50)" />
+            <ellipse cx="50" cy="50" rx="35" ry="12" transform="rotate(30 50 50)" />
+            <ellipse cx="50" cy="50" rx="35" ry="12" transform="rotate(90 50 50)" />
+            <circle cx="50" cy="50" r="6" fill="currentColor" />
+          </svg>
+        )}
+      </div>
+
+      {/* Layered 3D Content Container */}
+      <div className="relative z-10 flex flex-col justify-between h-full" style={{ transform: 'translateZ(30px)', transformStyle: 'preserve-3d' }}>
+        
+        {/* Animated Icon */}
+        <div 
+          className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 shadow-md"
+          style={{
+            transform: 'translateZ(40px)',
+            background: isHacker ? 'rgba(0, 255, 65, 0.05)' : isLight ? 'rgba(99, 102, 241, 0.08)' : 'rgba(34, 211, 238, 0.08)',
+            border: `1px solid ${isHacker ? 'rgba(0, 255, 65, 0.15)' : isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.15)'}`,
+            color: themeColors.accent
+          }}
+        >
+          <item.icon className="w-6 h-6" />
+        </div>
+
+        {/* Text Details with layered lifts */}
+        <div className="space-y-4">
+          <h3 
+            className={`text-xl md:text-2xl font-black tracking-tight transition-colors duration-300`}
+            style={{
+              transform: 'translateZ(25px)',
+              color: isHacker ? '#00ff41' : isLight ? '#1e293b' : '#ffffff'
+            }}
+          >
+            <span>
+              {item.title}
+            </span>
+          </h3>
+
+          <p 
+            className={`text-sm leading-relaxed transition-all duration-300 select-none ${
+              isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-500' : 'text-slate-400'
+            }`}
+            style={{ transform: 'translateZ(10px)' }}
+          >
+            {item.desc}
+          </p>
+
+          {/* Staggered tags */}
+          <div 
+            className="flex flex-wrap gap-2 pt-2"
+            style={{ transform: 'translateZ(15px)' }}
+          >
+            {item.skills.map((skill, j) => (
+              <motion.span
+                key={j}
+                whileHover={{ scale: 1.08 }}
+                className={`px-3 py-1 border rounded-lg text-xs font-mono font-bold tracking-wide select-none transition-colors duration-300 ${
+                  isHacker 
+                    ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/80 hover:border-[#00ff41] hover:text-[#00ff41]'
+                    : isLight 
+                      ? 'bg-indigo-50/50 border-indigo-100 text-indigo-650 hover:border-indigo-400 hover:bg-indigo-50'
+                      : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-cyan-500 hover:text-cyan-300'
+                }`}
+              >
+                {skill}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Kinetic Border Highlight on Hover */}
+      <div 
+        className={`absolute bottom-0 left-0 right-0 h-[2.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20`}
+        style={{
+          background: `linear-gradient(to right, transparent, ${themeColors.accent}, transparent)`
+        }}
+      />
+    </motion.div>
+  );
+}
+
 // ── CountUp hook ──
 function useCountUp(target, duration = 1800, inView = false) {
   const [count, setCount] = useState(0);
@@ -1462,48 +1678,8 @@ const Portfolio = () => {
                   skills: ["RAG Systems", "LLM Tuning", "Distributed", "MLOps"]
                 }
               ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  variants={staggerItem}
-                  whileHover={{ y: -8 }}
-                  transition={{ type: 'spring', stiffness: 250, damping: 20 }}
-                  className={`group relative p-8 backdrop-blur-xl border rounded-2xl overflow-hidden card-glow-hover ${
-                    isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10'
-                    : isLight ? 'bg-white/70 border-slate-200 shadow-sm'
-                    : 'bg-slate-900/50 border-slate-800'}`}
-                >
-                  <div className="relative z-10">
-                    <motion.div
-                      className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
-                        isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-600/10'
-                      }`}
-                      whileHover={{ rotate: 8, scale: 1.15 }}
-                      transition={{ type: 'spring', stiffness: 400 }}
-                    >
-                      <item.icon className={`w-8 h-8 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
-                    </motion.div>
-                    <h3 className={`text-xl md:text-2xl font-bold mb-4 kinetic-underline ${
-                      isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'
-                    }`}>{item.title}</h3>
-                    <p className={`mb-6 leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{item.desc}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {item.skills.map((skill, j) => (
-                        <motion.span
-                          key={j}
-                          whileHover={{ scale: 1.08 }}
-                          className={`px-3 py-1 border rounded-lg text-xs transition-colors ${
-                            isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/60 hover:border-[#00ff41]/40 hover:text-[#00ff41]'
-                            : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-500 hover:border-indigo-400'
-                            : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-cyan-500/50 hover:text-cyan-300'
-                          }`}
-                        >{skill}</motion.span>
-                      ))}
-                    </div>
-                  </div>
-                  {/* bottom accent bar */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ${
-                    isHacker ? 'bg-[#00ff41]/50' : 'bg-gradient-to-r from-cyan-500 to-purple-500'
-                  }`} />
+                <motion.div key={i} variants={staggerItem}>
+                  <WhatIDoCard item={item} i={i} isLight={isLight} isHacker={isHacker} />
                 </motion.div>
               ))}
             </motion.div>
