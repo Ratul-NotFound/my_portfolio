@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValueEvent, useMotionValue, useInView } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { useTheme } from '../context/ThemeContext';
 const MemoNavbar = React.memo(Navbar);
 const MemoFooter = React.memo(Footer);
-import { useTheme } from '../context/ThemeContext';
 import {
   Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2,
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
@@ -15,6 +15,42 @@ import {
 } from 'lucide-react';
 
 const springConfig = { stiffness: 80, damping: 20, restDelta: 0.001 };
+const heroReveal = {
+  hidden: { opacity: 0, y: 28, scale: 0.98 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroBadgeReveal = {
+  hidden: { opacity: 0, x: -18, y: -10, filter: 'blur(6px)' },
+  show: { opacity: 1, x: 0, y: 0, filter: 'blur(0px)', transition: { duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroHeadlineReveal = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroLineReveal = {
+  hidden: { opacity: 0, x: -28 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.55, delay: 0.14, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroParaReveal = {
+  hidden: { opacity: 0, x: 22, y: 10 },
+  show: { opacity: 1, x: 0, y: 0, transition: { duration: 0.6, delay: 0.18, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroActionsReveal = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.24, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroSocialReveal = {
+  hidden: { opacity: 0, x: -20, y: 10 },
+  show: { opacity: 1, x: 0, y: 0, transition: { duration: 0.55, delay: 0.28, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroCardReveal = {
+  hidden: { opacity: 0, y: 22, scale: 0.98 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] } }
+};
+const heroImageReveal = {
+  hidden: { opacity: 0, x: 40, y: 20, scale: 0.98, filter: 'blur(8px)' },
+  show: { opacity: 1, x: 0, y: 0, scale: 1, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+};
 
 const ScrollAnimatedCard = ({ children, className, index = 0 }) => {
   const ref = useRef(null);
@@ -112,29 +148,79 @@ const ScrollHeading = ({ children, className }) => {
   );
 };
 
-const ScrollSkillCard = ({ children, className }) => {
+const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }) => {
+  const clampedProgress = useTransform(progress, (p) => Math.min(1, Math.max(0, p)));
+  const safeTotal = Math.max(1, total);
+  const start = 0.08 + (index / safeTotal) * 0.6;
+  const end = Math.min(1, start + 0.28);
+
+  const scale = useTransform(clampedProgress, [start, end], [0.9, 1]);
+  const opacity = useTransform(clampedProgress, [start, end], [0.05, 1]);
+  const blurValue = useTransform(clampedProgress, [start, end], [12, 0]);
+  const y = useTransform(clampedProgress, [start, end], [90, 0]);
+  const x = useTransform(clampedProgress, [start, end], [-110, 0]);
+  const rotateZ = useTransform(clampedProgress, [start, end], [-1.5, 0]);
+
+  return (
+    <motion.div
+      style={{ scale, opacity, x, y, rotateZ, filter: `blur(${blurValue}px)` }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const TechGrid = ({ skills, isHacker, isLight }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
   });
-
   const smoothProgress = useSpring(scrollYProgress, springConfig);
 
-  const scale = useTransform(smoothProgress, [0, 0.25], [0.2, 1]);
-  const opacity = useTransform(smoothProgress, [0, 0.2], [0, 1]);
-  const rotateY = useTransform(smoothProgress, [0, 0.25], [90, 0]);
-  const blurValue = useTransform(smoothProgress, [0, 0.2], [10, 0]);
-  const y = useTransform(smoothProgress, [0, 0.25], [250, 0]);
-
   return (
-    <motion.div
-      ref={ref}
-      style={{ scale, opacity, y, rotateY, filter: `blur(${blurValue}px)`, transformStyle: 'preserve-3d' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <div ref={ref} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      {skills.map((skill, i) => (
+        <ScrollSkillCard
+          key={i}
+          index={i}
+          total={skills.length}
+          progress={smoothProgress}
+          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
+
+          <div className="relative z-10 flex flex-col items-center gap-4">
+            <div className="relative w-16 h-16 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+
+              <div className={`relative w-full h-full p-2 rounded-xl border transition-all group-hover/card:scale-110 ${isHacker ? 'bg-[#000a02] border-[#00ff41]/15 group-hover/card:border-[#00ff41]/30' : isLight ? 'bg-white border-slate-200 group-hover/card:border-indigo-300 shadow-sm' : 'bg-slate-800/50 border-slate-700 group-hover/card:border-slate-600'}`}>
+                <img
+                  src={skill.icon}
+                  alt={skill.name}
+                  className="w-full h-full object-contain filter group-hover/card:drop-shadow-[0_0_8px_rgba(6,182,212,0.5)] transition-all duration-500"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </div>
+
+              <div className="absolute inset-0 border-2 border-cyan-500/0 group-hover/card:border-cyan-500/50 rounded-xl transition-all duration-500 group-hover/card:scale-125"></div>
+            </div>
+
+            <div className="text-center">
+              <span className={`text-sm font-semibold transition-colors block ${isHacker ? 'text-[#00cc32]/70 group-hover/card:text-[#00ff41]' : isLight ? 'text-slate-600 group-hover/card:text-indigo-600' : 'text-slate-300 group-hover/card:text-cyan-300'}`}>
+                {skill.name}
+              </span>
+            </div>
+          </div>
+
+          <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transform scale-x-0 group-hover/card:scale-x-100 transition-transform duration-500"></div>
+        </ScrollSkillCard>
+      ))}
+    </div>
   );
 };
 const ShufflingProjectWrapper = ({ children, index, total, progress }) => {
@@ -368,6 +454,8 @@ const Portfolio = () => {
   const heroParallaxY = useTransform(scrollY, [0, 600], [0, -80]);
   const heroOpacity  = useTransform(scrollY, [0, 400], [1, 0.3]);
   const blobParallax = useTransform(scrollY, [0, 800], [0, -120]);
+  const heroLeftX = useTransform(scrollY, [0, 120, 600], [0, 0, -18]);
+  const heroLeftBlur = useTransform(scrollY, [0, 200, 600], [0, 0, 3]);
 
   const spotlightRef = useRef(null);
   const canvasRef = useRef(null);
@@ -752,18 +840,28 @@ const Portfolio = () => {
         </AnimatePresence>
 
         {/* Hero */}
-        <section id="hero" className="min-h-screen flex items-center justify-center px-2 pt-10">
+        <section id="hero" ref={heroRef} className="min-h-screen flex items-center justify-center px-2 pt-10">
           <div className="max-w-7xl mx-auto w-full">
             <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
               <motion.div
                 className="space-y-8"
-                style={{ y: heroParallaxY, opacity: heroOpacity }}
+                variants={heroReveal}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: '-80px' }}
+                style={{
+                  y: heroParallaxY,
+                  opacity: heroOpacity,
+                  x: heroLeftX,
+                  filter: `blur(${heroLeftBlur}px)`
+                }}
               >
                 {/* Status badge */}
                 <motion.div
-                  initial={{ opacity: 0, y: -16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
+                  variants={heroBadgeReveal}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-80px' }}
                   className={`inline-flex items-center gap-3 px-5 py-2.5 backdrop-blur-xl border rounded-full text-sm transition-all duration-300 cursor-default group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 hover:border-[#00ff41]/50' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500/50'}`}>
                   <span className="relative flex h-3 w-3">
                     <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isHacker ? 'bg-[#00ff41]' : 'bg-green-400'} opacity-75`}></span>
@@ -774,7 +872,13 @@ const Portfolio = () => {
                 </motion.div>
 
                 {/* Split-word stagger headline */}
-                <div className="space-y-4">
+                <motion.div
+                  className="space-y-4"
+                  variants={heroHeadlineReveal}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-80px' }}
+                >
                   <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-none">
                     {['Building', 'Scalable', 'Systems', 'with AI'].map((word, i) => (
                       <div key={word} className="word-reveal-wrapper block">
@@ -796,19 +900,37 @@ const Portfolio = () => {
                     ))}
                   </h1>
 
-                  <div className={`flex items-center gap-2 text-lg md:text-xl font-mono h-8 ${isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <motion.div
+                    className={`flex items-center gap-2 text-lg md:text-xl font-mono h-8 ${isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}
+                    variants={heroLineReveal}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: '-80px' }}
+                  >
                     <Terminal className={`w-5 h-5 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
                     <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}>$</span>
                     <span>{typedText}</span>
                     <span className={`w-2 h-5 animate-blink ${isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_rgba(0,255,65,0.6)]' : isLight ? 'bg-indigo-500' : 'bg-cyan-400'}`}></span>
-                  </div>
+                  </motion.div>
 
-                  <p className={`text-base md:text-lg lg:text-xl max-w-2xl leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+                  <motion.p
+                    className={`text-base md:text-lg lg:text-xl max-w-2xl leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-600' : 'text-slate-400'}`}
+                    variants={heroParaReveal}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: '-80px' }}
+                  >
                     Full Stack Engineer & AI Researcher specializing in <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>high-performance applications</span>, <span className={`font-semibold ${isHacker ? 'text-[#33ff66]' : isLight ? 'text-purple-600' : 'text-purple-400'}`}>machine learning</span>, and <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-pink-600' : 'text-pink-400'}`}>scalable architecture</span>.
-                  </p>
-                </div>
+                  </motion.p>
+                </motion.div>
 
-                <div className="flex flex-wrap gap-4">
+                <motion.div
+                  className="flex flex-wrap gap-4"
+                  variants={heroActionsReveal}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-80px' }}
+                >
                   <a
                     href="#projects"
                     className={`group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 overflow-hidden ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'}`}
@@ -826,9 +948,15 @@ const Portfolio = () => {
                     <Download className="w-5 h-5 group-hover:animate-bounce" />
                     <span>Resume</span>
                   </a>
-                </div>
+                </motion.div>
 
-                <div className="flex items-center gap-4 pt-4">
+                <motion.div
+                  className="flex items-center gap-4 pt-4"
+                  variants={heroSocialReveal}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: '-80px' }}
+                >
                   {[
                     { icon: Github, href: "https://github.com/ratul-notfound", label: "GitHub" },
                     { icon: Linkedin, href: "https://linkedin.com/in/mahmud-hasan-ratul", label: "LinkedIn" },
@@ -845,19 +973,26 @@ const Portfolio = () => {
                       <social.icon className={`w-6 h-6 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover:text-[#00ff41]' : isLight ? 'text-slate-500 group-hover:text-indigo-600' : 'text-slate-400 group-hover:text-cyan-400'}`} />
                     </a>
                   ))}
-                </div>
+                </motion.div>
               </motion.div>
 
               <motion.div
                 className="relative"
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+                variants={heroCardReveal}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: '-80px' }}
               >
                 <div className="relative aspect-square max-w-lg mx-auto">
                   <div className={`absolute inset-0 rounded-3xl blur-3xl ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-r from-indigo-300/30 via-purple-300/20 to-pink-300/20' : 'bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20'}`}></div>
                   <div className={`relative backdrop-blur-2xl border rounded-3xl p-8 space-y-6 transition-all duration-500 ${isHacker ? 'bg-[#000a02]/90 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-slate-900/90 border-slate-700 hover:border-cyan-500/50'}`}>
-                    <div className={`relative aspect-square rounded-2xl overflow-hidden border-4 group shadow-xl transition-shadow duration-500 ${isHacker ? 'border-[#00ff41]/20 hover:shadow-[0_0_20px_rgba(0,255,65,0.15)]' : isLight ? 'border-slate-200 hover:shadow-indigo-300/30' : 'border-slate-700 hover:shadow-cyan-500/30'}`}>
+                    <motion.div
+                      className={`relative aspect-square rounded-2xl overflow-hidden border-4 group shadow-xl transition-shadow duration-500 ${isHacker ? 'border-[#00ff41]/20 hover:shadow-[0_0_20px_rgba(0,255,65,0.15)]' : isLight ? 'border-slate-200 hover:shadow-indigo-300/30' : 'border-slate-700 hover:shadow-cyan-500/30'}`}
+                      variants={heroImageReveal}
+                      initial="hidden"
+                      whileInView="show"
+                      viewport={{ once: true, margin: '-80px' }}
+                    >
                       <img
                         src="/profile.jpg"
                         alt="Mahmud Hasan Ratul"
@@ -867,7 +1002,7 @@ const Portfolio = () => {
                         }}
                       />
                       <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]' : isLight ? 'from-white' : 'from-slate-900'} via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                    </div>
+                    </motion.div>
 
                     <div className="space-y-4">
                       <div>
@@ -1022,9 +1157,9 @@ const Portfolio = () => {
                 </motion.div>
               ))}
             </motion.div>
-          </div>
-         {/* ── Tech Marquee Belt ── */}
-        <div className="py-8 overflow-hidden">
+
+            {/* ── Tech Marquee Belt ── */}
+            <div className="py-8 overflow-hidden">
           {[
             ['Next.js','React','TypeScript','Node.js','Python','TensorFlow','Docker','AWS','MongoDB','PostgreSQL','Redis','GraphQL','FastAPI','Kubernetes','PyTorch','OpenAI'],
             ['System Design','CI/CD','Microservices','REST APIs','WebSockets','Redis Cache','JWT Auth','OAuth2','Stripe','Firebase','Vercel','Nginx','Linux','Git','LangChain','Whisper']
@@ -1049,6 +1184,7 @@ const Portfolio = () => {
               </div>
             </div>
           ))}
+          </div>
         </div>
       </section>
 
@@ -1318,46 +1454,7 @@ const Portfolio = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-                      {skills.map((skill, i) => (
-
-                        <ScrollSkillCard
-                          key={i}
-                          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
-
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
-
-                          <div className="relative z-10 flex flex-col items-center gap-4">
-                            <div className="relative w-16 h-16 flex items-center justify-center">
-                              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
-
-                              <div className={`relative w-full h-full p-2 rounded-xl border transition-all group-hover/card:scale-110 ${isHacker ? 'bg-[#000a02] border-[#00ff41]/15 group-hover/card:border-[#00ff41]/30' : isLight ? 'bg-white border-slate-200 group-hover/card:border-indigo-300 shadow-sm' : 'bg-slate-800/50 border-slate-700 group-hover/card:border-slate-600'}`}>
-                                <img
-                                  src={skill.icon}
-                                  alt={skill.name}
-                                  className="w-full h-full object-contain filter group-hover/card:drop-shadow-[0_0_8px_rgba(6,182,212,0.5)] transition-all duration-500"
-                                  onError={(e) => {
-                                    e.target.style.display = 'none';
-                                  }}
-                                />
-                              </div>
-
-                              <div className="absolute inset-0 border-2 border-cyan-500/0 group-hover/card:border-cyan-500/50 rounded-xl transition-all duration-500 group-hover/card:scale-125"></div>
-                            </div>
-
-                            <div className="text-center">
-                              <span className={`text-sm font-semibold transition-colors block ${isHacker ? 'text-[#00cc32]/70 group-hover/card:text-[#00ff41]' : isLight ? 'text-slate-600 group-hover/card:text-indigo-600' : 'text-slate-300 group-hover/card:text-cyan-300'}`}>
-                                {skill.name}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
-                          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transform scale-x-0 group-hover/card:scale-x-100 transition-transform duration-500"></div>
-                        </ScrollSkillCard>
-                      ))}
-                    </div>
+                    <TechGrid skills={skills} isHacker={isHacker} isLight={isLight} />
                   </div>
                 )
               ))}

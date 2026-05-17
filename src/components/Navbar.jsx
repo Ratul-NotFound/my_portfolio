@@ -32,12 +32,11 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const isLight = theme === 'light';
   const isHacker = theme === 'hacker';
+  const { ref: magRef, sx, sy, handleMouseMove: mm, handleMouseLeave: ml } = useMagnetic(0.3);
 
   // Scroll progress
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-
-  const hireMeMagnetic = useMagnetic(0.3);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -233,10 +232,10 @@ export default function Navbar() {
 
               {/* Hire Me — magnetic */}
               <motion.div
-                ref={hireMeMagnetic.ref}
-                onMouseMove={hireMeMagnetic.handleMouseMove}
-                onMouseLeave={hireMeMagnetic.handleMouseLeave}
-                style={{ x: hireMeMagnetic.sx, y: hireMeMagnetic.sy }}
+                ref={magRef}
+                onMouseMove={mm}
+                onMouseLeave={ml}
+                style={{ x: sx, y: sy }}
                 className="hidden sm:flex magnetic-btn"
               >
                 <motion.button
