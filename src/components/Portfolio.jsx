@@ -11,7 +11,7 @@ import {
   Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2,
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
   Star, Cpu, Network, Award, TrendingUp, Coffee, Rocket,
-  Circle, ChevronRight, ChevronDown, Hand
+  Circle, ChevronRight, ChevronDown, Hand, BookOpen
 } from 'lucide-react';
 
 const springConfig = { stiffness: 80, damping: 20, restDelta: 0.001 };
@@ -1430,7 +1430,7 @@ const Portfolio = () => {
             </div>
 
             <motion.div
-              className="grid md:grid-cols-3 gap-3 md:gap-4"
+              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"
               variants={staggerContainer}
               initial="hidden"
               whileInView="show"
@@ -1440,20 +1440,26 @@ const Portfolio = () => {
                 {
                   icon: Code2,
                   title: "Full Stack Development",
-                  desc: "Expert in modern web technologies, building responsive and performant applications from frontend to backend with focus on scalability.",
+                  desc: "Crafting modern, responsive web applications. Architecting seamless end-to-end user interfaces, secure APIs, and performant backends.",
                   skills: ["React", "Next.js", "Node.js", "TypeScript"]
                 },
                 {
                   icon: Brain,
                   title: "AI & Machine Learning",
-                  desc: "Integrating cutting-edge AI models and ML algorithms to create intelligent, data-driven solutions that automate and optimize workflows.",
-                  skills: ["GPT-4", "TensorFlow", "LangChain", "NLP"]
+                  desc: "Designing neural networks, custom deep learning models, and complex NLP pipelines. Engineering production-grade ML algorithms.",
+                  skills: ["PyTorch", "TensorFlow", "Transformers", "NLP"]
                 },
                 {
-                  icon: Server,
-                  title: "Cloud Architecture",
-                  desc: "Designing and deploying robust cloud infrastructure with focus on performance, reliability, and cost-effectiveness at scale.",
-                  skills: ["AWS", "Docker", "Kubernetes", "CI/CD"]
+                  icon: Zap,
+                  title: "AI Automation",
+                  desc: "Architecting intelligent agentic frameworks, automated pipelines, and multi-agent systems to streamline and optimize complex workflows.",
+                  skills: ["LangChain", "CrewAI", "Vector DBs", "Flows"]
+                },
+                {
+                  icon: BookOpen,
+                  title: "Research",
+                  desc: "Investigating next-generation machine learning architectures, distributed computing, and emerging computer science research paradigms.",
+                  skills: ["RAG Systems", "LLM Tuning", "Distributed", "MLOps"]
                 }
               ].map((item, i) => (
                 <motion.div
