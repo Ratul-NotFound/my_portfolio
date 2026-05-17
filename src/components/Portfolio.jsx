@@ -2009,6 +2009,19 @@ const Portfolio = () => {
       metrics: ["100+ Hours", "92% Accuracy", "NLP Pipeline", "Auto Summary"],
       image: "/lecture-ai.jpeg?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/8637/8637099.png"
+    },
+    {
+      id: 5,
+      title: "UniVibe",
+      category: "Social • Collaboration",
+      description: "Unified student collaboration portal and social hub engineered for Daffodil International University. Facilitates real-time campus communication, resource sharing, and study group organization.",
+      tech: ["Next.js 14", "Firebase", "WebSockets", "Tailwind CSS", "Vercel"],
+      links: { live: "https://univibe-diu.vercel.app", code: "https://github.com/ratul-notfound/univibe" },
+      icon: Sparkles,
+      gradient: "from-indigo-600 to-cyan-600",
+      metrics: ["3K+ Active Users", "Real-Time Portal", "DIU Academic Hub", "Resource Sharing"],
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
+      logo: "https://cdn-icons-png.flaticon.com/512/3249/3249911.png"
     }
 
   ]), []);
