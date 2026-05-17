@@ -122,8 +122,36 @@ export default function Navbar() {
                     ? 'bg-gradient-to-br from-slate-100 to-white border-slate-200 group-hover:border-cyan-500'
                     : 'bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700 group-hover:border-cyan-500'
                   }`}>
-                  <Terminal className={`w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform ${isHacker ? 'text-[#00ff41]' : 'text-cyan-400'}`} />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent translate-y-[-100%] group-hover:translate-y-[100%] transition-transform duration-1000" />
+                  <svg 
+                    viewBox="0 0 64 64" 
+                    className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300"
+                  >
+                    <linearGradient id="navLogoGrad" x1="0" x2="1" y1="0" y2="1">
+                      <stop offset="0%" stopColor={isHacker ? "#00ff41" : "#22d3ee"} />
+                      <stop offset="50%" stopColor={isHacker ? "#39ff14" : "#6366f1"} />
+                      <stop offset="100%" stopColor={isHacker ? "#00ff41" : "#ec4899"} />
+                    </linearGradient>
+
+                    <g fill="none" stroke="url(#navLogoGrad)" strokeWidth="4.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M 18,16 L 18,48" />
+                      <path d="M 36,16 L 36,48" />
+                      <path d="M 18,16 L 27,32 L 36,16" />
+                      <path d="M 18,32 L 36,32" />
+                      <path d="M 36,16 C 48,16 48,32 36,32" />
+                      <path d="M 36,32 L 48,48" />
+                    </g>
+                    
+                    <g fill={isHacker ? "#00ff41" : "#22d3ee"}>
+                      <circle cx="18" cy="16" r="2" />
+                      <circle cx="36" cy="16" r="2" fill={isHacker ? "#00ff41" : "#ec4899"} />
+                      <circle cx="27" cy="32" r="2" />
+                      <circle cx="18" cy="32" r="2" />
+                      <circle cx="36" cy="32" r="2" fill={isHacker ? "#00ff41" : "#6366f1"} />
+                      <circle cx="18" cy="48" r="2" />
+                      <circle cx="36" cy="48" r="2" fill={isHacker ? "#00ff41" : "#6366f1"} />
+                      <circle cx="48" cy="48" r="2" fill={isHacker ? "#00ff41" : "#ec4899"} />
+                    </g>
+                  </svg>
                 </div>
               </div>
               <div className="flex flex-col">
