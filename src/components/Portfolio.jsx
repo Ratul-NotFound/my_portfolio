@@ -439,10 +439,70 @@ function StatCard({ stat, isLight, isHacker }) {
   );
 }
 
+const InteractiveText = ({ text, className, isHacker, isLight }) => {
+  return (
+    <span className={`inline-flex flex-wrap ${className}`}>
+      {text.split(' ').map((word, wi) => (
+        <span key={wi} className="inline-flex whitespace-nowrap mr-[0.25em]">
+          {word.split('').map((char, ci) => (
+            <motion.span
+              key={ci}
+              className="inline-block cursor-default select-none origin-center"
+              whileHover={{
+                scale: 1.3,
+                y: -6,
+                rotate: Math.random() * 20 - 10,
+                color: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee',
+                textShadow: isHacker ? '0 0 12px rgba(0, 255, 65, 0.9)' : isLight ? '0 0 10px rgba(79, 70, 229, 0.5)' : '0 0 12px rgba(34, 211, 238, 0.9)'
+              }}
+              transition={{ type: "spring", stiffness: 450, damping: 10 }}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </span>
+      ))}
+    </span>
+  );
+};
+
+const topicsConfig = {
+  'web-app': {
+    title: "Web App",
+    subject: "Let's Build a Premium Web Application!",
+    body: "Hi Ratul, I am looking to build a high-performance, beautiful, and interactive web application. Let's discuss details!",
+    buttonText: "Launch Web Project",
+    desc: "React, Next.js, Custom CSS"
+  },
+  'ai': {
+    title: "AI Integration",
+    subject: "Let's Build an AI Integration!",
+    body: "Hi Ratul, I want to integrate advanced AI capabilities into my application. Let's chat!",
+    buttonText: "Initiate AI Brainstorm",
+    desc: "LLMs, Neural Networks, Agents"
+  },
+  'saas': {
+    title: "SaaS Platform",
+    subject: "Let's Build a SaaS Platform!",
+    body: "Hi Ratul, I am planning a scalable Software-as-a-Service system. Let's make it real!",
+    buttonText: "Design SaaS Architecture",
+    desc: "Scale, Payments, APIs"
+  },
+  'consultation': {
+    title: "Consultation",
+    subject: "Schedule a Free Portfolio/System Consultation",
+    body: "Hi Ratul, I would love to get your advice on my system architecture and schedule a brief free consultation call. Let's connect!",
+    buttonText: "Book Architecture Review",
+    desc: "Free 1-on-1 System Design Review"
+  }
+};
+
 const Portfolio = () => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
   const isHacker = theme === 'hacker';
+  const [contactCoords, setContactCoords] = useState({ x: 0, y: 0 });
+  const [selectedTopic, setSelectedTopic] = useState('web-app');
   const [isMounted, setIsMounted] = useState(false);
   const [activeTech, setActiveTech] = useState('all');
   const [typedText, setTypedText] = useState('');
@@ -1472,46 +1532,122 @@ const Portfolio = () => {
           <div className="max-w-4xl mx-auto">
             <motion.div
               ref={contactSpotlightRef}
-              className={`relative p-12 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden spotlight-card-v2 animated-border-card group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
+              className={`relative p-10 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden spotlight-card-v2 animated-border-card group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
-                e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`);
-                e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`);
+                const x = Math.round(e.clientX - rect.left);
+                const y = Math.round(e.clientY - rect.top);
+                e.currentTarget.style.setProperty('--mx', `${x}px`);
+                e.currentTarget.style.setProperty('--my', `${y}px`);
+                setContactCoords({ x, y });
               }}
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isHacker ? 'bg-[#00ff41]/[0.02]' : isLight ? 'bg-gradient-to-br from-indigo-50/50 to-purple-50/30' : 'bg-gradient-to-br from-cyan-500/5 to-purple-500/5'}`}></div>
+              {/* Creative Interactive Spotlight Grid */}
+              <div 
+                className="absolute inset-0 opacity-20 pointer-events-none transition-opacity duration-500 group-hover:opacity-35"
+                style={{
+                  backgroundImage: isHacker
+                    ? `radial-gradient(circle 180px at var(--mx, 50%) var(--my, 50%), rgba(0, 255, 65, 0.15), transparent 80%), 
+                       linear-gradient(to right, rgba(0, 255, 65, 0.05) 1px, transparent 1px), 
+                       linear-gradient(to bottom, rgba(0, 255, 65, 0.05) 1px, transparent 1px)`
+                    : `radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), ${isLight ? 'rgba(99, 102, 241, 0.18)' : 'rgba(34, 211, 238, 0.15)'}, transparent 80%), 
+                       linear-gradient(to right, ${isLight ? 'rgba(99, 102, 241, 0.06)' : 'rgba(255, 255, 255, 0.04)'} 1px, transparent 1px), 
+                       linear-gradient(to bottom, ${isLight ? 'rgba(99, 102, 241, 0.06)' : 'rgba(255, 255, 255, 0.04)'} 1px, transparent 1px)`,
+                  backgroundSize: '100% 100%, 30px 30px, 30px 30px'
+                }}
+              />
 
               <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/5' : isLight ? 'bg-indigo-300/20' : 'bg-cyan-500/10'}`}></div>
               <div className={`absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/3' : isLight ? 'bg-purple-300/20' : 'bg-purple-500/10'}`}></div>
 
               <div className="relative z-10 text-center space-y-8">
                 <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20'}`}>
-                  <Sparkles className={`w-10 h-10 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
+                  <Sparkles className={`w-10 h-10 mb-0 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
                 </div>
 
                 <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black">
-                    <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'}>
-                      Let&apos;s Build Something
-                    </span>
-                    <br />
-                    <span className={isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-white'}>Amazing Together</span>
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none">
+                    <InteractiveText text="Let's Build Something" isHacker={isHacker} isLight={isLight} />
+                    <br className="my-1.5" />
+                    <InteractiveText text="Amazing Together" isHacker={isHacker} isLight={isLight} className={isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-white'} />
                   </h2>
-                  <p className={`text-lg md:text-xl max-w-2xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                    Have a project in mind? Let&apos;s discuss how we can turn your vision into a scalable, production-ready solution.
+                  <p className={`text-base md:text-lg max-w-2xl mx-auto leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    Choose a path below to custom-configure your conversation. Select what you would like to build together!
                   </p>
                 </div>
 
+                {/* Topic selector chips */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto pt-2">
+                  {Object.entries(topicsConfig).map(([key, value]) => {
+                    const isSelected = selectedTopic === key;
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => setSelectedTopic(key)}
+                        className={`group/chip relative py-3 px-4 rounded-xl border text-xs font-bold transition-all duration-300 ${
+                          isSelected
+                            ? isHacker
+                              ? 'bg-[#00ff41]/20 border-[#00ff41] text-[#00ff41] shadow-[0_0_15px_rgba(0,255,65,0.25)] scale-105'
+                              : isLight
+                                ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-500/20 scale-105'
+                                : 'bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/20 scale-105'
+                            : isHacker
+                              ? 'bg-[#000a02]/60 border-[#00ff41]/20 text-[#00cc32]/60 hover:border-[#00ff41]/60 hover:text-[#00ff41]'
+                              : isLight
+                                ? 'bg-slate-50 border-slate-200 text-slate-600 hover:border-indigo-400 hover:bg-white shadow-sm'
+                                : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-cyan-500/50 hover:bg-slate-900/80'
+                        }`}
+                      >
+                        <span className="block relative z-10 transition-transform group-hover/chip:scale-105">{value.title}</span>
+                        <span className={`block text-[9px] font-medium mt-1 relative z-10 ${
+                          isSelected 
+                            ? 'text-white/80' 
+                            : isHacker 
+                              ? 'text-[#00cc32]/40' 
+                              : 'text-slate-500'
+                        }`}>{value.desc}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Simulated Live Hacker Console */}
+                {isHacker && (
+                  <div className="font-mono text-left bg-black/90 border border-[#00ff41]/20 rounded-xl p-4 text-xs space-y-1.5 shadow-[inset_0_0_10px_rgba(0,255,65,0.05)] w-full max-w-lg mx-auto">
+                    <div className="flex items-center gap-1.5 text-[#00ff41]/60">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#00ff41]/30 animate-ping"></span>
+                      <span>COORDINATE_TRACKING_SYSTEM --ACTIVE</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-[#00cc32]/80 mt-2">
+                      <div>CURSOR_X: <span className="text-[#00ff41]">{contactCoords.x}px</span></div>
+                      <div>CURSOR_Y: <span className="text-[#00ff41]">{contactCoords.y}px</span></div>
+                    </div>
+                    <div className="text-[#00cc32]/60 mt-1">
+                      STATUS: <span className="text-[#00ff41] animate-pulse">ESTABLISHED_CONNECTION_TO_PORTFOLIO</span>
+                    </div>
+                    <div className="text-[#00cc32]/40 text-[10px] mt-1 border-t border-[#00ff41]/10 pt-2">
+                      $ npx create-interactive-future --partner=ratul --topic={selectedTopic}
+                    </div>
+                  </div>
+                )}
+
+                {/* Dynamically Pre-filled Email Button */}
                 <a
-                  href="mailto:m.h.ratul18@gmail.com"
-                  className={`group/btn inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-lg transition-all hover:scale-105 overflow-hidden relative ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'}`}
+                  href={`mailto:m.h.ratul18@gmail.com?subject=${encodeURIComponent(topicsConfig[selectedTopic].subject)}&body=${encodeURIComponent(topicsConfig[selectedTopic].body)}`}
+                  className={`group/btn inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-lg transition-all hover:scale-105 overflow-hidden relative ${
+                    isHacker 
+                      ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.25)]' 
+                      : isLight 
+                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' 
+                        : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'
+                  }`}
                 >
                   <Mail className="w-6 h-6 relative z-10" />
-                  <span className="relative z-10">Start Conversation</span>
+                  <span className="relative z-10">{topicsConfig[selectedTopic].buttonText}</span>
                   <ArrowRight className="w-6 h-6 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
 
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
