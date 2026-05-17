@@ -509,7 +509,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
 
   return (
     <motion.div 
-      className={`relative w-full max-w-xl mx-auto h-[320px] rounded-3xl border overflow-hidden flex flex-col items-center justify-center p-6 transition-all duration-500 cursor-pointer group/handshake ${
+      className={`relative w-full max-w-md mx-auto h-[240px] rounded-2xl border overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-500 cursor-pointer group/handshake ${
         isHacker
           ? 'bg-[#000401]/95 border-[#00ff41]/10 hover:border-[#00ff41]/30 shadow-[0_0_30px_rgba(0,255,65,0.02)]'
           : isLight
@@ -526,45 +526,45 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
         className="absolute inset-0 opacity-15 pointer-events-none transition-opacity duration-700 group-hover/handshake:opacity-25"
         style={{
           backgroundImage: isHacker
-            ? `radial-gradient(circle 150px at 50% 50%, rgba(0, 255, 65, 0.15), transparent 80%)`
-            : `radial-gradient(circle 160px at 50% 50%, ${isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'}, transparent 80%)`
+            ? `radial-gradient(circle 120px at 50% 50%, rgba(0, 255, 65, 0.15), transparent 80%)`
+            : `radial-gradient(circle 130px at 50% 50%, ${isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'}, transparent 80%)`
         }}
       />
 
       {/* Main Handshake Playground */}
-      <div className="relative w-full h-[160px] flex items-center justify-center overflow-hidden">
+      <div className="relative w-full h-[110px] flex items-center justify-center overflow-hidden">
         {/* Left Hand (Ratul's Hand) */}
         <motion.div
           animate={{
-            x: isConnected ? -10 : -70,
+            x: isConnected ? -8 : -50,
             opacity: isConnected ? 1 : 0.5,
             scale: isConnected ? 1.05 : 0.95,
-            rotate: isConnected ? 0 : 25
+            rotate: isConnected ? 0 : 20
           }}
           transition={{ type: "spring", stiffness: 180, damping: 20 }}
-          className={`absolute flex items-center gap-1.5 ${
+          className={`absolute flex items-center gap-1 ${
             isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'
           }`}
-          style={{ left: 'calc(50% - 75px)' }}
+          style={{ left: 'calc(50% - 60px)' }}
         >
-          <Hand className="w-10 h-10 transform rotate-[90deg] scale-x-[-1]" />
+          <Hand className="w-8 h-8 transform rotate-[90deg] scale-x-[-1]" />
         </motion.div>
 
         {/* Right Hand (Visitor's Hand) */}
         <motion.div
           animate={{
-            x: isConnected ? 10 : 70,
+            x: isConnected ? 8 : 50,
             opacity: isConnected ? 1 : 0.5,
             scale: isConnected ? 1.05 : 0.95,
-            rotate: isConnected ? 0 : -25
+            rotate: isConnected ? 0 : -20
           }}
           transition={{ type: "spring", stiffness: 180, damping: 20 }}
-          className={`absolute flex items-center gap-1.5 ${
+          className={`absolute flex items-center gap-1 ${
             isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'
           }`}
-          style={{ right: 'calc(50% - 75px)' }}
+          style={{ right: 'calc(50% - 60px)' }}
         >
-          <Hand className="w-10 h-10 transform rotate-[-90deg]" />
+          <Hand className="w-8 h-8 transform rotate-[-90deg]" />
         </motion.div>
 
         {/* Ripple Wave Spark */}
@@ -572,10 +572,10 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
           {isConnected && (
             <motion.div
               initial={{ scale: 0.2, opacity: 0.8 }}
-              animate={{ scale: [0.2, 2.2], opacity: [0.8, 0] }}
+              animate={{ scale: [0.2, 2.0], opacity: [0.8, 0] }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className={`absolute w-12 h-12 rounded-full border pointer-events-none z-10 ${
+              className={`absolute w-10 h-10 rounded-full border pointer-events-none z-10 ${
                 isHacker 
                   ? 'border-[#00ff41] bg-[#00ff41]/20 shadow-[0_0_15px_rgba(0,255,65,0.5)]' 
                   : isLight 
@@ -592,13 +592,13 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className={`w-6 h-6 rounded-full border border-dashed mx-auto mb-2 flex items-center justify-center ${
+              className={`w-5 h-5 rounded-full border border-dashed mx-auto mb-1 flex items-center justify-center ${
                 isHacker ? 'border-[#00ff41]/40' : isLight ? 'border-indigo-300' : 'border-cyan-500/40'
               }`}
             >
-              <div className={`w-2.5 h-2.5 rounded-full ${isHacker ? 'bg-[#00ff41]/50' : isLight ? 'bg-indigo-550' : 'bg-cyan-400'}`} />
+              <div className={`w-2 h-2 rounded-full ${isHacker ? 'bg-[#00ff41]/50' : isLight ? 'bg-indigo-550' : 'bg-cyan-400'}`} />
             </motion.div>
-            <p className={`text-[10px] font-bold tracking-widest uppercase ${
+            <p className={`text-[9px] font-bold tracking-widest uppercase ${
               isHacker ? 'text-[#00cc32]/60' : 'text-slate-400'
             }`}>
               Hover to Connect
@@ -613,7 +613,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
             animate={{ opacity: 1, scale: 1 }}
             className="absolute z-10 select-none pointer-events-none"
           >
-            <Sparkles className={`w-7 h-7 animate-pulse ${
+            <Sparkles className={`w-6 h-6 animate-pulse ${
               isHacker ? 'text-[#00ff41]' : isLight ? 'text-amber-500' : 'text-cyan-300'
             }`} />
           </motion.div>
@@ -621,15 +621,15 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
       </div>
 
       {/* Info & CTA details below */}
-      <div className="relative z-20 text-center w-full max-w-sm mt-2">
+      <div className="relative z-20 text-center w-full max-w-sm mt-1">
         <AnimatePresence mode="wait">
           {isConnected ? (
             <motion.div
               key="connected-state"
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              className="space-y-3"
+              exit={{ opacity: 0, y: -6 }}
+              className="space-y-2.5"
             >
               <p className={`text-xs font-mono uppercase tracking-wider ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>
                 Connection Established! 🤝
