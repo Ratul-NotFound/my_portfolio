@@ -1,13 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#06b6d4"/>
-      <stop offset="1" stop-color="#a78bfa"/>
+    <!-- Dark Mode-ready Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
     </linearGradient>
+    <!-- Glowing Accent Gradient -->
+    <linearGradient id="accentGrad" x1="0" x2="0" y1="1" y2="0">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <!-- Soft Glow Filter -->
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="64" height="64" rx="12" fill="url(#g)"/>
-  <g transform="translate(10,14) scale(1.4)">
-    <polygon points="6,6 18,14 6,22" fill="#0f172a" opacity="0.95"/>
-    <rect x="22" y="20" width="10" height="4" rx="1" fill="#0f172a" opacity="0.95"/>
+
+  <!-- Premium rounded card container with sleek thin border -->
+  <rect width="64" height="64" rx="16" fill="url(#bgGrad)"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="15.5" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
+
+  <!-- Futuristic interlocking symbol: Chevron (>) + Neural/Code core -->
+  <g transform="translate(12, 12)">
+    <!-- Tech Chevron Caret -->
+    <path d="M 8,10 L 22,20 L 8,30" fill="none" stroke="url(#accentGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    
+    <!-- Code Cursor / Neural Pulsing Node -->
+    <rect x="26" y="27" width="10" height="3.5" rx="1.5" fill="#38bdf8" filter="url(#glow)"/>
+    <circle cx="31" cy="17" r="4.5" fill="#a78bfa" filter="url(#glow)"/>
+    
+    <!-- Connective Vector Lines linking the chevron to the node -->
+    <line x1="22" y1="20" x2="31" y2="17" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2" stroke-dasharray="2 2"/>
+    <line x1="26" y1="28" x2="31" y2="17" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.2" stroke-dasharray="2 2"/>
   </g>
 </svg>
