@@ -2313,11 +2313,16 @@ const Portfolio = () => {
                       className={`group relative backdrop-blur-xl border rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl w-full h-full ${isHacker ? 'border-[#00ff41]/20 hover:border-[#00ff41]/60' : isLight ? 'border-slate-200 shadow-xl' : 'border-slate-700 shadow-cyan-500/10'}`}
                       style={{ backgroundColor: isHacker ? "#000a02" : isLight ? "#ffffff" : "#0f172a" }}
                     >
-                      {/* Decorative HUD Corner Brackets */}
-                      <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
-                      <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
-                      <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
-                      <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+                      {/* Decorative HUD Corner Brackets - Refined to premium slim accents */}
+                      <div className="absolute top-3 left-3 w-3 h-3 border-t border-l opacity-20 transition-all duration-500 group-hover:scale-105" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+                      <div className="absolute top-3 right-3 w-3 h-3 border-t border-r opacity-20 transition-all duration-500 group-hover:scale-105" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+                      <div className="absolute bottom-3 left-3 w-3 h-3 border-b border-l opacity-20 transition-all duration-500 group-hover:scale-105" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+                      <div className="absolute bottom-3 right-3 w-3 h-3 border-b border-r opacity-20 transition-all duration-500 group-hover:scale-105" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+
+                      {/* Watermarked Big Serial Indicator in the background */}
+                      <div className="absolute right-6 bottom-4 text-7xl md:text-8xl font-black font-mono tracking-tighter opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-700 pointer-events-none select-none z-0" style={{ color: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }}>
+                        0{project.id}
+                      </div>
 
                       <div className={`flex flex-col md:flex-row h-full transition-opacity duration-300 ${isBehind ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                       {/* Left: Image block (1/2 width) */}
@@ -2334,25 +2339,25 @@ const Portfolio = () => {
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
                         
-                        {/* Sweeping Project Laser Scanner Beam */}
+                        {/* Sweeping Project Laser Scanner Beam - Made thin and hover-only */}
                         <motion.div 
-                          className="absolute left-0 right-0 h-[1.5px] z-10"
+                          className="absolute left-0 right-0 h-[1px] z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                           style={{
                             background: `linear-gradient(to right, transparent, ${isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee'}, transparent)`,
                             boxShadow: `0 0 8px ${isHacker ? '#00ff41' : isLight ? '#818cf8' : '#22d3ee'}`,
                             top: 0
                           }}
                           animate={{ top: ['0%', '98%', '0%'] }}
-                          transition={{ duration: 5.5, repeat: Infinity, ease: "linear" }}
+                          transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }}
                         />
 
-                        {/* Live Cybernetic Telemetry Coordinates */}
-                        <div className="absolute bottom-3 left-4 font-mono text-[8px] opacity-75 tracking-wider text-white bg-black/60 backdrop-blur-md px-2 py-0.5 rounded border border-white/5 pointer-events-none select-none z-10 flex items-center gap-1.5">
+                        {/* Elite High-Performance Project Health Monitor */}
+                        <div className="absolute bottom-3 left-4 font-mono text-[8px] uppercase tracking-wider text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 pointer-events-none select-none z-10 flex items-center gap-1.5 shadow-sm">
                           <span className="relative flex h-1.5 w-1.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                           </span>
-                          <span>{`SYS.LATENCY: 12ms // CPU.ID_${project.id} // STAT: PASS`}</span>
+                          <span className="opacity-90">{`ENGINE ACTIVE // PORT_0${project.id} // SECURE`}</span>
                         </div>
 
                         {/* Category badge */}
@@ -2378,22 +2383,23 @@ const Portfolio = () => {
 
                       {/* Right: Content block (1/2 width) */}
                       <div className="w-full md:w-[58%] p-5 md:p-7 flex flex-col justify-between overflow-hidden relative z-10">
-                        {/* Interactive circuit grid lines background */}
-                        <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-700 pointer-events-none z-0 overflow-hidden select-none" style={{ color: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }}>
-                          <svg className="w-full h-full text-current" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="0.8">
-                            <path d="M10,20 L30,20 L40,30 L70,30 L80,40" />
-                            <path d="M20,80 L40,80 L50,70 L80,70" strokeDasharray="2 2" />
-                            <circle cx="10" cy="20" r="1.5" fill="currentColor" />
-                            <circle cx="80" cy="40" r="1.5" fill="currentColor" />
-                            <circle cx="20" cy="80" r="1.5" fill="currentColor" />
-                            <circle cx="80" cy="70" r="1.5" fill="currentColor" />
+                        {/* Interactive Blueprint Coordinate Matrix background */}
+                        <div className="absolute inset-0 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-700 pointer-events-none z-0 overflow-hidden select-none" style={{ color: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }}>
+                          <svg className="w-full h-full text-current" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="0.5">
+                            <defs>
+                              <pattern id={`grid-${project.id}`} width="10" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 10 0 L 0 0 0 10" fill="none" />
+                              </pattern>
+                            </defs>
+                            <rect width="100" height="100" fill={`url(#grid-${project.id})`} />
+                            <circle cx="50" cy="50" r="1.5" fill="currentColor" />
                           </svg>
                         </div>
 
                         <div className="space-y-3.5 relative z-10">
                           <div className="flex justify-between items-start gap-4">
-                            <h3 className={`text-xl md:text-3xl font-black transition-colors leading-tight ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>
-                              <span className="font-mono text-xs md:text-sm mr-2 opacity-50 font-bold block sm:inline">[0{project.id}] //</span>
+                            <h3 className={`text-xl md:text-3xl font-black transition-colors leading-tight tracking-tight ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>
+                              <span className="font-mono text-xs font-semibold mr-2.5 px-2 py-0.5 rounded border border-current opacity-40 select-none">0{project.id}</span>
                               {project.title}
                             </h3>
                             
@@ -2455,14 +2461,21 @@ const Portfolio = () => {
                         </div>
 
                         <div className="space-y-3 pt-3 border-t border-slate-800/20">
-                          {/* Tech list wrapped inside compilation brackets */}
-                          <div className="flex flex-wrap gap-1.5">
+                          {/* Tech list wrapped inside compilation chips */}
+                          <div className="flex flex-wrap gap-1.5 relative z-10">
                             {project.tech.map((tech, j) => (
                               <span
                                 key={j}
-                                className={`px-2 py-0.5 border rounded-lg text-[9px] md:text-[10px] font-mono font-black transition-all ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/75 hover:border-[#00ff41]/35' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-650 hover:border-indigo-300' : 'bg-[#0d1527]/60 border-slate-800 text-slate-400 hover:border-cyan-500/40'}`}
+                                className={`inline-flex items-center px-2.5 py-0.5 border rounded-full text-[9px] md:text-[10px] font-mono font-bold tracking-wide transition-all ${
+                                  isHacker 
+                                    ? 'bg-[#00ff41]/5 border-[#00ff41]/10 text-[#00ff41]/80 hover:border-[#00ff41]/35 shadow-sm' 
+                                    : isLight 
+                                      ? 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-350 shadow-sm' 
+                                      : 'bg-slate-800/40 border-slate-800 text-slate-300 hover:border-slate-700 shadow-sm'
+                                }`}
                               >
-                                [{tech}]
+                                <span className="w-1.5 h-1.5 rounded-full mr-1.5 shrink-0 opacity-80 animate-pulse" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
+                                {tech}
                               </span>
                             ))}
                           </div>
