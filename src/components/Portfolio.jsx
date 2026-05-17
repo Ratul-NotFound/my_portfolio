@@ -1960,6 +1960,19 @@ const Portfolio = () => {
   const projects = useMemo(() => ([
     {
       id: 1,
+      title: "UniVibe",
+      category: "Social • Collaboration",
+      description: "Unified student collaboration portal and social hub engineered for Daffodil International University. Facilitates real-time campus communication, resource sharing, and study group organization.",
+      tech: ["Next.js 14", "Firebase", "WebSockets", "Tailwind CSS", "Vercel"],
+      links: { live: "https://univibe-diu.vercel.app", code: "https://github.com/ratul-notfound/univibe" },
+      icon: Sparkles,
+      gradient: "from-indigo-600 to-cyan-600",
+      metrics: ["3K+ Active Users", "Real-Time Portal", "DIU Academic Hub", "Resource Sharing"],
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
+      logo: "https://cdn-icons-png.flaticon.com/512/3249/3249911.png"
+    },
+    {
+      id: 2,
       title: "CV Maker AI",
       category: "SaaS • ML",
       description: "LLM-powered resume analyzer with ATS optimization engine. Processes 50+ resumes weekly with 92% accuracy rate using Gemini Pro API.",
@@ -1972,7 +1985,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
     },
     {
-      id: 2,
+      id: 3,
       title: "Orivo Commerce",
       category: "E-Commerce",
       description: "Enterprise-grade e-commerce platform handling 10K+ concurrent users. Real-time inventory management with Redis caching and Stripe integration.",
@@ -1985,7 +1998,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
     },
     {
-      id: 3,
+      id: 4,
       title: "BloodNet",
       category: "Mobile • Algorithms",
       description: "Geospatial blood donor matching system using A* pathfinding algorithm. Optimizes donor-patient routes with O(log n) complexity.",
@@ -1998,7 +2011,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/3209/3209265.png"
     },
     {
-      id: 4,
+      id: 5,
       title: "Lecture AI",
       category: "NLP • Research",
       description: "Audio-to-text processing pipeline using Whisper API with GPT-4 summarization. Achieves 92% transcription accuracy for educational content.",
@@ -2009,19 +2022,6 @@ const Portfolio = () => {
       metrics: ["100+ Hours", "92% Accuracy", "NLP Pipeline", "Auto Summary"],
       image: "/lecture-ai.jpeg?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/8637/8637099.png"
-    },
-    {
-      id: 5,
-      title: "UniVibe",
-      category: "Social • Collaboration",
-      description: "Unified student collaboration portal and social hub engineered for Daffodil International University. Facilitates real-time campus communication, resource sharing, and study group organization.",
-      tech: ["Next.js 14", "Firebase", "WebSockets", "Tailwind CSS", "Vercel"],
-      links: { live: "https://univibe-diu.vercel.app", code: "https://github.com/ratul-notfound/univibe" },
-      icon: Sparkles,
-      gradient: "from-indigo-600 to-cyan-600",
-      metrics: ["3K+ Active Users", "Real-Time Portal", "DIU Academic Hub", "Resource Sharing"],
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
-      logo: "https://cdn-icons-png.flaticon.com/512/3249/3249911.png"
     }
 
   ]), []);
