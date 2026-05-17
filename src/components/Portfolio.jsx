@@ -492,7 +492,7 @@ function HoloProfileCard({ isLight, isHacker }) {
       </div>
 
       {/* Main Tab Viewports */}
-      <div className="relative z-10 flex-grow py-2 min-h-[280px] flex flex-col justify-center" style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}>
+      <div className="relative z-10 flex-grow py-2 min-h-[330px] flex flex-col justify-center" style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}>
         <AnimatePresence mode="wait">
           {activeTab === 'avatar' && (
             <motion.div
@@ -501,7 +501,7 @@ function HoloProfileCard({ isLight, isHacker }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4 }}
-              className="relative aspect-square max-w-[240px] mx-auto w-full rounded-2xl overflow-hidden border-4"
+              className="relative aspect-square max-w-[320px] mx-auto w-full rounded-2xl overflow-hidden border-4"
               style={{
                 borderColor: isHacker ? 'rgba(0, 255, 65, 0.15)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)'
               }}
@@ -514,9 +514,10 @@ function HoloProfileCard({ isLight, isHacker }) {
                 className="absolute left-0 right-0 h-[2px] z-10"
                 style={{
                   background: `linear-gradient(to right, transparent, ${themeColors.accent}, transparent)`,
-                  boxShadow: `0 0 10px ${themeColors.scanner}`
+                  boxShadow: `0 0 10px ${themeColors.scanner}`,
+                  top: 0
                 }}
-                animate={{ y: ['0px', '240px', '0px'] }}
+                animate={{ top: ['0%', '98%', '0%'] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               />
 
@@ -574,7 +575,7 @@ function HoloProfileCard({ isLight, isHacker }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4 }}
-              className={`p-4 rounded-xl border font-mono text-[10px] md:text-xs text-left overflow-auto max-h-[240px] w-full relative z-10 transition-colors duration-500 ${
+              className={`p-4 rounded-xl border font-mono text-[10px] md:text-xs text-left overflow-auto max-h-[295px] w-full relative z-10 transition-colors duration-500 ${
                 isHacker 
                   ? 'bg-[#000a02] border-[#00ff41]/15 text-[#00ff41]' 
                   : isLight 
