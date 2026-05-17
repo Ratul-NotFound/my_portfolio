@@ -1756,10 +1756,6 @@ const Portfolio = () => {
               <div className={`absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/3' : isLight ? 'bg-purple-300/20' : 'bg-purple-500/10'}`}></div>
 
               <div className="relative z-10 text-center space-y-6">
-                <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20'}`}>
-                  <Sparkles className={`w-7 h-7 mb-0 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
-                </div>
-
                 <div className="space-y-3">
                   <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
                     <InteractiveText text="Let's Build Something" isHacker={isHacker} isLight={isLight} />
