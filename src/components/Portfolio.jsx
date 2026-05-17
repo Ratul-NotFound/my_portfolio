@@ -497,6 +497,333 @@ const topicsConfig = {
   }
 };
 
+const IngredientBubble = ({ ing, onAbsorb, isAbsorbed, canvasRef, reactorRef, isHacker, isLight }) => {
+  if (isAbsorbed) return null;
+
+  const handleDragEnd = (event, info) => {
+    if (!reactorRef.current || !canvasRef.current) return;
+    
+    const reactorRect = reactorRef.current.getBoundingClientRect();
+    const reactorCenterX = reactorRect.left + reactorRect.width / 2;
+    const reactorCenterY = reactorRect.top + reactorRect.height / 2;
+    
+    const dragX = info.point.x;
+    const dragY = info.point.y;
+    
+    const dist = Math.sqrt(Math.pow(dragX - reactorCenterX, 2) + Math.pow(dragY - reactorCenterY, 2));
+    
+    if (dist < 85) {
+      onAbsorb(ing.id);
+    }
+  };
+
+  const IconComponent = ing.icon;
+
+  return (
+    <motion.div
+      drag
+      dragConstraints={canvasRef}
+      dragElastic={0.15}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 1.15, cursor: 'grabbing', zIndex: 50 }}
+      whileHover={{ scale: 1.08 }}
+      initial={{ x: ing.initialOffset.x, y: ing.initialOffset.y }}
+      animate={{ 
+        y: [ing.initialOffset.y - 6, ing.initialOffset.y + 6, ing.initialOffset.y - 6]
+      }}
+      transition={{
+        y: {
+          repeat: Infinity,
+          duration: 3 + Math.random() * 2,
+          ease: "easeInOut"
+        },
+        scale: { type: "spring", stiffness: 350, damping: 15 }
+      }}
+      className={`absolute w-28 h-28 rounded-full flex flex-col items-center justify-center p-3 text-center cursor-grab select-none z-30 backdrop-blur-md shadow-lg shadow-black/20 border transition-all ${
+        isHacker
+          ? 'bg-[#000a02]/80 border-[#00ff41]/20 hover:border-[#00ff41]/60 text-[#00ff41]'
+          : isLight
+            ? 'bg-white/80 border-slate-200 hover:border-indigo-400 text-slate-800'
+            : 'bg-slate-900/60 border-slate-800 hover:border-cyan-500/50 text-white'
+      }`}
+      style={{
+        left: 'calc(50% - 56px)',
+        top: 'calc(50% - 56px)',
+      }}
+    >
+      <IconComponent className={`w-6 h-6 mb-1 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
+      <span className="text-[11px] font-extrabold tracking-tight">{ing.label}</span>
+      <span className={`text-[8px] mt-0.5 opacity-60 leading-none ${isHacker ? 'text-[#00cc32]' : ''}`}>{ing.desc}</span>
+    </motion.div>
+  );
+};
+
+const InteractiveReactor = ({ isHacker, isLight, contactCoords, setContactCoords }) => {
+  const [absorbed, setAbsorbed] = useState([]);
+  const [showNotification, setShowNotification] = useState("");
+  const canvasRef = useRef(null);
+  const reactorRef = useRef(null);
+
+  const ingredients = [
+    { id: 'app', label: 'Web Application', icon: Code2, desc: 'Next.js & React', initialOffset: { x: -160, y: -110 } },
+    { id: 'ai', label: 'AI & Neural', icon: Brain, desc: 'Agents & LLMs', initialOffset: { x: 160, y: -110 } },
+    { id: 'design', label: 'UI/UX Magic', icon: Sparkles, desc: 'Fluid Dynamics', initialOffset: { x: -160, y: 110 } },
+    { id: 'scale', label: 'SaaS Architecture', icon: Rocket, desc: 'DevOps & APIs', initialOffset: { x: 160, y: 110 } }
+  ];
+
+  const absorb = (id) => {
+    if (absorbed.includes(id)) return;
+    setAbsorbed(prev => [...prev, id]);
+    const label = ingredients.find(ing => ing.id === id)?.label || "";
+    setShowNotification(`+ Infused: ${label}! 🧪`);
+    setTimeout(() => setShowNotification(""), 2000);
+  };
+
+  const reset = () => {
+    setAbsorbed([]);
+  };
+
+  // Dynamic Mail Template Compiler
+  const mailSubject = absorbed.length > 0 
+    ? `Project Recipe Synthesized: ${absorbed.map(id => ingredients.find(ing => ing.id === id)?.label).join(' + ')}`
+    : "Let's Build Something Beautiful Together!";
+
+  const mailBody = absorbed.length > 0
+    ? `Hi Ratul,\n\nI visited your interactive portfolio reactor core and formulated a custom project using these specific ingredients:\n${absorbed.map(id => `• ${ingredients.find(ing => ing.id === id)?.label} (${ingredients.find(ing => ing.id === id)?.desc})`).join('\n')}\n\nLet's get in touch to discuss details and build this customized system together!`
+    : "Hi Ratul, I am interested in building a project with you. Let's get in touch!";
+
+  const mailLink = `mailto:m.h.ratul18@gmail.com?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+
+  return (
+    <div 
+      ref={canvasRef} 
+      onMouseMove={(e) => {
+        if (!canvasRef.current) return;
+        const rect = canvasRef.current.getBoundingClientRect();
+        const x = Math.round(e.clientX - rect.left);
+        const y = Math.round(e.clientY - rect.top);
+        setContactCoords({ x, y });
+      }}
+      className={`relative w-full h-[520px] rounded-3xl border overflow-hidden flex flex-col items-center justify-between p-6 transition-all duration-500 ${
+        isHacker
+          ? 'bg-[#000401]/95 border-[#00ff41]/10 shadow-[0_0_40px_rgba(0,255,65,0.02)]'
+          : isLight
+            ? 'bg-slate-50/90 border-slate-200/80 shadow-2xl shadow-indigo-500/5'
+            : 'bg-[#0b0f19]/80 border-slate-900 shadow-2xl'
+      }`}
+    >
+      {/* Interactive Mesh Coordinate Spotlight Background */}
+      <div 
+        className="absolute inset-0 opacity-15 pointer-events-none transition-opacity duration-700 group-hover:opacity-30"
+        style={{
+          backgroundImage: isHacker
+            ? `radial-gradient(circle 180px at ${contactCoords.x}px ${contactCoords.y}px, rgba(0, 255, 65, 0.15), transparent 80%), 
+               linear-gradient(to right, rgba(0, 255, 65, 0.04) 1px, transparent 1px), 
+               linear-gradient(to bottom, rgba(0, 255, 65, 0.04) 1px, transparent 1px)`
+            : `radial-gradient(circle 200px at ${contactCoords.x}px ${contactCoords.y}px, ${isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'}, transparent 80%), 
+               linear-gradient(to right, ${isLight ? 'rgba(99, 102, 241, 0.05)' : 'rgba(255, 255, 255, 0.03)'} 1px, transparent 1px), 
+               linear-gradient(to bottom, ${isLight ? 'rgba(99, 102, 241, 0.05)' : 'rgba(255, 255, 255, 0.03)'} 1px, transparent 1px)`,
+          backgroundSize: '100% 100%, 30px 30px, 30px 30px'
+        }}
+      />
+
+      {/* Header Info */}
+      <div className="relative z-10 text-center select-none pt-2">
+        <h4 className={`text-xs font-black tracking-[0.25em] uppercase mb-1.5 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>
+          PROJECT ALCHEMY INTERACTIVE LAB
+        </h4>
+        <p className={`text-[11px] max-w-md ${isHacker ? 'text-[#00cc32]/60' : 'text-slate-400'}`}>
+          Drag and drop floating ingredients into the central Reactor Core to synthesize your custom system recipe!
+        </p>
+      </div>
+
+      {/* Floating Notification */}
+      <AnimatePresence>
+        {showNotification && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            className={`absolute top-20 z-40 px-5 py-2.5 rounded-full font-bold text-xs shadow-xl pointer-events-none ${
+              isHacker
+                ? 'bg-black border border-[#00ff41] text-[#00ff41]'
+                : isLight
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
+            }`}
+          >
+            {showNotification}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Dynamic Reactor Core and Ingredients Playground */}
+      <div className="relative w-full h-[280px] flex items-center justify-center">
+        {/* Reactor Core */}
+        <div 
+          ref={reactorRef}
+          className={`absolute w-36 h-36 rounded-full flex flex-col items-center justify-center border z-20 transition-all duration-500 ${
+            absorbed.length > 0
+              ? isHacker
+                ? 'border-[#00ff41] bg-black/90 shadow-[0_0_40px_rgba(0,255,65,0.35)]'
+                : isLight
+                  ? 'border-indigo-500 bg-white/95 shadow-[0_0_40px_rgba(99,102,241,0.25)]'
+                  : 'border-cyan-400 bg-slate-950/90 shadow-[0_0_40px_rgba(34,211,238,0.25)]'
+              : isHacker
+                ? 'border-[#00ff41]/20 bg-black/60 shadow-[0_0_15px_rgba(0,255,65,0.03)]'
+                : isLight
+                  ? 'border-slate-200 bg-white/60 shadow-sm'
+                  : 'border-slate-800 bg-slate-900/40 shadow-sm'
+          }`}
+          style={{
+            left: 'calc(50% - 72px)',
+            top: 'calc(50% - 72px)',
+          }}
+        >
+          {/* Rotating Concentric Rings */}
+          <motion.div
+            className={`absolute inset-1 rounded-full border border-dashed ${isHacker ? 'border-[#00ff41]/30' : isLight ? 'border-indigo-300' : 'border-cyan-500/30'}`}
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
+          />
+          <motion.div
+            className={`absolute -inset-3 rounded-full border border-dotted ${isHacker ? 'border-[#00ff41]/15' : isLight ? 'border-purple-300' : 'border-purple-500/15'}`}
+            animate={{ rotate: -360 }}
+            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+          />
+
+          {/* Symbol */}
+          <div className="relative z-10 text-center pointer-events-none p-4 select-none">
+            {absorbed.length === 0 ? (
+              <>
+                <Sparkles className={`w-8 h-8 mx-auto mb-1 animate-pulse ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
+                <p className={`text-[9px] font-black tracking-widest uppercase ${isHacker ? 'text-[#00cc32]/60' : 'text-slate-400'}`}>
+                  REACTOR CORE
+                </p>
+                <p className="text-[7px] text-white/30 leading-none mt-1">Drag elements here</p>
+              </>
+            ) : (
+              <>
+                <div className={`text-2xl font-black mb-0.5 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>
+                  {absorbed.length} / 4
+                </div>
+                <p className={`text-[9px] font-black uppercase tracking-wider ${isHacker ? 'text-[#00ff41]/60' : 'text-slate-400'}`}>
+                  Synthesized
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Floating Orbiting elements */}
+        {absorbed.map((id, index) => {
+          const startAngle = (index * 90);
+          const ing = ingredients.find(i => i.id === id);
+          if (!ing) return null;
+          const IconComponent = ing.icon;
+
+          return (
+            <motion.div
+              key={id}
+              className={`absolute w-9 h-9 rounded-full flex items-center justify-center text-sm shadow-md pointer-events-none z-20 border backdrop-blur-md ${
+                isHacker 
+                  ? 'bg-black/80 border-[#00ff41]/30 text-[#00ff41]' 
+                  : isLight 
+                    ? 'bg-white/90 border-slate-200 text-indigo-600' 
+                    : 'bg-slate-900/90 border-slate-800 text-cyan-400'
+              }`}
+              style={{
+                left: 'calc(50% - 18px)',
+                top: 'calc(50% - 18px)',
+              }}
+              animate={{
+                rotate: [startAngle, startAngle + 360],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 9,
+                ease: "linear"
+              }}
+            >
+              <div className="absolute text-center flex items-center justify-center w-full h-full" style={{ transform: `translateY(-65px)` }}>
+                <IconComponent className="w-4 h-4" />
+              </div>
+            </motion.div>
+          );
+        })}
+
+        {/* Drag elements */}
+        {ingredients.map(ing => (
+          <IngredientBubble
+            key={ing.id}
+            ing={ing}
+            onAbsorb={absorb}
+            isAbsorbed={absorbed.includes(ing.id)}
+            canvasRef={canvasRef}
+            reactorRef={reactorRef}
+            isHacker={isHacker}
+            isLight={isLight}
+          />
+        ))}
+      </div>
+
+      {/* Dynamic Status / Actions Panel */}
+      <div className="relative z-10 w-full max-w-lg space-y-4 text-center mt-2">
+        {absorbed.length > 0 ? (
+          <div className="space-y-3">
+            {/* Formula Recipe Label */}
+            <div className={`text-xs font-mono inline-block px-4 py-1.5 rounded-full border border-dashed select-none ${
+              isHacker
+                ? 'bg-black border-[#00ff41]/30 text-[#00cc32]'
+                : isLight
+                  ? 'bg-indigo-55 border-indigo-200 text-indigo-700'
+                  : 'bg-slate-900 border-slate-800 text-cyan-400'
+            }`}>
+              Recipe: {absorbed.map(id => ingredients.find(ing => ing.id === id)?.label.split(' ')[0]).join(' + ')}
+            </div>
+
+            <div className="flex items-center justify-center gap-3">
+              {/* Reset Reactor Button */}
+              <button 
+                onClick={reset}
+                className={`px-4 py-3 rounded-xl font-bold text-xs border transition-all ${
+                  isHacker
+                    ? 'bg-black border-[#00ff41]/20 hover:border-[#00ff41] text-[#00ff41]/70 hover:text-[#00ff41]'
+                    : isLight
+                      ? 'bg-white border-slate-200 hover:border-slate-400 text-slate-500 hover:text-slate-800'
+                      : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white'
+                }`}
+              >
+                Reset Core
+              </button>
+
+              {/* Reactor Synthesis Button */}
+              <a
+                href={mailLink}
+                className={`group/btn inline-flex items-center gap-2 px-8 py-3 rounded-xl font-extrabold text-xs tracking-wider uppercase transition-all hover:scale-105 ${
+                  isHacker
+                    ? 'bg-[#00ff41]/20 border border-[#00ff41] text-[#00ff41] shadow-[0_0_20px_rgba(0,255,65,0.25)]'
+                    : isLight
+                      ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'
+                      : 'bg-gradient-to-r from-cyan-600 to-cyan-500 text-white shadow-lg shadow-cyan-500/20'
+                }`}
+              >
+                <Mail className="w-4 h-4" />
+                <span>Synthesize Project Proposal</span>
+                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div className={`text-xs select-none font-mono py-2 ${isHacker ? 'text-[#00cc32]/40' : 'text-slate-500'}`}>
+            [System Idle]: Awaiting project ingredients...
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const Portfolio = () => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
@@ -1576,82 +1903,16 @@ const Portfolio = () => {
                     <InteractiveText text="Amazing Together" isHacker={isHacker} isLight={isLight} className={isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-white'} />
                   </h2>
                   <p className={`text-base md:text-lg max-w-2xl mx-auto leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                    Choose a path below to custom-configure your conversation. Select what you would like to build together!
+                    Drag and drop floating tech ingredients into the Reactor Core to synthesize your custom system recipe!
                   </p>
                 </div>
 
-                {/* Topic selector chips */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-2xl mx-auto pt-2">
-                  {Object.entries(topicsConfig).map(([key, value]) => {
-                    const isSelected = selectedTopic === key;
-                    return (
-                      <button
-                        key={key}
-                        onClick={() => setSelectedTopic(key)}
-                        className={`group/chip relative py-3 px-4 rounded-xl border text-xs font-bold transition-all duration-300 ${
-                          isSelected
-                            ? isHacker
-                              ? 'bg-[#00ff41]/20 border-[#00ff41] text-[#00ff41] shadow-[0_0_15px_rgba(0,255,65,0.25)] scale-105'
-                              : isLight
-                                ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-500/20 scale-105'
-                                : 'bg-cyan-500 border-cyan-500 text-white shadow-lg shadow-cyan-500/20 scale-105'
-                            : isHacker
-                              ? 'bg-[#000a02]/60 border-[#00ff41]/20 text-[#00cc32]/60 hover:border-[#00ff41]/60 hover:text-[#00ff41]'
-                              : isLight
-                                ? 'bg-slate-50 border-slate-200 text-slate-600 hover:border-indigo-400 hover:bg-white shadow-sm'
-                                : 'bg-slate-900/40 border-slate-800 text-slate-400 hover:border-cyan-500/50 hover:bg-slate-900/80'
-                        }`}
-                      >
-                        <span className="block relative z-10 transition-transform group-hover/chip:scale-105">{value.title}</span>
-                        <span className={`block text-[9px] font-medium mt-1 relative z-10 ${
-                          isSelected 
-                            ? 'text-white/80' 
-                            : isHacker 
-                              ? 'text-[#00cc32]/40' 
-                              : 'text-slate-500'
-                        }`}>{value.desc}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Simulated Live Hacker Console */}
-                {isHacker && (
-                  <div className="font-mono text-left bg-black/90 border border-[#00ff41]/20 rounded-xl p-4 text-xs space-y-1.5 shadow-[inset_0_0_10px_rgba(0,255,65,0.05)] w-full max-w-lg mx-auto">
-                    <div className="flex items-center gap-1.5 text-[#00ff41]/60">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#00ff41]/30 animate-ping"></span>
-                      <span>COORDINATE_TRACKING_SYSTEM --ACTIVE</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 text-[#00cc32]/80 mt-2">
-                      <div>CURSOR_X: <span className="text-[#00ff41]">{contactCoords.x}px</span></div>
-                      <div>CURSOR_Y: <span className="text-[#00ff41]">{contactCoords.y}px</span></div>
-                    </div>
-                    <div className="text-[#00cc32]/60 mt-1">
-                      STATUS: <span className="text-[#00ff41] animate-pulse">ESTABLISHED_CONNECTION_TO_PORTFOLIO</span>
-                    </div>
-                    <div className="text-[#00cc32]/40 text-[10px] mt-1 border-t border-[#00ff41]/10 pt-2">
-                      $ npx create-interactive-future --partner=ratul --topic={selectedTopic}
-                    </div>
-                  </div>
-                )}
-
-                {/* Dynamically Pre-filled Email Button */}
-                <a
-                  href={`mailto:m.h.ratul18@gmail.com?subject=${encodeURIComponent(topicsConfig[selectedTopic].subject)}&body=${encodeURIComponent(topicsConfig[selectedTopic].body)}`}
-                  className={`group/btn inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-lg transition-all hover:scale-105 overflow-hidden relative ${
-                    isHacker 
-                      ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.25)]' 
-                      : isLight 
-                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' 
-                        : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'
-                  }`}
-                >
-                  <Mail className="w-6 h-6 relative z-10" />
-                  <span className="relative z-10">{topicsConfig[selectedTopic].buttonText}</span>
-                  <ArrowRight className="w-6 h-6 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
-
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000"></div>
-                </a>
+                <InteractiveReactor 
+                  isHacker={isHacker} 
+                  isLight={isLight} 
+                  contactCoords={contactCoords} 
+                  setContactCoords={setContactCoords} 
+                />
 
                 <div className="flex justify-center gap-4 pt-8">
                   {[
