@@ -399,42 +399,136 @@ function useCountUp(target, duration = 1800, inView = false) {
 }
 
 // ── StatCard with count-up ──
+// ── StatCard with count-up ──
 function StatCard({ stat, isLight, isHacker }) {
-  const ref = useRef(null);
+  const cardRef = useRef(null);
   const [inView, setInView] = useState(false);
+  
+  // 3D Tilt values using Framer Motion values
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  // Smooth spring physics for fluid cursor lag
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), { stiffness: 150, damping: 25 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 25 });
+
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.5 });
-    if (ref.current) obs.observe(ref.current);
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.3 });
+    if (cardRef.current) obs.observe(cardRef.current);
     return () => obs.disconnect();
   }, []);
+
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    
+    // Normalize coordinates to range [-0.5, 0.5]
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = (e.clientX - rect.left) / width - 0.5;
+    const mouseY = (e.clientY - rect.top) / height - 0.5;
+    
+    x.set(mouseX);
+    y.set(mouseY);
+    
+    // Set custom CSS variables for cursor spotlight tracking
+    const px = Math.round(e.clientX - rect.left);
+    const py = Math.round(e.clientY - rect.top);
+    cardRef.current.style.setProperty('--spotlight-x', `${px}px`);
+    cardRef.current.style.setProperty('--spotlight-y', `${py}px`);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
   const displayed = useCountUp(stat.value, 1600, inView);
+
   return (
     <motion.div
-      ref={ref}
-      whileHover={{ y: -6, scale: 1.03 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl cursor-default overflow-hidden card-glow-hover ${
-        isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10'
-        : isLight ? 'bg-white/70 border-slate-200 shadow-sm'
-        : 'bg-slate-900/50 border-slate-800'}`}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+      }}
+      className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl cursor-default overflow-hidden transition-all duration-500 ${
+        isHacker
+          ? 'bg-[#000401]/85 border-[#00ff41]/10 hover:border-[#00ff41]/30 shadow-[0_0_20px_rgba(0,255,65,0.02)]'
+          : isLight
+            ? 'bg-white/40 border-slate-200/80 shadow-lg shadow-indigo-500/5 hover:border-indigo-400'
+            : 'bg-[#0b0f19]/40 border-slate-900 shadow-2xl hover:border-cyan-500/30'
+      }`}
     >
-      <div className="relative z-10">
-        <motion.div whileHover={{ rotate: 12, scale: 1.2 }} transition={{ type: 'spring', stiffness: 400 }}>
-          <stat.icon className={`w-8 h-8 md:w-10 md:h-10 mb-4 ${
-            isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
-        </motion.div>
-        <div className="stat-number text-3xl md:text-4xl font-black mb-2">{displayed || stat.value}</div>
-        <div className={`text-sm md:text-base font-semibold mb-1 ${
-          isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-700' : 'text-slate-300'}`}>{stat.label}</div>
-        <div className={`text-xs ${
-          isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>{stat.desc}</div>
+      {/* 3D Glass Reflective Glare */}
+      <div className="absolute inset-0 pointer-events-none z-20 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      
+      {/* Cursor Spotlight mesh background */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 z-0"
+        style={{
+          backgroundImage: isHacker
+            ? `radial-gradient(circle 120px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(0, 255, 65, 0.15), transparent 80%)`
+            : `radial-gradient(circle 140px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), ${
+                isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'
+              }, transparent 80%)`
+        }}
+      />
+
+      {/* Main Stats content layered in 3D */}
+      <div className="relative z-10 flex flex-col justify-between h-full" style={{ transform: 'translateZ(30px)' }}>
+        {/* Icon & Status header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className={`p-3 rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 ${
+            isHacker ? 'bg-[#00ff41]/5 text-[#00ff41]' : isLight ? 'bg-indigo-50 text-indigo-650' : 'bg-cyan-500/10 text-cyan-400'
+          }`}>
+            <stat.icon className="w-6 h-6 animate-pulse" />
+          </div>
+          
+          {/* Active status pulse */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-dashed text-[9px] font-mono font-bold tracking-wider uppercase select-none pointer-events-none leading-none scale-90 origin-right opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+            <span className={`w-1.5 h-1.5 rounded-full animate-ping ${isHacker ? 'bg-[#00ff41]' : isLight ? 'bg-indigo-600' : 'bg-cyan-400'}`} />
+            <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}>Live</span>
+          </div>
+        </div>
+
+        {/* Numbers & Titles */}
+        <div className="space-y-1.5">
+          <div className={`stat-number text-4xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r bg-clip-text text-transparent select-none ${
+            isHacker
+              ? 'from-[#00ff41] to-[#00cc32]'
+              : isLight
+                ? 'from-indigo-600 to-purple-600'
+                : 'from-cyan-400 via-indigo-400 to-purple-400'
+          }`}>
+            {displayed || stat.value}
+          </div>
+          
+          <div className={`text-[10px] font-black font-mono tracking-[0.2em] uppercase select-none ${
+            isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-550 font-extrabold' : 'text-slate-300'
+          }`}>
+            {stat.label}
+          </div>
+          
+          <div className={`text-xs select-none ${
+            isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'
+          }`}>
+            {stat.desc}
+          </div>
+        </div>
       </div>
-      {/* corner accent */}
+
+      {/* Decorative border spotlight accents */}
       <div className={`absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r ${
-        isHacker ? 'from-[#00ff41]/0 via-[#00ff41]/50 to-[#00ff41]/0'
-        : 'from-transparent via-cyan-500/60 to-transparent'
-      } opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover:from-cyan-500/5 group-hover:to-purple-500/5 transition-all duration-500" />
+        isHacker 
+          ? 'from-transparent via-[#00ff41]/50 to-transparent' 
+          : isLight 
+            ? 'from-transparent via-indigo-500/55 to-transparent' 
+            : 'from-transparent via-cyan-500/60 to-transparent'
+      } opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20`} />
     </motion.div>
   );
 }
