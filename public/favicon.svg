@@ -13,9 +13,9 @@
       <stop offset="100%" stop-color="#ec4899"/>
     </linearGradient>
 
-    <!-- Node Glow Filter -->
-    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
+    <!-- Soft Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -27,37 +27,36 @@
   <rect width="64" height="64" rx="16" fill="url(#bgGrad)"/>
   <rect x="0.5" y="0.5" width="63" height="63" rx="15.5" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1"/>
 
-  <!-- Master Typographic MHR Interlocking Monogram -->
-  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Outer Network Circuit grid lines (subtle connectors) -->
-    <path d="M 6,32 L 18,32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1.2"/>
-    <path d="M 46,32 L 58,32" stroke="#ffffff" stroke-opacity="0.08" stroke-width="1.2"/>
+  <!-- Ingenious Typographic MHR Monogram (Legible, Balanced, Clean) -->
+  <g fill="none" stroke="url(#accentGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <!-- Left Stem (Spine of M & H) -->
+    <path d="M 18,16 L 18,48" />
     
-    <!-- M & H Base Structural Pillars -->
-    <path d="M 18,16 L 18,48 M 46,16 L 46,48" stroke="url(#accentGrad)" stroke-width="4.5" stroke-opacity="0.7"/>
+    <!-- Middle Stem (Spine of M, H, & R) -->
+    <path d="M 36,16 L 36,48" />
     
-    <!-- H Horizontal Crossbar -->
-    <path d="M 18,32 L 46,32" stroke="url(#accentGrad)" stroke-width="4.5" stroke-opacity="0.8"/>
+    <!-- M Center Chevron (Dips perfectly to the middle) -->
+    <path d="M 18,16 L 27,32 L 36,16" />
     
-    <!-- R Elegant Loop (Curved from Spine to Crossbar) -->
-    <path d="M 18,16 C 34,16 34,32 18,32" stroke="url(#accentGrad)" stroke-width="4.5" filter="url(#glow)"/>
+    <!-- H Horizontal Crossbar (Links Left and Middle stems) -->
+    <path d="M 18,32 L 36,32" />
     
-    <!-- M Elegant Sweeping Wave (Flowing Dip) -->
-    <path d="M 18,16 C 24,32 40,32 46,16" stroke="url(#accentGrad)" stroke-width="4.5" filter="url(#glow)"/>
+    <!-- R Loop (Curves out cleanly to the right of the middle stem) -->
+    <path d="M 36,16 C 48,16 48,32 36,32" />
     
-    <!-- R Elegant Swooping Leg (Quadratic Bezier Curve) -->
-    <path d="M 28,32 Q 36,40 40,48" stroke="url(#accentGrad)" stroke-width="4.5" filter="url(#glow)"/>
+    <!-- R Diagonal Leg (Extends down-right in absolute alignment) -->
+    <path d="M 36,32 L 48,48" />
   </g>
 
-  <!-- Glowing Constellation Nodes (Circuit Vertices) -->
+  <!-- Glowing Constellation Junction Nodes (Sleek and Subtle) -->
   <g filter="url(#glow)">
     <circle cx="18" cy="16" r="2" fill="#22d3ee"/>
-    <circle cx="46" cy="16" r="2" fill="#ec4899"/>
-    <circle cx="32" cy="28" r="2.2" fill="#6366f1"/>
+    <circle cx="36" cy="16" r="2" fill="#6366f1"/>
+    <circle cx="27" cy="32" r="2" fill="#22d3ee"/>
     <circle cx="18" cy="32" r="2" fill="#22d3ee"/>
-    <circle cx="46" cy="32" r="2" fill="#6366f1"/>
+    <circle cx="36" cy="32" r="2" fill="#6366f1"/>
     <circle cx="18" cy="48" r="2" fill="#22d3ee"/>
-    <circle cx="46" cy="48" r="2" fill="#6366f1"/>
-    <circle cx="40" cy="48" r="2" fill="#ec4899"/>
+    <circle cx="36" cy="48" r="2" fill="#6366f1"/>
+    <circle cx="48" cy="48" r="2" fill="#ec4899"/>
   </g>
 </svg>
