@@ -45,13 +45,12 @@
 
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
   }
 
   body {
     background-color: rgb(var(--bg-main));
     color: rgb(var(--text-primary));
-    @apply overflow-x-hidden;
+    @apply overflow-x-clip;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
