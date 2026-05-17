@@ -1665,6 +1665,7 @@ const Portfolio = () => {
   const [activeTech, setActiveTech] = useState('all');
   const [typedText, setTypedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
+  const [activePhraseIdx, setActivePhraseIdx] = useState(0);
   const [activeProject, setActiveProject] = useState(1);
   const [activeSection, setActiveSection] = useState('hero');
   const heroRef = useRef(null);
@@ -1738,29 +1739,44 @@ const Portfolio = () => {
     setActiveProject(projects[activeIndex].id);
   });
 
-  const fullText = "Building scalable systems with precision...";
+  const phrases = useMemo(() => [
+    "Building scalable Full Stack systems...",
+    "Designing custom Deep Learning models...",
+    "Architecting autonomous AI Agentic flows...",
+    "Investigating next-gen computer science Research..."
+  ], []);
 
   useEffect(() => {
     setIsMounted(true);
+    const currentPhrase = phrases[activePhraseIdx];
 
-    // Typing effect
-    if (isTyping && typedText.length < fullText.length) {
-      const timeout = setTimeout(() => {
-        setTypedText(fullText.slice(0, typedText.length + 1));
-      }, 100);
-      return () => clearTimeout(timeout);
-    } else if (typedText.length === fullText.length) {
-      const timeout1 = setTimeout(() => {
-        setIsTyping(false);
-        const timeout2 = setTimeout(() => {
-          setTypedText('');
-          setIsTyping(true);
+    if (isTyping) {
+      if (typedText.length < currentPhrase.length) {
+        const timeout = setTimeout(() => {
+          setTypedText(currentPhrase.slice(0, typedText.length + 1));
+        }, 65);
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          setIsTyping(false);
         }, 2000);
-        return () => clearTimeout(timeout2);
-      }, 2000);
-      return () => clearTimeout(timeout1);
+        return () => clearTimeout(timeout);
+      }
+    } else {
+      if (typedText.length > 0) {
+        const timeout = setTimeout(() => {
+          setTypedText(typedText.slice(0, -1));
+        }, 25);
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          setIsTyping(true);
+          setActivePhraseIdx((prev) => (prev + 1) % phrases.length);
+        }, 400);
+        return () => clearTimeout(timeout);
+      }
     }
-  }, [typedText, isTyping, fullText.length]);
+  }, [typedText, isTyping, activePhraseIdx, phrases]);
 
   useEffect(() => {
     if (!isMounted) return;
