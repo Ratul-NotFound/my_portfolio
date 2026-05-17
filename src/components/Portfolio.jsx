@@ -371,6 +371,393 @@ function SectionTitleLine({ isHacker, isLight }) {
   );
 }
 
+// ── CompetencyConsole (Sci-Fi Cybernetic Control Panel) ──
+function CompetencyConsole({ isLight, isHacker }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [terminalLogs, setTerminalLogs] = useState([]);
+  
+  const competencies = useMemo(() => [
+    {
+      icon: Code2,
+      index: "01",
+      title: "Full Stack Development",
+      role: "SYSTEM ARCHITECT",
+      desc: "Engineering premium, responsive client viewports and secure backends. Developing high-performance systems with strict data safety protocols, standard caching layers, and fluid UX controls.",
+      skills: ["React", "Next.js", "Node.js", "TypeScript", "REST APIs", "GraphQL"],
+      logs: [
+        "SYS: Initializing frontend viewports...",
+        "NET: Establishing secure CORS channels...",
+        "DB: Caching query results via Redis...",
+        "API: Route maps successfully compiled."
+      ],
+      color: isHacker ? "#00ff41" : isLight ? "#4f46e5" : "#22d3ee",
+      glow: isHacker ? "rgba(0, 255, 65, 0.15)" : isLight ? "rgba(79, 70, 229, 0.15)" : "rgba(34, 211, 238, 0.15)"
+    },
+    {
+      icon: Brain,
+      index: "02",
+      title: "AI & Machine Learning",
+      role: "ML RESEARCHER",
+      desc: "Designing neural layers, customized weights, and NLP deep learning channels. Training and deploying custom predictive models with focus on transformers, fine-tuning, and robust vector embeddings.",
+      skills: ["PyTorch", "TensorFlow", "Transformers", "NLP", "Scikit-Learn", "CUDA"],
+      logs: [
+        "SYS: Loading tensor arrays...",
+        "GPU: Binding CUDA parallel matrix...",
+        "ML: Adjusting hyperparameter weights...",
+        "MODEL: Epoch validation completed (Loss: 0.024)."
+      ],
+      color: isHacker ? "#00ff66" : isLight ? "#9333ea" : "#a855f7",
+      glow: isHacker ? "rgba(0, 255, 102, 0.15)" : isLight ? "rgba(147, 51, 234, 0.15)" : "rgba(168, 85, 247, 0.15)"
+    },
+    {
+      icon: Zap,
+      index: "03",
+      title: "AI Automation",
+      role: "AUTOMATION SPECIALIST",
+      desc: "Creating autonomous agentic flows, multi-agent frameworks, and vector-backed state systems. Engineering scalable cron execution pipelines to completely automate high-complexity operational tasks.",
+      skills: ["LangChain", "CrewAI", "Vector DBs", "n8n", "Python", "State Flows"],
+      logs: [
+        "SYS: Launching multi-agent environment...",
+        "AGENT: Critic agent validating researcher logs...",
+        "VEC: Similarity queries routing to Pinecone...",
+        "FLOW: Execution loop completed safely."
+      ],
+      color: isHacker ? "#00c8ff" : isLight ? "#ec4899" : "#f43f5e",
+      glow: isHacker ? "rgba(0, 200, 255, 0.15)" : isLight ? "rgba(236, 72, 153, 0.15)" : "rgba(244, 63, 94, 0.15)"
+    },
+    {
+      icon: BookOpen,
+      index: "04",
+      title: "Research",
+      role: "CS SCIENTIST",
+      desc: "Investigating emerging computational paradigms, distributed ledger clusters, and high-concurrency systems. Pioneer in optimizing Retrieval-Augmented Generation (RAG) layouts and high-speed compiler layers.",
+      skills: ["RAG Systems", "LLM Tuning", "Distributed", "MLOps", "Compiler Theory", "Cloud Scale"],
+      logs: [
+        "SYS: Benchmarking distributed nodes...",
+        "RAG: Parsing document embedding layers...",
+        "LATENCY: RTT metrics analyzed (4.2ms avg)...",
+        "SYS: Next-generation cluster specs generated."
+      ],
+      color: isHacker ? "#ffd700" : isLight ? "#f59e0b" : "#eab308",
+      glow: isHacker ? "rgba(255, 215, 0, 0.15)" : isLight ? "rgba(245, 158, 11, 0.15)" : "rgba(234, 179, 8, 0.15)"
+    }
+  ], [isLight, isHacker]);
+
+  // Auto-rotate tabs slowly
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % competencies.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, competencies]);
+
+  // Terminal log typing simulator
+  useEffect(() => {
+    setTerminalLogs([]);
+    const logs = competencies[activeIdx].logs;
+    let timer;
+    let currentLogs = [];
+    
+    const addLogLine = (idx) => {
+      if (idx >= logs.length) return;
+      currentLogs.push(logs[idx]);
+      setTerminalLogs([...currentLogs]);
+      timer = setTimeout(() => addLogLine(idx + 1), 600);
+    };
+
+    addLogLine(0);
+    return () => clearTimeout(timer);
+  }, [activeIdx, competencies]);
+
+  const active = competencies[activeIdx];
+
+  return (
+    <div className="grid lg:grid-cols-12 gap-8 items-stretch pt-6 pb-12 select-none">
+      {/* LEFT SELECTOR NODE PANEL */}
+      <div className="lg:col-span-5 flex flex-col justify-center gap-4">
+        <div className="mb-2">
+          <span className={`text-[10px] font-mono tracking-[0.25em] font-black uppercase ${isHacker ? 'text-[#00ff41]/50' : 'text-slate-400'}`}>
+            SELECT TERMINAL COMPETENCY
+          </span>
+        </div>
+
+        {competencies.map((comp, idx) => {
+          const isSelected = activeIdx === idx;
+          return (
+            <button
+              key={idx}
+              onClick={() => {
+                setActiveIdx(idx);
+                setIsAutoPlaying(false);
+              }}
+              onMouseEnter={() => {
+                setActiveIdx(idx);
+                setIsAutoPlaying(false);
+              }}
+              className={`group flex items-center justify-between p-5 rounded-2xl border text-left transition-all duration-550 w-full relative overflow-hidden backdrop-blur-md outline-none ${
+                isSelected
+                  ? isHacker 
+                    ? 'bg-[#000a02]/90 border-[#00ff41] shadow-[0_0_25px_rgba(0,255,65,0.08)]' 
+                    : isLight 
+                      ? 'bg-white border-indigo-500 shadow-xl shadow-indigo-500/10' 
+                      : 'bg-[#0d1527]/90 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.08)]'
+                  : isHacker
+                    ? 'bg-transparent border-[#00ff41]/10 hover:border-[#00ff41]/30 hover:bg-[#00ff41]/5'
+                    : isLight
+                      ? 'bg-white/40 border-slate-200/80 hover:border-slate-300 hover:bg-white/60 shadow-sm'
+                      : 'bg-[#0b0f19]/30 border-slate-900/80 hover:border-slate-800 hover:bg-[#0b0f19]/60'
+              }`}
+            >
+              {/* Dynamic Accent Line */}
+              <div 
+                className="absolute left-0 top-0 bottom-0 w-[4px] transition-transform duration-500 origin-bottom"
+                style={{
+                  backgroundColor: comp.color,
+                  transform: isSelected ? 'scaleY(1)' : 'scaleY(0)'
+                }}
+              />
+
+              <div className="flex items-center gap-4 pl-2 relative z-10">
+                {/* Index marker */}
+                <span 
+                  className="font-mono text-xs font-bold select-none opacity-40 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ color: isSelected ? comp.color : 'inherit' }}
+                >
+                  {comp.index}
+                </span>
+
+                {/* Node pulsing synapse */}
+                <div className="relative">
+                  {isSelected && (
+                    <span 
+                      className="absolute inset-0 rounded-full animate-ping opacity-75"
+                      style={{ backgroundColor: comp.color }}
+                    />
+                  )}
+                  <div 
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all duration-500 ${
+                      isSelected ? 'scale-110' : 'scale-90 select-none'
+                    }`}
+                    style={{
+                      backgroundColor: isSelected ? `${comp.color}15` : 'transparent',
+                      borderColor: isSelected ? comp.color : 'transparent',
+                      color: isSelected ? comp.color : 'currentColor'
+                    }}
+                  >
+                    <comp.icon className="w-5 h-5" />
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className={`font-black tracking-tight text-base transition-colors duration-300 ${
+                    isSelected
+                      ? isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-950' : 'text-white'
+                      : isHacker ? 'text-[#00cc32]/60 group-hover:text-[#00cc32]' : isLight ? 'text-slate-650' : 'text-slate-400'
+                  }`}>
+                    {comp.title}
+                  </h4>
+                  <span className="text-[9px] font-mono font-bold tracking-wider uppercase opacity-55 select-none leading-none">
+                    {comp.role}
+                  </span>
+                </div>
+              </div>
+
+              {/* Angle selector icon */}
+              <div 
+                className="w-8 h-8 rounded-full border border-dashed flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ borderColor: isSelected ? comp.color : 'rgba(150,150,150,0.3)', color: comp.color }}
+              >
+                <span className="text-xs font-mono font-black">&gt;</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* RIGHT LIVE MONITOR PANEL */}
+      <div className="lg:col-span-7 flex flex-col">
+        <div 
+          className={`flex-1 rounded-3xl border backdrop-blur-xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-700 ${
+            isHacker 
+              ? 'bg-[#000401]/95 border-[#00ff41]/20 shadow-[0_0_35px_rgba(0,255,65,0.03)]' 
+              : isLight 
+                ? 'bg-white border-slate-200 shadow-2xl shadow-indigo-500/5' 
+                : 'bg-[#0b0f19]/80 border-slate-900 shadow-2xl shadow-cyan-500/2'
+          }`}
+          style={{
+            boxShadow: `0 0 40px ${active.glow}20`
+          }}
+        >
+          {/* Glass glare effect */}
+          <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-tr from-white/0 via-white/3 to-white/0 opacity-60" />
+
+          {/* Technical monitor grids overlay */}
+          <div className="absolute inset-0 pointer-events-none opacity-5 z-0" style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${active.color} 1px, transparent 0)`,
+            backgroundSize: '16px 16px'
+          }} />
+
+          {/* Monitor Header with coordinate metrics */}
+          <div className="relative z-10 flex items-center justify-between border-b pb-4 mb-6" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.1)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' }}>
+            <div className="flex items-center gap-2">
+              {/* Dynamic status light */}
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: active.color }} />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5" style={{ backgroundColor: active.color }} />
+              </span>
+              <span className={`text-[10px] font-mono tracking-widest font-bold uppercase ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>
+                LIVE MONITOR :: COMP_SELECTOR_{active.index}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3 font-mono text-[9px] opacity-40">
+              <span>LATENCY: 4.2ms</span>
+              <span>SYNERGY: 98%</span>
+            </div>
+          </div>
+
+          {/* Main Visualizer and text container */}
+          <div className="relative z-10 grid md:grid-cols-12 gap-6 items-center flex-grow">
+            
+            {/* Visualizer canvas left (md:col-span-4) */}
+            <div className="md:col-span-4 flex items-center justify-center relative aspect-square max-w-[150px] mx-auto w-full md:max-w-none">
+              
+              {/* Spinning background circles */}
+              <div 
+                className="absolute inset-0 rounded-full border border-dashed animate-spin"
+                style={{
+                  borderColor: `${active.color}255`,
+                  animationDuration: '20s'
+                }}
+              />
+              <div 
+                className="absolute inset-4 rounded-full border border-dotted animate-spin"
+                style={{
+                  borderColor: `${active.color}45`,
+                  animationDuration: '10s',
+                  animationDirection: 'reverse'
+                }}
+              />
+
+              {/* Dynamic SVG graphic visualizer */}
+              <div className="relative z-10 w-24 h-24 flex items-center justify-center">
+                {active.title === "Full Stack Development" && (
+                  <svg className="w-16 h-16" fill="none" viewBox="0 0 100 100" stroke={active.color} strokeWidth="1.2">
+                    <rect x="15" y="15" width="70" height="50" rx="4" />
+                    <line x1="15" y1="27" x2="85" y2="27" />
+                    <rect x="25" y="37" width="16" height="6" rx="0.5" />
+                    <rect x="47" y="37" width="28" height="6" rx="0.5" />
+                    <rect x="25" y="49" width="50" height="10" rx="0.5" />
+                    <rect x="35" y="75" width="30" height="10" rx="1" />
+                    <line x1="50" y1="65" x2="50" y2="75" />
+                  </svg>
+                )}
+                {active.title === "AI & Machine Learning" && (
+                  <svg className="w-16 h-16 spin-slow" fill="none" viewBox="0 0 100 100" stroke={active.color} strokeWidth="1.2">
+                    <circle cx="50" cy="50" r="14" strokeDasharray="3 3" />
+                    <circle cx="50" cy="50" r="4" fill={active.color} />
+                    <circle cx="20" cy="50" r="6" />
+                    <circle cx="80" cy="50" r="6" />
+                    <circle cx="50" cy="20" r="6" />
+                    <circle cx="50" cy="80" r="6" />
+                    <line x1="26" y1="50" x2="36" y2="50" />
+                    <line x1="64" y1="50" x2="74" y2="50" />
+                    <line x1="50" y1="26" x2="50" y2="36" />
+                    <line x1="50" y1="64" x2="50" y2="74" />
+                  </svg>
+                )}
+                {active.title === "AI Automation" && (
+                  <svg className="w-16 h-16" fill="none" viewBox="0 0 100 100" stroke={active.color} strokeWidth="1.2">
+                    <path d="M 25 35 L 50 35 L 50 65 L 75 65" strokeDasharray="3 3" />
+                    <circle cx="25" cy="35" r="5" fill={active.color} fillOpacity="0.4" />
+                    <circle cx="50" cy="35" r="5" />
+                    <circle cx="50" cy="65" r="5" />
+                    <circle cx="75" cy="65" r="5" fill={active.color} fillOpacity="0.4" />
+                    <polygon points="58,32 66,35 58,38" fill={active.color} />
+                    <polygon points="60,62 68,65 60,68" fill={active.color} />
+                  </svg>
+                )}
+                {active.title === "Research" && (
+                  <svg className="w-16 h-16 spin-slow" fill="none" viewBox="0 0 100 100" stroke={active.color} strokeWidth="1.2">
+                    <ellipse cx="50" cy="50" rx="38" ry="12" transform="rotate(-30 50 50)" />
+                    <ellipse cx="50" cy="50" rx="38" ry="12" transform="rotate(30 50 50)" />
+                    <ellipse cx="50" cy="50" rx="38" ry="12" transform="rotate(90 50 50)" />
+                    <circle cx="50" cy="50" r="8" fill={active.color} />
+                  </svg>
+                )}
+              </div>
+            </div>
+
+            {/* Content Details right (md:col-span-8) */}
+            <div className="md:col-span-8 space-y-4">
+              <h3 className={`text-2xl md:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-900' : 'text-white'}`}>
+                {active.title}
+              </h3>
+              
+              <p className={`text-sm md:text-base leading-relaxed leading-7 ${isHacker ? 'text-[#00cc32]/80' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
+                {active.desc}
+              </p>
+
+              {/* Dynamic tag cluster */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                {active.skills.map((skill, j) => (
+                  <motion.span
+                    key={j}
+                    whileHover={{ scale: 1.05 }}
+                    className={`px-3 py-1 border rounded-lg text-xs font-mono font-bold tracking-wide select-none transition-colors duration-300 ${
+                      isHacker 
+                        ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/80 hover:border-[#00ff41] hover:text-[#00ff41]'
+                        : isLight 
+                          ? 'bg-indigo-50 border-indigo-200 text-indigo-600 hover:border-indigo-400'
+                          : 'bg-[#0d1527]/60 border-slate-800 text-slate-400 hover:border-cyan-400 hover:text-cyan-300'
+                    }`}
+                  >
+                    {skill}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Interactive blinder console monitor at the bottom */}
+          <div className={`mt-6 p-4 rounded-xl border font-mono text-[10px] md:text-xs relative z-10 transition-colors duration-500 overflow-hidden ${
+            isHacker 
+              ? 'bg-[#000a02] border-[#00ff41]/15 text-[#00ff41]' 
+              : isLight 
+                ? 'bg-slate-50 border-slate-200 text-slate-600' 
+                : 'bg-[#0d1527] border-slate-900 text-cyan-400'
+          }`}>
+            {/* Blinking prompt */}
+            <div className="flex items-center justify-between border-b pb-2 mb-2 select-none opacity-45" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.03)' }}>
+              <span>TERMINAL COMPILER SHELL v2.08</span>
+              <span>STATUS: COMPILED</span>
+            </div>
+
+            <div className="space-y-1 select-none">
+              {terminalLogs.map((log, index) => (
+                <div key={index} className="flex items-center gap-1">
+                  <span className="opacity-40">&gt;</span>
+                  <span>{log}</span>
+                </div>
+              ))}
+              {terminalLogs.length < active.logs.length && (
+                <div className="flex items-center gap-1">
+                  <span className="opacity-40">&gt;</span>
+                  <span className="w-1.5 h-3 bg-current animate-blink" />
+                </div>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── WhatIDoCard (Hyper-Creative 3D Interactive Card) ──
 function WhatIDoCard({ item, i, isLight, isHacker }) {
   const cardRef = useRef(null);
@@ -1645,44 +2032,7 @@ const Portfolio = () => {
               </motion.p>
             </div>
 
-            <motion.div
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5"
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: '-60px' }}
-            >
-              {[
-                {
-                  icon: Code2,
-                  title: "Full Stack Development",
-                  desc: "Crafting modern, responsive web applications. Architecting seamless end-to-end user interfaces, secure APIs, and performant backends.",
-                  skills: ["React", "Next.js", "Node.js", "TypeScript"]
-                },
-                {
-                  icon: Brain,
-                  title: "AI & Machine Learning",
-                  desc: "Designing neural networks, custom deep learning models, and complex NLP pipelines. Engineering production-grade ML algorithms.",
-                  skills: ["PyTorch", "TensorFlow", "Transformers", "NLP"]
-                },
-                {
-                  icon: Zap,
-                  title: "AI Automation",
-                  desc: "Architecting intelligent agentic frameworks, automated pipelines, and multi-agent systems to streamline and optimize complex workflows.",
-                  skills: ["LangChain", "CrewAI", "Vector DBs", "Flows"]
-                },
-                {
-                  icon: BookOpen,
-                  title: "Research",
-                  desc: "Investigating next-generation machine learning architectures, distributed computing, and emerging computer science research paradigms.",
-                  skills: ["RAG Systems", "LLM Tuning", "Distributed", "MLOps"]
-                }
-              ].map((item, i) => (
-                <motion.div key={i} variants={staggerItem}>
-                  <WhatIDoCard item={item} i={i} isLight={isLight} isHacker={isHacker} />
-                </motion.div>
-              ))}
-            </motion.div>
+            <CompetencyConsole isLight={isLight} isHacker={isHacker} />
 
             {/* Removed Tech Marquee Belt */}
           </div>
