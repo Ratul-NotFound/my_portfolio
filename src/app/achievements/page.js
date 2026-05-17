@@ -74,17 +74,17 @@ export default function Achievements() {
       title: "ICPC Dhaka Regional Contest 2024",
       role: "Co-Lead Volunteer",
       organization: "ICPC",
-      date: "Dec 202d",
+      date: "Dec 2024",
       location: "Dhaka, Bangladesh",
       type: "program",
-      description: "Participated in ICPC Dhaka Regional Contest 2024",
-      fullDescription: "The ICPC Dhaka Regional Contest 2024 was a prestigious event where I Served as voulnetter.\n\n• Competition: Worked As corud Controll head\n• Ranking: T\n• Topics: \n• Mentoring: Conducted workshops for 50+ students\n• Impact: Helped 10 students qualify for next year",
+      description: "Coordinated logistics, volunteer teams, and crowd control management for the ICPC Dhaka Regional Contest 2024.",
+      fullDescription: "Served as Co-Lead Volunteer and Crowd Control Management Head. Engineered logistics pipelines coordinating technical setup, contest environment initialization, and arena alignment for 100+ competing universities.",
       images: [
-        "icpc1.jpg?w=800&q=80",
+        "/icpc1.jpg?w=800&q=80",
         "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"
       ],
-      highlights: ["Top 15%", "6/10 Solved", "50+ Trained"],
-      tags: ["Algorithms", "Competitive Programming", "Mentoring"]
+      highlights: ["100+ Universities", "Logistics Head", "Co-Lead Volunteer"],
+      tags: ["Algorithms", "Competitive Programming", "Leadership"]
     },
     {
       id: 3,
@@ -125,13 +125,13 @@ export default function Achievements() {
   const certificates = [
     {
       id: 1,
-      name: "AWS Certified Solutions Architect",
-      issuer: "Amazon Web Services",
+      name: "Google Gemini AI Developer",
+      issuer: "Google Cloud & DeepLearning.AI",
       date: "Dec 2025",
-      credentialId: "AWS-SA-2023-12345",
-      description: "Professional certification demonstrating expertise in designing distributed systems on AWS.",
-      photo: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-      skills: ["AWS", "Cloud Architecture", "System Design"]
+      credentialId: "GOOGLE-GEMINI-AI-2025-4455",
+      description: "Advanced specialization in integrating Google Gemini multimodal models, prompt engineering, and building intelligent AI agent workflows.",
+      photo: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=80",
+      skills: ["Gemini API", "AI Agents", "Python", "LLMs"]
     },
     {
       id: 2,
