@@ -2158,7 +2158,7 @@ const Portfolio = () => {
                     whileInView="show"
                     viewport={{ once: true, margin: '-80px' }}
                   >
-                    Full Stack Engineer & AI Researcher specializing in <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>high-performance applications</span>, <span className={`font-semibold ${isHacker ? 'text-[#33ff66]' : isLight ? 'text-purple-600' : 'text-purple-400'}`}>machine learning</span>, and <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-pink-600' : 'text-pink-400'}`}>scalable architecture</span>.
+                    Full Stack Engineer & AI Researcher specializing in <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-300'}`}>high-performance applications</span>, <span className={`font-semibold ${isHacker ? 'text-[#33ff66]' : isLight ? 'text-purple-600' : 'text-indigo-300'}`}>machine learning</span>, and <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-pink-600' : 'text-cyan-300'}`}>scalable architecture</span>.
                   </motion.p>
                 </motion.div>
 

@@ -1602,10 +1602,9 @@ body {
   background: linear-gradient(
     120deg,
     #06b6d4 0%,
-    #8b5cf6 25%,
-    #ec4899 50%,
-    #06b6d4 75%,
-    #8b5cf6 100%
+    #3b82f6 35%,
+    #6366f1 70%,
+    #06b6d4 100%
   );
   background-size: 300% 300%;
   -webkit-background-clip: text;
@@ -1627,8 +1626,8 @@ body {
   background: linear-gradient(
     120deg,
     #4f46e5 0%,
-    #7c3aed 30%,
-    #db2777 60%,
+    #3b82f6 35%,
+    #06b6d4 70%,
     #4f46e5 100%
   );
   background-size: 300% 300%;
@@ -1978,10 +1977,12 @@ body {
   right: -1rem;
   top: -2rem;
   opacity: 0.04;
+    opacity: 0.04;
   pointer-events: none;
   user-select: none;
   font-family: 'Inter', sans-serif;
 }
+
 
 /* ── Kinetic underline on heading hover ── */
 .kinetic-underline {
