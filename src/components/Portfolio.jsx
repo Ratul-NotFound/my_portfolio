@@ -1961,13 +1961,13 @@ const Portfolio = () => {
     {
       id: 1,
       title: "UniVibe",
-      category: "Social • Collaboration",
-      description: "Unified student collaboration portal and social hub engineered for Daffodil International University. Facilitates real-time campus communication, resource sharing, and study group organization.",
-      tech: ["Next.js 14", "Firebase", "WebSockets", "Tailwind CSS", "Vercel"],
+      category: "Web Starter • TypeScript",
+      description: "A modern, high-performance web application starter built with React, TypeScript, and Vite. Designed for professional architecture with instant HMR, strict type-aware lint rules, and scalable file organization.",
+      tech: ["React 18", "TypeScript", "Vite", "ESLint"],
       links: { live: "https://univibe-diu.vercel.app", code: "https://github.com/ratul-notfound/univibe" },
       icon: Sparkles,
       gradient: "from-indigo-600 to-cyan-600",
-      metrics: ["3K+ Active Users", "Real-Time Portal", "DIU Academic Hub", "Resource Sharing"],
+      metrics: ["300+ Users", "Vite HMR", "Strict Types", "Optimal DX"],
       image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
       logo: "https://cdn-icons-png.flaticon.com/512/3249/3249911.png"
     },
