@@ -607,28 +607,35 @@ function HoloProfileCard({ isLight, isHacker }) {
       </div>
 
       {/* Footer Profile Details */}
-      <div className="relative z-10 text-left pt-2 border-t" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)', transform: 'translateZ(15px)' }}>
-        <div className="flex justify-between items-end">
-          <div>
-            <h3 className={`text-2xl md:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>
-              Mahmud Hasan Ratul
-            </h3>
-            <p className={`flex items-center gap-2 text-xs md:text-sm font-mono mt-1 ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-              <MapPin className="w-3.5 h-3.5" style={{ color: themeColors.accent }} />
-              Dhaka, Bangladesh • Available
-            </p>
+      <div className="relative z-10 text-left pt-3 border-t" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)', transform: 'translateZ(15px)' }}>
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className={`text-xl md:text-2xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>
+                Mahmud Hasan Ratul
+              </h3>
+              <p className={`flex items-center gap-1.5 text-[10px] md:text-xs font-mono mt-0.5 ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                <MapPin className="w-3 h-3" style={{ color: themeColors.accent }} />
+                Dhaka, Bangladesh • Available
+              </p>
+            </div>
+            
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: themeColors.accent }} />
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: themeColors.accent }} />
+            </span>
           </div>
 
-          <div className="flex gap-2.5">
-            {['Full Stack', 'AI ML', 'Automation'].map((tag) => (
+          <div className="flex flex-wrap gap-1.5 pt-1.5">
+            {['Full Stack', 'AI & ML', 'AI Automation', 'Research'].map((tag) => (
               <span
                 key={tag}
-                className={`px-3 py-1 border rounded-lg text-[10px] font-mono font-bold tracking-wide select-none ${
+                className={`px-2.5 py-0.5 border rounded-lg text-[9px] font-mono font-bold tracking-wide select-none ${
                   isHacker 
-                    ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/80'
+                    ? 'bg-[#00ff41]/5 border-[#00ff41]/10 text-[#00cc32]/85'
                     : isLight 
-                      ? 'bg-indigo-50 border-indigo-100 text-indigo-650 shadow-sm'
-                      : 'bg-[#0d1527]/60 border-slate-850 text-slate-400'
+                      ? 'bg-slate-50 border-slate-200 text-slate-650 shadow-sm'
+                      : 'bg-[#0b0f1a] border-slate-900 text-slate-400'
                 }`}
               >
                 {tag}
@@ -2073,7 +2080,7 @@ const Portfolio = () => {
         </AnimatePresence>
 
         {/* Hero */}
-        <section id="hero" ref={heroRef} className="min-h-screen flex items-center justify-center px-2 pt-10">
+        <section id="hero" ref={heroRef} className="min-h-screen flex items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden">
           <div className="max-w-7xl mx-auto w-full">
             <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
               <motion.div
