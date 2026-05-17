@@ -2,6 +2,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Award, Users, Trophy, Calendar, Download, ImageIcon, X, Github, Linkedin, Mail, Sparkles, Star, Target, Medal, Crown, Heart, ChevronRight, Search, ExternalLink, MapPin, BookOpen } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
@@ -221,33 +222,50 @@ export default function Achievements() {
       <main className="relative z-10 pt-20">
         {/* Hero */}
         <section className="py-20 md:py-32 px-4">
-          <div className="max-w-7xl mx-auto text-center">
-            <div className={`inline-flex items-center gap-3 px-5 py-2.5 border rounded-full text-sm mb-8 font-mono animate-pulse ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-cyan-50 border-cyan-200 text-cyan-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="max-w-7xl mx-auto text-center"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className={`inline-flex items-center gap-3 px-5 py-2.5 border rounded-full text-sm mb-8 font-mono ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]' : isLight ? 'bg-cyan-50 border-cyan-200 text-cyan-600' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}
+            >
               <Sparkles className="w-4 h-4" />
               <span>achievements</span>
-            </div>
+            </motion.div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none">
               <span className={`block mb-4 ${isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>Leadership &</span>
               <span className={`block ${isHacker ? 'text-[#00ff41] drop-shadow-[0_0_10px_rgba(0,255,65,0.5)]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>Recognition</span>
             </h1>
             <p className={`text-lg md:text-xl max-w-4xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Building communities and making impact through technology</p>
-          </div>
+          </motion.div>
         </section>
 
         {/* Stats */}
         <section className="py-12 px-4">
           <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {stats.map((stat, i) => (
-              <div key={i} className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl transition-all hover:scale-105 cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-purple-400 hover:shadow-purple-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-purple-500/50'}`}>
-                <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: "easeOut" }}
+                className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl transition-all hover:scale-105 cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-purple-400 hover:shadow-purple-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-purple-500/50'}`}
+              >
+                <div className={`absolute inset-0 ${stat.bgClass} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
                 <div className="relative z-10">
-                  <div className={`w-14 h-14 bg-gradient-to-br ${stat.gradient} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all shadow-lg`}>
+                  <div className={`w-14 h-14 ${stat.bgClass} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all shadow-lg`}>
                     <stat.icon className="w-7 h-7 text-white" />
                   </div>
                   <div className={`text-4xl font-black mb-2 font-mono ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>{stat.number}</div>
                   <div className={`text-sm ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>{stat.label}</div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -282,8 +300,15 @@ export default function Achievements() {
               </div>
             ) : (
               <div className="grid md:grid-cols-2 gap-8">
-                {filteredPrograms.map((prog) => (
-                  <div key={prog.id} className={`group backdrop-blur-xl border rounded-3xl overflow-hidden transition-all hover:scale-[1.02] hover:shadow-2xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_25px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-purple-400 hover:shadow-purple-200/40 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-purple-500/50'}`}>
+                {filteredPrograms.map((prog, idx) => (
+                  <motion.div 
+                    key={prog.id}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.7, delay: (idx % 2) * 0.15, ease: "easeOut" }}
+                    className={`group backdrop-blur-xl border rounded-3xl overflow-hidden transition-all hover:scale-[1.02] hover:shadow-2xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_25px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-purple-400 hover:shadow-purple-200/40 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-purple-500/50'}`}
+                  >
                     <div className="relative aspect-[16/10] bg-slate-800">
                       {prog.images && prog.images.length > 0 ? (
                         <>
@@ -356,7 +381,7 @@ export default function Achievements() {
                       )}
                     </div>
                     <div className={`h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ${isHacker ? 'bg-[#00ff41]' : isLight ? 'bg-indigo-600' : 'bg-cyan-500'}`}></div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             )}
@@ -375,8 +400,15 @@ export default function Achievements() {
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {certificates.map((cert) => (
-                <div key={cert.id} className={`group backdrop-blur-xl border rounded-2xl overflow-hidden transition-all hover:scale-105 hover:shadow-2xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/40 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}>
+              {certificates.map((cert, idx) => (
+                <motion.div 
+                  key={cert.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: (idx % 3) * 0.1, ease: "easeOut" }}
+                  className={`group backdrop-blur-xl border rounded-2xl overflow-hidden transition-all hover:scale-105 hover:shadow-2xl ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/40 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
+                >
                   <div className="relative aspect-video bg-slate-800">
                     <button onClick={() => setSelectedImage(cert.photo)} className="w-full h-full">
                       <img src={cert.photo} alt={cert.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -409,7 +441,7 @@ export default function Achievements() {
                     </div>
                     {cert.credentialId && <div className={`text-xs font-mono truncate ${isHacker ? 'text-[#00ff41]/20' : isLight ? 'text-slate-400' : 'text-slate-600'}`}>ID: {cert.credentialId}</div>}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -418,7 +450,12 @@ export default function Achievements() {
         {/* CTA */}
         <section className="py-32 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className={`relative p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40' : isLight ? 'bg-white border-slate-200 shadow-xl' : 'bg-slate-900/40 border-slate-800'}`}>
+            <motion.div 
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className={`relative p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40' : isLight ? 'bg-white border-slate-200 shadow-xl' : 'bg-slate-900/40 border-slate-800'}`}>
               <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${isHacker ? 'bg-[#00ff41]/[0.02]' : isLight ? 'bg-slate-100/60' : 'bg-slate-800/10'}`}></div>
               <div className="relative z-10 text-center space-y-8">
                 <Star className={`w-20 h-20 mx-auto ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-500' : 'text-purple-400'}`} />
@@ -443,7 +480,7 @@ export default function Achievements() {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
       </main>
@@ -451,22 +488,38 @@ export default function Achievements() {
       <Footer />
 
       {/* Image Modal */}
-      {selectedImage && (
-        <div className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex items-center justify-center p-4" onClick={() => setSelectedImage(null)}>
-          <button onClick={() => setSelectedImage(null)} className="absolute top-6 right-6 p-3 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500 rounded-xl transition-all hover:scale-110 group z-10">
-            <X className="w-6 h-6 text-slate-400 group-hover:text-cyan-400 transition-colors" />
-          </button>
-          <a href={selectedImage} download className="absolute top-6 left-6 p-3 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-purple-500 rounded-xl transition-all hover:scale-110 group z-10" onClick={(e) => e.stopPropagation()}>
-            <Download className="w-6 h-6 text-slate-400 group-hover:text-purple-400 transition-colors" />
-          </a>
-          <div className="max-w-6xl w-full" onClick={(e) => e.stopPropagation()}>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 blur-3xl"></div>
-              <img src={selectedImage} alt="Achievement" className="relative w-full h-auto rounded-2xl shadow-2xl border border-slate-800" />
-            </div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex items-center justify-center p-4" 
+            onClick={() => setSelectedImage(null)}
+          >
+            <button onClick={() => setSelectedImage(null)} className="absolute top-6 right-6 p-3 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500 rounded-xl transition-all hover:scale-110 group z-10">
+              <X className="w-6 h-6 text-slate-400 group-hover:text-cyan-400 transition-colors" />
+            </button>
+            <a href={selectedImage} download className="absolute top-6 left-6 p-3 bg-slate-900/80 hover:bg-slate-800 border border-slate-700 hover:border-purple-500 rounded-xl transition-all hover:scale-110 group z-10" onClick={(e) => e.stopPropagation()}>
+              <Download className="w-6 h-6 text-slate-400 group-hover:text-purple-400 transition-colors" />
+            </a>
+            <motion.div 
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="max-w-6xl w-full" 
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-purple-500/10 blur-3xl"></div>
+                <img src={selectedImage} alt="Achievement" className="relative w-full h-auto rounded-2xl shadow-2xl border border-slate-800" />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
