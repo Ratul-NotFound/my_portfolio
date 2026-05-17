@@ -1502,33 +1502,7 @@ const Portfolio = () => {
               ))}
             </motion.div>
 
-            {/* ── Tech Marquee Belt ── */}
-            <div className="py-8 overflow-hidden">
-              {[
-                ['Next.js','React','TypeScript','Node.js','Python','TensorFlow','Docker','AWS','MongoDB','PostgreSQL','Redis','GraphQL','FastAPI','Kubernetes','PyTorch','OpenAI'],
-                ['System Design','CI/CD','Microservices','REST APIs','WebSockets','Redis Cache','JWT Auth','OAuth2','Stripe','Firebase','Vercel','Nginx','Linux','Git','LangChain','Whisper']
-              ].map((row, ri) => (
-                <div key={ri} className="ticker-container mb-3">
-                  <div className={`marquee-track ${ri === 0 ? 'marquee-track--left' : 'marquee-track--right'}`}>
-                    {[...row, ...row].map((tech, i) => (
-                      <span
-                        key={i}
-                        className={`inline-flex items-center gap-2 mx-3 px-4 py-2 rounded-full border text-sm font-medium whitespace-nowrap transition-colors cursor-default ${
-                          isHacker
-                            ? 'bg-[#000a02]/80 border-[#00ff41]/15 text-[#00cc32]/70 hover:text-[#00ff41] hover:border-[#00ff41]/40'
-                            : isLight
-                              ? 'bg-white/80 border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 shadow-sm'
-                              : 'bg-slate-900/60 border-slate-700 text-slate-400 hover:border-cyan-500/50 hover:text-cyan-300'
-                        }`}
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full ${isHacker ? 'bg-[#00ff41]' : ri === 0 ? 'bg-cyan-400' : 'bg-purple-400'}`} />
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* Removed Tech Marquee Belt */}
           </div>
         </section>
 
