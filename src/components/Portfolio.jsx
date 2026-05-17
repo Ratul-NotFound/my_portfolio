@@ -371,6 +371,275 @@ function SectionTitleLine({ isHacker, isLight }) {
   );
 }
 
+// ── HoloProfileCard (Interactive 3D Sci-Fi Profile) ──
+function HoloProfileCard({ isLight, isHacker }) {
+  const [activeTab, setActiveTab] = useState('avatar');
+  const cardRef = useRef(null);
+  
+  // 3D Perspective Tilt using Framer Motion
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 150, damping: 20 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 20 });
+  
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = (e.clientX - rect.left) / width - 0.5;
+    const mouseY = (e.clientY - rect.top) / height - 0.5;
+    
+    x.set(mouseX);
+    y.set(mouseY);
+    
+    const px = Math.round(e.clientX - rect.left);
+    const py = Math.round(e.clientY - rect.top);
+    cardRef.current.style.setProperty('--spot-x', `${px}px`);
+    cardRef.current.style.setProperty('--spot-y', `${py}px`);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  const themeColors = {
+    spotlight: isHacker ? "rgba(0, 255, 65, 0.12)" : isLight ? "rgba(79, 70, 229, 0.12)" : "rgba(34, 211, 238, 0.12)",
+    accent: isHacker ? "#00ff41" : isLight ? "#4f46e5" : "#22d3ee",
+    scanner: isHacker ? "rgba(0, 255, 65, 0.5)" : isLight ? "rgba(79, 70, 229, 0.5)" : "rgba(34, 211, 238, 0.6)"
+  };
+
+  const metrics = [
+    { name: "Frontend Speed", val: 96, desc: "Fluid UI render latencies" },
+    { name: "Backend Security", val: 94, desc: "Secure endpoints & protocols" },
+    { name: "Model Tuning", val: 88, desc: "Hyperparameter NLP layers" },
+    { name: "Automation Flow", val: 92, desc: "Agentic pipeline efficiency" }
+  ];
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+      }}
+      className={`group relative w-full max-w-lg mx-auto backdrop-blur-2xl border rounded-3xl p-6 md:p-8 space-y-6 transition-all duration-500 cursor-default select-none overflow-hidden ${
+        isHacker
+          ? 'bg-[#000401]/90 border-[#00ff41]/15 hover:border-[#00ff41]/45 shadow-[0_0_35px_rgba(0,255,65,0.02)]'
+          : isLight
+            ? 'bg-white border-slate-200 shadow-2xl hover:border-indigo-400'
+            : 'bg-[#0d1323]/85 border-slate-900 shadow-2xl hover:border-cyan-500/30'
+      }`}
+    >
+      {/* Refraction Overlay Glare */}
+      <div className="absolute inset-0 pointer-events-none z-20 bg-gradient-to-tr from-white/0 via-white/4 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      
+      {/* Specular Spotlight Glow */}
+      <div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500 z-0"
+        style={{
+          backgroundImage: `radial-gradient(circle 150px at var(--spot-x, 50%) var(--spot-y, 50%), ${themeColors.spotlight}, transparent 85%)`
+        }}
+      />
+
+      {/* Cybernetic HUD Frame Coordinates */}
+      <div className="absolute top-3 left-4 font-mono text-[8px] opacity-35 tracking-wider">
+        {"SYS.HUD // DHAKA.BD [N 23° 42' E 90° 22']"}
+      </div>
+      <div className="absolute top-3 right-4 font-mono text-[8px] opacity-35 tracking-wider">
+        {"VER.2.08 // SECURE_CON"}
+      </div>
+
+      {/* Interactive Tabs Header Control Panel */}
+      <div className="relative z-10 flex items-center justify-between border-b pb-4 mt-2" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.1)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' }}>
+        <div className="flex gap-2.5">
+          {['avatar', 'metrics', 'kernel'].map((tab) => {
+            const isTabActive = activeTab === tab;
+            return (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`font-mono text-[10px] md:text-xs font-black tracking-widest uppercase px-3 py-1.5 rounded-lg border transition-all duration-350 outline-none ${
+                  isTabActive
+                    ? isHacker 
+                      ? 'bg-[#00ff41]/10 border-[#00ff41] text-[#00ff41] shadow-[0_0_12px_rgba(0,255,65,0.2)]'
+                      : isLight
+                        ? 'bg-indigo-50 border-indigo-500 text-indigo-600 shadow-sm'
+                        : 'bg-cyan-500/10 border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.2)]'
+                    : isHacker
+                      ? 'bg-transparent border-transparent text-[#00cc32]/50 hover:text-[#00cc32]'
+                      : isLight
+                        ? 'bg-transparent border-transparent text-slate-400 hover:text-slate-600'
+                        : 'bg-transparent border-transparent text-slate-500 hover:text-slate-350'
+                }`}
+              >
+                [{tab === 'avatar' ? 'HOLO_AVATAR' : tab === 'metrics' ? 'SYS_STATS' : 'CODE_KERNEL'}]
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Small theme pulse */}
+        <span className="relative flex h-2 w-2 mr-1">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: themeColors.accent }} />
+          <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: themeColors.accent }} />
+        </span>
+      </div>
+
+      {/* Main Tab Viewports */}
+      <div className="relative z-10 flex-grow py-2 min-h-[280px] flex flex-col justify-center" style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}>
+        <AnimatePresence mode="wait">
+          {activeTab === 'avatar' && (
+            <motion.div
+              key="avatar"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.4 }}
+              className="relative aspect-square max-w-[240px] mx-auto w-full rounded-2xl overflow-hidden border-4"
+              style={{
+                borderColor: isHacker ? 'rgba(0, 255, 65, 0.15)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)'
+              }}
+            >
+              {/* Spinning compass HUD overlays inside the image frame */}
+              <div className="absolute inset-0 z-10 pointer-events-none border border-dashed rounded-xl opacity-20 animate-spin" style={{ borderColor: themeColors.accent, animationDuration: '30s' }} />
+
+              {/* Sweeping Laser Scanner Beam */}
+              <motion.div 
+                className="absolute left-0 right-0 h-[2px] z-10"
+                style={{
+                  background: `linear-gradient(to right, transparent, ${themeColors.accent}, transparent)`,
+                  boxShadow: `0 0 10px ${themeColors.scanner}`
+                }}
+                animate={{ y: ['0px', '240px', '0px'] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              />
+
+              <img
+                src="/profile.jpg"
+                alt="Mahmud Hasan Ratul"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+                onError={(e) => {
+                  e.target.src = "/profile.jpg";
+                }}
+              />
+              <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]/80' : isLight ? 'from-white/70' : 'from-[#0d1323]/80'} via-transparent to-transparent opacity-60`} />
+            </motion.div>
+          )}
+
+          {activeTab === 'metrics' && (
+            <motion.div
+              key="metrics"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-4 w-full"
+            >
+              <div className="text-left mb-2">
+                <span className={`text-[10px] font-mono font-bold tracking-widest uppercase opacity-45`}>METRICS DIAGNOSIS</span>
+              </div>
+
+              {metrics.map((metric, i) => (
+                <div key={i} className="space-y-1">
+                  <div className="flex justify-between items-center text-xs md:text-sm font-mono font-bold">
+                    <span className={isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-700' : 'text-slate-300'}>{metric.name}</span>
+                    <span style={{ color: themeColors.accent }}>{metric.val}%</span>
+                  </div>
+                  {/* Gauge Tracker */}
+                  <div className={`h-2 rounded-full overflow-hidden w-full relative ${isHacker ? 'bg-[#00ff41]/5' : isLight ? 'bg-slate-100' : 'bg-slate-900'}`}>
+                    <motion.div 
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: themeColors.accent }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${metric.val}%` }}
+                      transition={{ duration: 0.8, delay: i * 0.1, ease: "easeOut" }}
+                    />
+                  </div>
+                  <div className="text-[9px] font-mono opacity-40 text-left">{metric.desc}</div>
+                </div>
+              ))}
+            </motion.div>
+          )}
+
+          {activeTab === 'kernel' && (
+            <motion.div
+              key="kernel"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.4 }}
+              className={`p-4 rounded-xl border font-mono text-[10px] md:text-xs text-left overflow-auto max-h-[240px] w-full relative z-10 transition-colors duration-500 ${
+                isHacker 
+                  ? 'bg-[#000a02] border-[#00ff41]/15 text-[#00ff41]' 
+                  : isLight 
+                    ? 'bg-slate-50 border-slate-200 text-slate-600' 
+                    : 'bg-[#0b0f19] border-slate-900 text-cyan-400'
+              }`}
+            >
+              <div className="opacity-45 border-b pb-2 mb-2 select-none flex justify-between text-[9px]">
+                <span>CORE_KERNEL_RUNSHEET</span>
+                <span>STATUS: STABLE</span>
+              </div>
+              <pre className="whitespace-pre-wrap select-text leading-relaxed font-bold">
+{`{
+  "developer": "Mahmud Hasan Ratul",
+  "location": "Dhaka, Bangladesh [GMT+6]",
+  "active_status": "AVAILABLE_FOR_HIRE",
+  "core_competency": [
+    "Full Stack Development",
+    "AI & Machine Learning",
+    "AI Automation",
+    "Systems Research"
+  ],
+  "interests": ["Scalable Systems", "Distributed Clusters", "LLM Tuning"]
+}`}
+              </pre>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Footer Profile Details */}
+      <div className="relative z-10 text-left pt-2 border-t" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)', transform: 'translateZ(15px)' }}>
+        <div className="flex justify-between items-end">
+          <div>
+            <h3 className={`text-2xl md:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>
+              Mahmud Hasan Ratul
+            </h3>
+            <p className={`flex items-center gap-2 text-xs md:text-sm font-mono mt-1 ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <MapPin className="w-3.5 h-3.5" style={{ color: themeColors.accent }} />
+              Dhaka, Bangladesh • Available
+            </p>
+          </div>
+
+          <div className="flex gap-2.5">
+            {['Full Stack', 'AI ML', 'Automation'].map((tag) => (
+              <span
+                key={tag}
+                className={`px-3 py-1 border rounded-lg text-[10px] font-mono font-bold tracking-wide select-none ${
+                  isHacker 
+                    ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/80'
+                    : isLight 
+                      ? 'bg-indigo-50 border-indigo-100 text-indigo-650 shadow-sm'
+                      : 'bg-[#0d1527]/60 border-slate-850 text-slate-400'
+                }`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 // ── CompetencyConsole (Sci-Fi Cybernetic Control Panel) ──
 function CompetencyConsole({ isLight, isHacker }) {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -1930,61 +2199,7 @@ const Portfolio = () => {
                 whileInView="show"
                 viewport={{ once: true, margin: '-80px' }}
               >
-                <div className="relative aspect-square max-w-lg mx-auto">
-                  <div className={`absolute inset-0 rounded-3xl blur-3xl ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-r from-indigo-300/30 via-purple-300/20 to-pink-300/20' : 'bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20'}`}></div>
-                  <div className={`relative backdrop-blur-2xl border rounded-3xl p-8 space-y-6 transition-all duration-500 ${isHacker ? 'bg-[#000a02]/90 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-slate-900/90 border-slate-700 hover:border-cyan-500/50'}`}>
-                    <motion.div
-                      className={`relative aspect-square rounded-2xl overflow-hidden border-4 group shadow-xl transition-shadow duration-500 ${isHacker ? 'border-[#00ff41]/20 hover:shadow-[0_0_20px_rgba(0,255,65,0.15)]' : isLight ? 'border-slate-200 hover:shadow-indigo-300/30' : 'border-slate-700 hover:shadow-cyan-500/30'}`}
-                      variants={heroImageReveal}
-                      initial="hidden"
-                      whileInView="show"
-                      viewport={{ once: true, margin: '-80px' }}
-                    >
-                      <img
-                        src="/profile.jpg"
-                        alt="Mahmud Hasan Ratul"
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        onError={(e) => {
-                          e.target.src = "/profile.jpg";
-                        }}
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]' : isLight ? 'from-white' : 'from-slate-900'} via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                    </motion.div>
-
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className={`text-2xl md:text-3xl font-bold mb-2 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>Mahmud Hasan Ratul</h3>
-                        <p className={`flex items-center gap-2 text-sm md:text-base ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                          <MapPin className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
-                          Dhaka, Bangladesh • GMT+6
-                        </p>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {['Full Stack', 'AI/ML', 'DevOps', 'System Design'].map((tag, i) => (
-                          <span
-                            key={tag}
-                            className={`px-4 py-2 backdrop-blur-xl border rounded-lg text-sm transition-all cursor-default hover:scale-105 ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00cc32]/70 hover:border-[#00ff41]/40 hover:text-[#00ff41]' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-600 hover:border-indigo-400' : 'bg-slate-800/50 border-slate-600 text-slate-300 hover:border-cyan-500 hover:text-cyan-300'}`}
-                            style={{ animationDelay: `${i * 100}ms` }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      <div className="flex items-center gap-4 pt-2">
-                        <div className="flex items-center gap-2">
-                          <Circle className={`w-2 h-2 ${isHacker ? 'fill-[#00ff41] text-[#00ff41]' : 'fill-green-500 text-green-500'}`} />
-                          <span className={`text-xs ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Available</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Coffee className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]/40' : isLight ? 'text-slate-400' : 'text-slate-400'}`} />
-                          <span className={`text-xs ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Fueled by coffee</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <HoloProfileCard isLight={isLight} isHacker={isHacker} />
               </motion.div>
             </div>
 
