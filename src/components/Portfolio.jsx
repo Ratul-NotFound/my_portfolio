@@ -1999,6 +1999,19 @@ const Portfolio = () => {
     },
     {
       id: 4,
+      title: "NeuroStack",
+      category: "AI Hub • PWA",
+      description: "A zero-cost, automation-first personal knowledge repository. Automatically monitors RSS/YouTube feeds daily, generating structured markdown summaries via Gemini 1.5 Flash in a PWA dashboard.",
+      tech: ["React 18", "Firebase", "Gemini API", "Tailwind CSS", "PWA"],
+      links: { live: "https://neurostackv1.vercel.app/", code: "https://github.com/ratul-notfound/neurostack" },
+      icon: Brain,
+      gradient: "from-blue-600 to-indigo-600",
+      metrics: ["Daily Auto-Fetch", "Smart Cache", "Vercel Hosted", "Zero-Cost Spark"],
+      image: "https://images.unsplash.com/photo-1507146426996-ef05306b995a?w=800&q=80",
+      logo: "https://cdn-icons-png.flaticon.com/512/3067/3067260.png"
+    },
+    {
+      id: 5,
       title: "Orivo Commerce",
       category: "E-Commerce",
       description: "Enterprise-grade e-commerce platform handling 10K+ concurrent users. Real-time inventory management with Redis caching and Stripe integration.",
@@ -2011,7 +2024,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
     },
     {
-      id: 5,
+      id: 6,
       title: "BloodNet",
       category: "Mobile • Algorithms",
       description: "Geospatial blood donor matching system using A* pathfinding algorithm. Optimizes donor-patient routes with O(log n) complexity.",
@@ -2024,7 +2037,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/3209/3209265.png"
     },
     {
-      id: 6,
+      id: 7,
       title: "Lecture AI",
       category: "NLP • Research",
       description: "Audio-to-text processing pipeline using Whisper API with GPT-4 summarization. Achieves 92% transcription accuracy for educational content.",
