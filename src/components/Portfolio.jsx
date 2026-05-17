@@ -1719,11 +1719,11 @@ const Portfolio = () => {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="py-20 md:py-32 px-4">
-          <div className="max-w-4xl mx-auto">
+        <section id="contact" className="py-12 md:py-20 px-4">
+          <div className="max-w-2xl mx-auto">
             <motion.div
               ref={contactSpotlightRef}
-              className={`relative p-10 md:p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden spotlight-card-v2 animated-border-card group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
+              className={`relative p-6 md:p-10 backdrop-blur-2xl border rounded-2xl overflow-hidden spotlight-card-v2 animated-border-card group transition-all duration-500 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40 hover:shadow-[0_0_30px_rgba(0,255,65,0.06)]' : isLight ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-xl hover:shadow-2xl' : 'bg-gradient-to-br from-slate-900/80 to-slate-900/50 border-slate-800 hover:border-cyan-500/50'}`}
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 const x = Math.round(e.clientX - rect.left);
@@ -1732,9 +1732,9 @@ const Portfolio = () => {
                 e.currentTarget.style.setProperty('--my', `${y}px`);
                 setContactCoords({ x, y });
               }}
-              initial={{ opacity: 0, scale: 0.96 }}
+              initial={{ opacity: 0, scale: 0.97 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Creative Interactive Spotlight Grid */}
@@ -1742,10 +1742,10 @@ const Portfolio = () => {
                 className="absolute inset-0 opacity-20 pointer-events-none transition-opacity duration-500 group-hover:opacity-35"
                 style={{
                   backgroundImage: isHacker
-                    ? `radial-gradient(circle 180px at var(--mx, 50%) var(--my, 50%), rgba(0, 255, 65, 0.15), transparent 80%), 
+                    ? `radial-gradient(circle 140px at var(--mx, 50%) var(--my, 50%), rgba(0, 255, 65, 0.15), transparent 80%), 
                        linear-gradient(to right, rgba(0, 255, 65, 0.05) 1px, transparent 1px), 
                        linear-gradient(to bottom, rgba(0, 255, 65, 0.05) 1px, transparent 1px)`
-                    : `radial-gradient(circle 200px at var(--mx, 50%) var(--my, 50%), ${isLight ? 'rgba(99, 102, 241, 0.18)' : 'rgba(34, 211, 238, 0.15)'}, transparent 80%), 
+                    : `radial-gradient(circle 160px at var(--mx, 50%) var(--my, 50%), ${isLight ? 'rgba(99, 102, 241, 0.18)' : 'rgba(34, 211, 238, 0.15)'}, transparent 80%), 
                        linear-gradient(to right, ${isLight ? 'rgba(99, 102, 241, 0.06)' : 'rgba(255, 255, 255, 0.04)'} 1px, transparent 1px), 
                        linear-gradient(to bottom, ${isLight ? 'rgba(99, 102, 241, 0.06)' : 'rgba(255, 255, 255, 0.04)'} 1px, transparent 1px)`,
                   backgroundSize: '100% 100%, 30px 30px, 30px 30px'
@@ -1755,18 +1755,18 @@ const Portfolio = () => {
               <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/5' : isLight ? 'bg-indigo-300/20' : 'bg-cyan-500/10'}`}></div>
               <div className={`absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 ${isHacker ? 'bg-[#00ff41]/3' : isLight ? 'bg-purple-300/20' : 'bg-purple-500/10'}`}></div>
 
-              <div className="relative z-10 text-center space-y-8">
-                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20'}`}>
-                  <Sparkles className={`w-10 h-10 mb-0 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
+              <div className="relative z-10 text-center space-y-6">
+                <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 ${isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-gradient-to-br from-indigo-100 to-purple-100' : 'bg-gradient-to-br from-cyan-500/20 to-purple-500/20'}`}>
+                  <Sparkles className={`w-7 h-7 mb-0 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
                 </div>
 
-                <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none">
+                <div className="space-y-3">
+                  <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
                     <InteractiveText text="Let's Build Something" isHacker={isHacker} isLight={isLight} />
-                    <br className="my-1.5" />
+                    <br className="my-1" />
                     <InteractiveText text="Amazing Together" isHacker={isHacker} isLight={isLight} className={isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-white'} />
                   </h2>
-                  <p className={`text-base md:text-lg max-w-2xl mx-auto leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <p className={`text-xs md:text-sm max-w-md mx-auto leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                     Bring the hands together in a digital handshake to establish a direct connection and reveal my contact details!
                   </p>
                 </div>
@@ -1776,7 +1776,7 @@ const Portfolio = () => {
                   isLight={isLight} 
                 />
 
-                <div className="flex justify-center gap-4 pt-8">
+                <div className="flex justify-center gap-3 pt-4">
                   {[
                     { icon: Github, href: "https://github.com/ratul-notfound", label: "GitHub" },
                     { icon: Linkedin, href: "https://linkedin.com/in/mahmud-hasan-ratul", label: "LinkedIn" }
@@ -1786,10 +1786,10 @@ const Portfolio = () => {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`group/social p-5 backdrop-blur-xl border rounded-xl transition-all hover:scale-110 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.15)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm hover:shadow-lg' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500'}`}
+                      className={`group/social p-3.5 backdrop-blur-xl border rounded-xl transition-all hover:scale-110 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.15)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 shadow-sm hover:shadow-lg' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500'}`}
                       aria-label={social.label}
                     >
-                      <social.icon className={`w-7 h-7 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover/social:text-[#00ff41]' : isLight ? 'text-slate-500 group-hover/social:text-indigo-600' : 'text-slate-400 group-hover/social:text-cyan-400'}`} />
+                      <social.icon className={`w-5 h-5 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover/social:text-[#00ff41]' : isLight ? 'text-slate-500 group-hover/social:text-indigo-600' : 'text-slate-400 group-hover/social:text-cyan-400'}`} />
                     </a>
                   ))}
                 </div>
