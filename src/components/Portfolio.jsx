@@ -1973,6 +1973,19 @@ const Portfolio = () => {
     },
     {
       id: 2,
+      title: "Dhaka 8 No Ward",
+      category: "Game • Satirical Parody",
+      description: "A funny, high-stakes campaign parody reaction game featuring candidates Mirza Abbas and Nasir Uddin Patwary. Catch the votes, grab the biryani, and try not to lose your deposit! Played by 50K+ people.",
+      tech: ["Vanilla JS", "CSS3", "HTML5", "Vercel"],
+      links: { live: "https://abbas-vs-nasir.vercel.app/", code: "https://github.com/ratul-notfound/abbas-vs-nasir" },
+      icon: Award,
+      gradient: "from-amber-600 to-rose-600",
+      metrics: ["50K+ Players", "Comedic UI", "Satirical Parody", "Dynamic Pace"],
+      image: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=800&q=80",
+      logo: "https://cdn-icons-png.flaticon.com/512/3652/3652191.png"
+    },
+    {
+      id: 3,
       title: "CV Maker AI",
       category: "SaaS • ML",
       description: "LLM-powered resume analyzer with ATS optimization engine. Processes 50+ resumes weekly with 92% accuracy rate using Gemini Pro API.",
@@ -1985,7 +1998,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
     },
     {
-      id: 3,
+      id: 4,
       title: "Orivo Commerce",
       category: "E-Commerce",
       description: "Enterprise-grade e-commerce platform handling 10K+ concurrent users. Real-time inventory management with Redis caching and Stripe integration.",
@@ -1998,7 +2011,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/3081/3081559.png"
     },
     {
-      id: 4,
+      id: 5,
       title: "BloodNet",
       category: "Mobile • Algorithms",
       description: "Geospatial blood donor matching system using A* pathfinding algorithm. Optimizes donor-patient routes with O(log n) complexity.",
@@ -2011,7 +2024,7 @@ const Portfolio = () => {
       logo: "https://cdn-icons-png.flaticon.com/512/3209/3209265.png"
     },
     {
-      id: 5,
+      id: 6,
       title: "Lecture AI",
       category: "NLP • Research",
       description: "Audio-to-text processing pipeline using Whisper API with GPT-4 summarization. Achieves 92% transcription accuracy for educational content.",
