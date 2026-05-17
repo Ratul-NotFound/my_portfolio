@@ -156,10 +156,10 @@ export default function Achievements() {
   ];
 
   const stats = [
-    { number: programs.length.toString(), label: 'Achievements', icon: Trophy, gradient: 'from-purple-600 to-pink-600' },
-    { number: certificates.length.toString(), label: 'Certificates', icon: Award, gradient: 'from-cyan-600 to-blue-600' },
-    { number: '1000+', label: 'Students', icon: Users, gradient: 'from-green-600 to-emerald-600' },
-    { number: '15+', label: 'Events', icon: Target, gradient: 'from-orange-600 to-red-600' },
+    { number: programs.length.toString(), label: 'Achievements', icon: Trophy, bgClass: 'bg-purple-600' },
+    { number: certificates.length.toString(), label: 'Certificates', icon: Award, bgClass: 'bg-cyan-600' },
+    { number: '1000+', label: 'Students', icon: Users, bgClass: 'bg-emerald-600' },
+    { number: '15+', label: 'Events', icon: Target, bgClass: 'bg-rose-600' },
   ];
 
   const filteredPrograms = programs.filter(prog => {
@@ -192,18 +192,18 @@ export default function Achievements() {
   };
 
   return (
-    <div className={`min-h-screen ${isHacker ? 'bg-[#000600] text-[#00ff41]' : isLight ? 'bg-gradient-to-br from-blue-50 via-indigo-50/60 to-purple-50/50 text-slate-900' : 'bg-slate-950 text-white'} relative overflow-hidden`}>
+    <div className={`min-h-screen ${isHacker ? 'bg-[#000600] text-[#00ff41]' : isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-950 text-white'} relative overflow-hidden`}>
       <Navbar />
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className={`absolute inset-0 ${isHacker ? 'bg-[#000400]' : isLight ? 'bg-gradient-to-br from-blue-50 via-indigo-50/60 to-purple-50/50' : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'}`}></div>
-        <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00ff41]/5 animate-pulse' : isLight ? 'bg-gradient-to-br from-cyan-300/25 to-blue-300/20 animate-pulse' : 'bg-cyan-500/10 animate-pulse'}`}></div>
-        <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00cc32]/5 animate-pulse' : isLight ? 'bg-gradient-to-tl from-purple-300/25 to-indigo-300/20 animate-pulse' : 'bg-purple-500/10 animate-pulse'}`} style={{ animationDelay: '1s' }}></div>
+        <div className={`absolute inset-0 ${isHacker ? 'bg-[#000400]' : isLight ? 'bg-slate-50' : 'bg-slate-950'}`}></div>
+        <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00ff41]/5 animate-pulse' : isLight ? 'bg-cyan-300/15 animate-pulse' : 'bg-cyan-500/5 animate-pulse'}`}></div>
+        <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00cc32]/5 animate-pulse' : isLight ? 'bg-purple-300/15 animate-pulse' : 'bg-purple-500/5 animate-pulse'}`} style={{ animationDelay: '1s' }}></div>
         {isLight && (
           <>
-            <div className="absolute top-1/3 right-1/3 w-72 h-72 bg-gradient-to-br from-pink-300/15 to-rose-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
-            <div className="absolute bottom-1/4 left-1/2 w-80 h-80 bg-gradient-to-tr from-cyan-300/15 to-teal-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '6s' }}></div>
+            <div className="absolute top-1/3 right-1/3 w-72 h-72 bg-pink-300/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
+            <div className="absolute bottom-1/4 left-1/2 w-80 h-80 bg-cyan-300/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '6s' }}></div>
           </>
         )}
         {isHacker && (
@@ -214,7 +214,7 @@ export default function Achievements() {
         )}
         <div className={`absolute inset-0 ${isHacker ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgwLDI1NSw2NSwwLjA2KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-60" : isLight ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNikiIHN0cm9rZT0icmdpYiA2IDE4MiAyMTIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50" : "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"}`}></div>
         {particles.map(p => (
-          <div key={p.id} className="absolute rounded-full" style={{ left: `${p.x}%`, top: `${p.y}%`, width: `${p.size}px`, height: `${p.size}px`, opacity: isHacker ? p.opacity * 0.7 : isLight ? p.opacity * 0.5 : p.opacity, background: isHacker ? '#00ff41' : isLight ? 'linear-gradient(135deg, #06b6d4, #6366f1)' : '#06b6d4', boxShadow: isHacker ? `0 0 ${p.size * 8}px rgba(0, 255, 65, 0.6)` : isLight ? '0 0 14px rgba(6, 182, 212, 0.5)' : '0 0 10px rgba(6, 182, 212, 0.6)' }} />
+          <div key={p.id} className="absolute rounded-full" style={{ left: `${p.x}%`, top: `${p.y}%`, width: `${p.size}px`, height: `${p.size}px`, opacity: isHacker ? p.opacity * 0.7 : isLight ? p.opacity * 0.5 : p.opacity, background: isHacker ? '#00ff41' : isLight ? '#06b6d4' : '#06b6d4', boxShadow: isHacker ? `0 0 ${p.size * 8}px rgba(0, 255, 65, 0.6)` : isLight ? '0 0 14px rgba(6, 182, 212, 0.5)' : '0 0 10px rgba(6, 182, 212, 0.6)' }} />
         ))}
       </div>
 
@@ -228,7 +228,7 @@ export default function Achievements() {
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-8 leading-none">
               <span className={`block mb-4 ${isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>Leadership &</span>
-              <span className={`block ${isHacker ? 'text-[#00ff41] drop-shadow-[0_0_10px_rgba(0,255,65,0.5)]' : isLight ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 bg-clip-text text-transparent' : 'bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent'}`}>Recognition</span>
+              <span className={`block ${isHacker ? 'text-[#00ff41] drop-shadow-[0_0_10px_rgba(0,255,65,0.5)]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>Recognition</span>
             </h1>
             <p className={`text-lg md:text-xl max-w-4xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Building communities and making impact through technology</p>
           </div>
@@ -261,7 +261,7 @@ export default function Achievements() {
             </div>
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {categories.map((cat) => (
-                <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${activeCategory === cat.id ? isHacker ? 'bg-[#00ff41]/15 text-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.15)] scale-105' : isLight ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl scale-105' : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl scale-105' : isHacker ? 'bg-[#000a02]/80 text-[#00cc32]/50 border border-[#00ff41]/10 hover:scale-105' : isLight ? 'bg-white/70 text-slate-600 border border-slate-200 hover:scale-105' : 'bg-slate-900/50 text-slate-300 border border-slate-800 hover:scale-105'}`}>
+                <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${activeCategory === cat.id ? isHacker ? 'bg-[#00ff41]/15 text-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.15)] scale-105' : isLight ? 'bg-indigo-600 text-white shadow-xl scale-105' : 'bg-cyan-600 text-slate-950 shadow-xl scale-105' : isHacker ? 'bg-[#000a02]/80 text-[#00cc32]/50 border border-[#00ff41]/10 hover:scale-105' : isLight ? 'bg-white/70 text-slate-600 border border-slate-200 hover:scale-105' : 'bg-slate-900/50 text-slate-300 border border-slate-800 hover:scale-105'}`}>
                   <cat.icon className="w-4 h-4" />
                   <span>{cat.label}</span>
                   <span className={`px-2 py-0.5 rounded-full text-xs font-mono ${activeCategory === cat.id ? isHacker ? 'bg-[#00ff41]/20' : 'bg-white/20' : isHacker ? 'bg-[#00ff41]/10' : isLight ? 'bg-slate-100' : 'bg-slate-800'}`}>{cat.count}</span>
@@ -350,12 +350,12 @@ export default function Achievements() {
                       {prog.tags && (
                         <div className={`flex flex-wrap gap-2 pt-4 border-t ${isHacker ? 'border-[#00ff41]/10' : isLight ? 'border-slate-200' : 'border-slate-800'}`}>
                           {prog.tags.map((tag, j) => (
-                            <span key={j} className={`px-3 py-1.5 border rounded-lg text-xs font-medium ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/70' : isLight ? 'bg-purple-50 border-purple-200 text-purple-600' : 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30 text-purple-300'}`}>#{tag.toLowerCase().replace(' ', '_')}</span>
+                            <span key={j} className={`px-3 py-1.5 border rounded-lg text-xs font-medium ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/70' : isLight ? 'bg-purple-50 border-purple-200 text-purple-600' : 'bg-purple-950/40 border-purple-800 text-purple-300'}`}>#{tag.toLowerCase().replace(' ', '_')}</span>
                           ))}
                         </div>
                       )}
                     </div>
-                    <div className="h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    <div className={`h-1 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ${isHacker ? 'bg-[#00ff41]' : isLight ? 'bg-indigo-600' : 'bg-cyan-500'}`}></div>
                   </div>
                 ))}
               </div>
@@ -371,7 +371,7 @@ export default function Achievements() {
                 <Award className="w-4 h-4" />
                 <span>certificates.collection</span>
               </div>
-              <h2 className={`text-5xl font-black mb-6 ${isHacker ? 'text-[#00ff41]' : isLight ? 'bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500 bg-clip-text text-transparent' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>Professional Credentials</h2>
+              <h2 className={`text-5xl font-black mb-6 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>Professional Credentials</h2>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -418,19 +418,19 @@ export default function Achievements() {
         {/* CTA */}
         <section className="py-32 px-4">
           <div className="max-w-4xl mx-auto">
-            <div className={`relative p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40' : isLight ? 'bg-gradient-to-br from-purple-50/80 to-pink-50/60 border-purple-200 shadow-xl' : 'bg-gradient-to-br from-purple-900/30 to-pink-900/20 border-purple-500/30'}`}>
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${isHacker ? 'bg-[#00ff41]/[0.02]' : isLight ? 'bg-gradient-to-br from-purple-100/50 to-pink-100/30' : 'bg-gradient-to-br from-purple-500/10 to-pink-500/10'}`}></div>
+            <div className={`relative p-16 backdrop-blur-2xl border rounded-3xl overflow-hidden group ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/15 hover:border-[#00ff41]/40' : isLight ? 'bg-white border-slate-200 shadow-xl' : 'bg-slate-900/40 border-slate-800'}`}>
+              <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity ${isHacker ? 'bg-[#00ff41]/[0.02]' : isLight ? 'bg-slate-100/60' : 'bg-slate-800/10'}`}></div>
               <div className="relative z-10 text-center space-y-8">
                 <Star className={`w-20 h-20 mx-auto ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-500' : 'text-purple-400'}`} />
                 <div className="space-y-4">
-                  <h2 className={`text-5xl font-black ${isHacker ? 'text-[#00ff41]' : isLight ? 'bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 bg-clip-text text-transparent' : 'bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent'}`}>Let&apos;s Collaborate</h2>
+                  <h2 className={`text-5xl font-black ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>Let&apos;s Collaborate</h2>
                   <p className={`text-xl ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>Open to initiatives and partnerships</p>
                 </div>
-                <a href="mailto:m.h.ratul18@gmail.com" className={`inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-lg transition-all hover:scale-105 overflow-hidden relative ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white hover:shadow-2xl hover:shadow-purple-500/30' : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white hover:shadow-2xl hover:shadow-purple-500/30'}`}>
+                <a href="mailto:m.h.ratul18@gmail.com" className={`inline-flex items-center gap-3 px-10 py-5 rounded-xl font-bold text-lg transition-all hover:scale-105 overflow-hidden relative ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-indigo-600 hover:bg-indigo-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' : 'bg-cyan-600 hover:bg-cyan-500 text-slate-950 hover:shadow-2xl hover:shadow-cyan-500/30'}`}>
                   <Mail className="w-6 h-6 relative z-10" />
                   <span className="relative z-10 font-mono">send_message()</span>
                   <ChevronRight className="w-6 h-6 relative z-10" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
                 </a>
                 <div className="flex justify-center gap-4 pt-4">
                   {[
