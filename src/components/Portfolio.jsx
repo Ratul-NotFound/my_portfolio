@@ -76,7 +76,6 @@ const ScrollAnimatedCard = ({ children, className, index = 0 }) => {
     </motion.div>
   );
 };
-
 // ── Clip-path section reveal wrapper ──
 function SectionReveal({ children, delay = 0, className = '' }) {
   const ref = useRef(null);
@@ -151,15 +150,16 @@ const ScrollHeading = ({ children, className }) => {
 const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }) => {
   const clampedProgress = useTransform(progress, (p) => Math.min(1, Math.max(0, p)));
   const safeTotal = Math.max(1, total);
-  const start = 0.08 + (index / safeTotal) * 0.6;
-  const end = Math.min(1, start + 0.28);
+  // Wider stagger spread (0.38) for distinct one-by-one reveals, with a snappy duration (0.09)
+  const start = 0.02 + (index / safeTotal) * 0.38;
+  const end = Math.min(1, start + 0.09);
 
-  const scale = useTransform(clampedProgress, [start, end], [0.9, 1]);
+  const scale = useTransform(clampedProgress, [start, end], [0.94, 1]);
   const opacity = useTransform(clampedProgress, [start, end], [0.05, 1]);
-  const blurValue = useTransform(clampedProgress, [start, end], [12, 0]);
-  const y = useTransform(clampedProgress, [start, end], [90, 0]);
-  const x = useTransform(clampedProgress, [start, end], [-110, 0]);
-  const rotateZ = useTransform(clampedProgress, [start, end], [-1.5, 0]);
+  const blurValue = useTransform(clampedProgress, [start, end], [8, 0]);
+  const y = useTransform(clampedProgress, [start, end], [30, 0]);
+  const x = useTransform(clampedProgress, [start, end], [-25, 0]);
+  const rotateZ = useTransform(clampedProgress, [start, end], [-0.8, 0]);
 
   return (
     <motion.div
@@ -175,7 +175,8 @@ const TechGrid = ({ skills, isHacker, isLight }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"]
+    // Trigger progress to hit 1.0 when the element is 35% from the top of the viewport
+    offset: ["start end", "center 35%"]
   });
   const smoothProgress = useSpring(scrollYProgress, springConfig);
 
@@ -308,7 +309,6 @@ const ShufflingProjectWrapper = ({ children, index, total, progress }) => {
         </motion.div>
     );
 };
-
 // ── Scroll-parallax text ──
 function ParallaxHeading({ children, className = '' }) {
   const ref = useRef(null);
@@ -519,7 +519,6 @@ const Portfolio = () => {
     );
     setActiveProject(projects[activeIndex].id);
   });
-
 
   const fullText = "Building scalable systems with precision...";
 
@@ -1160,33 +1159,33 @@ const Portfolio = () => {
 
             {/* ── Tech Marquee Belt ── */}
             <div className="py-8 overflow-hidden">
-          {[
-            ['Next.js','React','TypeScript','Node.js','Python','TensorFlow','Docker','AWS','MongoDB','PostgreSQL','Redis','GraphQL','FastAPI','Kubernetes','PyTorch','OpenAI'],
-            ['System Design','CI/CD','Microservices','REST APIs','WebSockets','Redis Cache','JWT Auth','OAuth2','Stripe','Firebase','Vercel','Nginx','Linux','Git','LangChain','Whisper']
-          ].map((row, ri) => (
-            <div key={ri} className="ticker-container mb-3">
-              <div className={`marquee-track ${ri === 0 ? 'marquee-track--left' : 'marquee-track--right'}`}>
-                {[...row, ...row].map((tech, i) => (
-                  <span
-                    key={i}
-                    className={`inline-flex items-center gap-2 mx-3 px-4 py-2 rounded-full border text-sm font-medium whitespace-nowrap transition-colors cursor-default ${
-                      isHacker
-                        ? 'bg-[#000a02]/80 border-[#00ff41]/15 text-[#00cc32]/70 hover:text-[#00ff41] hover:border-[#00ff41]/40'
-                        : isLight
-                          ? 'bg-white/80 border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 shadow-sm'
-                          : 'bg-slate-900/60 border-slate-700 text-slate-400 hover:border-cyan-500/50 hover:text-cyan-300'
-                    }`}
-                  >
-                    <span className={`w-1.5 h-1.5 rounded-full ${isHacker ? 'bg-[#00ff41]' : ri === 0 ? 'bg-cyan-400' : 'bg-purple-400'}`} />
-                    {tech}
-                  </span>
-                ))}
-              </div>
+              {[
+                ['Next.js','React','TypeScript','Node.js','Python','TensorFlow','Docker','AWS','MongoDB','PostgreSQL','Redis','GraphQL','FastAPI','Kubernetes','PyTorch','OpenAI'],
+                ['System Design','CI/CD','Microservices','REST APIs','WebSockets','Redis Cache','JWT Auth','OAuth2','Stripe','Firebase','Vercel','Nginx','Linux','Git','LangChain','Whisper']
+              ].map((row, ri) => (
+                <div key={ri} className="ticker-container mb-3">
+                  <div className={`marquee-track ${ri === 0 ? 'marquee-track--left' : 'marquee-track--right'}`}>
+                    {[...row, ...row].map((tech, i) => (
+                      <span
+                        key={i}
+                        className={`inline-flex items-center gap-2 mx-3 px-4 py-2 rounded-full border text-sm font-medium whitespace-nowrap transition-colors cursor-default ${
+                          isHacker
+                            ? 'bg-[#000a02]/80 border-[#00ff41]/15 text-[#00cc32]/70 hover:text-[#00ff41] hover:border-[#00ff41]/40'
+                            : isLight
+                              ? 'bg-white/80 border-slate-200 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 shadow-sm'
+                              : 'bg-slate-900/60 border-slate-700 text-slate-400 hover:border-cyan-500/50 hover:text-cyan-300'
+                        }`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${isHacker ? 'bg-[#00ff41]' : ri === 0 ? 'bg-cyan-400' : 'bg-purple-400'}`} />
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
           </div>
-        </div>
-      </section>
+        </section>
 
         {/* Projects Section */}
         <section id="projects" ref={projectsRef} className="relative bg-transparent" style={{ height: `${projects.length * 100 + 100}vh` }}>
@@ -1197,7 +1196,7 @@ const Portfolio = () => {
               <ParallaxHeading>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3">
                   <span className={`kinetic-underline ${
-                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-650' : 'text-purple-400'
+                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'
                   }`}>Featured Work</span>
                 </h2>
               </ParallaxHeading>
@@ -1205,7 +1204,6 @@ const Portfolio = () => {
                 Real-world applications with measurable impact
               </p>
             </div>
-
 
             <div 
               className="relative w-full h-[400px] md:h-[450px] flex items-center justify-center shrink-0"
