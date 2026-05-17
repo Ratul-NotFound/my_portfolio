@@ -1920,8 +1920,8 @@ const Portfolio = () => {
   const stats = useMemo(() => ([
     { value: "3+", label: "Years", desc: "Experience", icon: TrendingUp },
     { value: "15+", label: "Projects", desc: "Deployed", icon: Rocket },
-    { value: "10K+", label: "Users", desc: "Active", icon: Star },
-    { value: "2K+", label: "Commits", desc: "GitHub", icon: Code2 }
+    { value: "5K+", label: "Users", desc: "Active", icon: Star },
+    { value: "500+", label: "Commits", desc: "GitHub", icon: Code2 }
   ]), []);
 
   const techStack = useMemo(() => ({
