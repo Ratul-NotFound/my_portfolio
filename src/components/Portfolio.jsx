@@ -2313,6 +2313,12 @@ const Portfolio = () => {
                       className={`group relative backdrop-blur-xl border rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl w-full h-full ${isHacker ? 'border-[#00ff41]/20 hover:border-[#00ff41]/60' : isLight ? 'border-slate-200 shadow-xl' : 'border-slate-700 shadow-cyan-500/10'}`}
                       style={{ backgroundColor: isHacker ? "#000a02" : isLight ? "#ffffff" : "#0f172a" }}
                     >
+                      {/* Decorative HUD Corner Brackets */}
+                      <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+                      <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+                      <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+                      <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 opacity-30 transition-all duration-500 group-hover:scale-110" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
+
                       <div className={`flex flex-col md:flex-row h-full transition-opacity duration-300 ${isBehind ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                       {/* Left: Image block (1/2 width) */}
                       <div className="relative w-full md:w-[42%] h-[160px] md:h-full bg-slate-800 overflow-hidden shrink-0">
@@ -2328,12 +2334,23 @@ const Portfolio = () => {
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
                         
+                        {/* Sweeping Project Laser Scanner Beam */}
+                        <motion.div 
+                          className="absolute left-0 right-0 h-[1.5px] z-10"
+                          style={{
+                            background: `linear-gradient(to right, transparent, ${isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee'}, transparent)`,
+                            boxShadow: `0 0 8px ${isHacker ? '#00ff41' : isLight ? '#818cf8' : '#22d3ee'}`,
+                            top: 0
+                          }}
+                          animate={{ top: ['0%', '98%', '0%'] }}
+                          transition={{ duration: 5.5, repeat: Infinity, ease: "linear" }}
+                        />
+
                         {/* Category badge */}
                         <div className="absolute top-4 left-4">
                           <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold text-white shadow-lg">
                             {project.category}
                           </span>
-
                         </div>
 
                         {/* Tech Logo */}
@@ -2350,45 +2367,51 @@ const Portfolio = () => {
                       </div>
 
                       {/* Right: Content block (1/2 width) */}
-                      <div className="w-full md:w-[58%] p-5 md:p-7 flex flex-col justify-between overflow-hidden">
+                      <div className="w-full md:w-[58%] p-5 md:p-7 flex flex-col justify-between overflow-hidden relative z-10">
                         <div className="space-y-3.5">
                           <div className="flex justify-between items-start gap-4">
                             <h3 className={`text-xl md:text-3xl font-black transition-colors leading-tight ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>
                               {project.title}
                             </h3>
                             
-                            {/* Project External Links */}
-                            <div className="flex gap-1.5 shrink-0 relative z-20">
-                              {project.links.code && (
-                                <a
-                                  href={project.links.code}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className={`p-2 border rounded-xl transition-all hover:scale-105 ${isHacker ? 'bg-black border-[#00ff41]/20 hover:border-[#00ff41]' : isLight ? 'bg-slate-50 border-slate-200 hover:border-indigo-400' : 'bg-slate-800/80 border-slate-700 hover:border-cyan-500'}`}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <Github className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-650' : 'text-white'}`} />
-                                </a>
-                              )}
-                              {project.links.live && project.links.live !== '#' && (
-                                <a
-                                  href={project.links.live}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="p-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl transition-all hover:scale-105 shadow-md shadow-cyan-500/20"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ExternalLink className="w-4 h-4 text-white" />
-                                </a>
-                              )}
+                            {/* Project External Links & Registry ID */}
+                            <div className="flex items-center gap-2 shrink-0 relative z-20">
+                              <span className="font-mono text-[8px] opacity-25 uppercase tracking-widest hidden lg:inline">
+                                REG_ID: 0x9F{project.id}
+                              </span>
+
+                              <div className="flex gap-1.5">
+                                {project.links.code && (
+                                  <a
+                                    href={project.links.code}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`p-2 border rounded-xl transition-all hover:scale-105 ${isHacker ? 'bg-black border-[#00ff41]/20 hover:border-[#00ff41]' : isLight ? 'bg-slate-50 border-slate-200 hover:border-indigo-400' : 'bg-slate-800/80 border-slate-700 hover:border-cyan-500'}`}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <Github className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-650' : 'text-white'}`} />
+                                  </a>
+                                )}
+                                {project.links.live && project.links.live !== '#' && (
+                                  <a
+                                    href={project.links.live}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl transition-all hover:scale-105 shadow-md shadow-cyan-500/20"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <ExternalLink className="w-4 h-4 text-white" />
+                                  </a>
+                                )}
+                              </div>
                             </div>
                           </div>
                           
-                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
+                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-650' : 'text-slate-350'}`}>
                             {project.description}
                           </p>
 
-                          {/* Metrics Grid */}
+                          {/* Metrics Grid with active pulsing indicator */}
                           <div className="grid grid-cols-2 gap-2.5">
                             {project.metrics.map((metric, j) => (
                               <div
@@ -2396,21 +2419,27 @@ const Portfolio = () => {
                                 className={`relative group/metric py-1.5 px-3 backdrop-blur-sm border rounded-xl text-center transition-all hover:scale-105 cursor-default overflow-hidden ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/10 hover:border-[#00ff41]/30' : isLight ? 'bg-indigo-50/50 border-indigo-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/30 border-slate-700 hover:border-cyan-500/50'}`}
                               >
                                 <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover/metric:opacity-10 transition-opacity`}></div>
-                                <span className={`relative text-xs font-bold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'}`}>{metric}</span>
+                                <div className="relative flex items-center justify-center gap-1.5">
+                                  <span className="relative flex h-1.5 w-1.5 shrink-0">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 animate-duration-1000" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
+                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
+                                  </span>
+                                  <span className={`text-[10px] sm:text-xs font-bold leading-none ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>{metric}</span>
+                                </div>
                               </div>
                             ))}
                           </div>
                         </div>
 
                         <div className="space-y-3 pt-3 border-t border-slate-800/20">
-                          {/* Tech list */}
+                          {/* Tech list wrapped inside compilation brackets */}
                           <div className="flex flex-wrap gap-1.5">
                             {project.tech.map((tech, j) => (
                               <span
                                 key={j}
-                                className={`px-2.5 py-1 border rounded-lg text-[10px] font-semibold transition-all ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/75 hover:border-[#00ff41]/35' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-650 hover:border-indigo-300' : 'bg-gradient-to-r from-cyan-500/5 to-purple-500/5 border-slate-700 text-slate-300 hover:border-cyan-500/40'}`}
+                                className={`px-2 py-0.5 border rounded-lg text-[9px] md:text-[10px] font-mono font-black transition-all ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/15 text-[#00ff41]/75 hover:border-[#00ff41]/35' : isLight ? 'bg-indigo-50 border-indigo-200 text-indigo-650 hover:border-indigo-300' : 'bg-[#0d1527]/60 border-slate-800 text-slate-400 hover:border-cyan-500/40'}`}
                               >
-                                {tech}
+                                [{tech}]
                               </span>
                             ))}
                           </div>
