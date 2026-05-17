@@ -2346,19 +2346,29 @@ const Portfolio = () => {
                           transition={{ duration: 5.5, repeat: Infinity, ease: "linear" }}
                         />
 
+                        {/* Live Cybernetic Telemetry Coordinates */}
+                        <div className="absolute bottom-3 left-4 font-mono text-[8px] opacity-75 tracking-wider text-white bg-black/60 backdrop-blur-md px-2 py-0.5 rounded border border-white/5 pointer-events-none select-none z-10 flex items-center gap-1.5">
+                          <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                          </span>
+                          <span>{`SYS.LATENCY: 12ms // CPU.ID_${project.id} // STAT: PASS`}</span>
+                        </div>
+
                         {/* Category badge */}
-                        <div className="absolute top-4 left-4">
+                        <div className="absolute top-4 left-4 z-10">
                           <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold text-white shadow-lg">
                             {project.category}
                           </span>
                         </div>
 
-                        {/* Tech Logo */}
-                        <div className="absolute top-4 right-4 w-9 h-9 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-1.5 group-hover:scale-105 transition-all duration-500 shadow-xl">
+                        {/* Tech Logo with spinning HUD Compass background */}
+                        <div className="absolute top-4 right-4 w-10 h-10 bg-black/45 backdrop-blur-md border border-white/10 rounded-xl p-2 group-hover:scale-110 transition-all duration-500 shadow-xl flex items-center justify-center z-10">
+                          <div className="absolute inset-0 border border-dashed rounded-lg opacity-25 animate-spin pointer-events-none" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee', animationDuration: '8s' }} />
                           <img
                             src={project.logo}
                             alt={`${project.title} logo`}
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-contain relative z-10"
                             onError={(e) => {
                               e.target.style.display = 'none';
                             }}
@@ -2368,9 +2378,22 @@ const Portfolio = () => {
 
                       {/* Right: Content block (1/2 width) */}
                       <div className="w-full md:w-[58%] p-5 md:p-7 flex flex-col justify-between overflow-hidden relative z-10">
-                        <div className="space-y-3.5">
+                        {/* Interactive circuit grid lines background */}
+                        <div className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-700 pointer-events-none z-0 overflow-hidden select-none" style={{ color: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }}>
+                          <svg className="w-full h-full text-current" fill="none" viewBox="0 0 100 100" stroke="currentColor" strokeWidth="0.8">
+                            <path d="M10,20 L30,20 L40,30 L70,30 L80,40" />
+                            <path d="M20,80 L40,80 L50,70 L80,70" strokeDasharray="2 2" />
+                            <circle cx="10" cy="20" r="1.5" fill="currentColor" />
+                            <circle cx="80" cy="40" r="1.5" fill="currentColor" />
+                            <circle cx="20" cy="80" r="1.5" fill="currentColor" />
+                            <circle cx="80" cy="70" r="1.5" fill="currentColor" />
+                          </svg>
+                        </div>
+
+                        <div className="space-y-3.5 relative z-10">
                           <div className="flex justify-between items-start gap-4">
                             <h3 className={`text-xl md:text-3xl font-black transition-colors leading-tight ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>
+                              <span className="font-mono text-xs md:text-sm mr-2 opacity-50 font-bold block sm:inline">[0{project.id}] //</span>
                               {project.title}
                             </h3>
                             
