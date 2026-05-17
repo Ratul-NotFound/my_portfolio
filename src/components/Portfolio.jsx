@@ -430,10 +430,10 @@ function HoloProfileCard({ isLight, isHacker }) {
       }}
       className={`group relative w-full max-w-lg mx-auto backdrop-blur-2xl border rounded-3xl p-6 md:p-8 space-y-6 transition-all duration-500 cursor-default select-none overflow-hidden ${
         isHacker
-          ? 'bg-[#000501]/95 border-[#00ff41]/25 hover:border-[#00ff41]/55 shadow-[0_0_40px_rgba(0,255,65,0.03)]'
+          ? 'bg-[#000401]/90 border-[#00ff41]/15 hover:border-[#00ff41]/45 shadow-[0_0_35px_rgba(0,255,65,0.02)]'
           : isLight
-            ? 'bg-white border-slate-250 hover:border-indigo-400 shadow-[0_20px_50px_rgba(0,0,0,0.06)]'
-            : 'bg-[#0c101d]/90 border-slate-800/80 hover:border-cyan-500/40 shadow-[0_25px_60px_rgba(0,0,0,0.45)]'
+            ? 'bg-white border-slate-200 shadow-2xl hover:border-indigo-400'
+            : 'bg-[#0d1323]/85 border-slate-900 shadow-2xl hover:border-cyan-500/30'
       }`}
     >
       {/* Refraction Overlay Glare */}
@@ -497,7 +497,7 @@ function HoloProfileCard({ isLight, isHacker }) {
       </div>
 
       {/* Main Tab Viewports */}
-      <div className="relative z-10 flex-grow py-2 md:min-h-[330px] min-h-[270px] flex flex-col justify-center" style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}>
+      <div className="relative z-10 flex-grow py-2 lg:min-h-[390px] md:min-h-[330px] min-h-[270px] flex flex-col justify-center" style={{ transform: 'translateZ(25px)', transformStyle: 'preserve-3d' }}>
         <AnimatePresence mode="wait">
           {activeTab === 'avatar' && (
             <motion.div
@@ -506,7 +506,7 @@ function HoloProfileCard({ isLight, isHacker }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4 }}
-              className="relative aspect-square md:max-w-[320px] max-w-[260px] mx-auto w-full rounded-2xl overflow-hidden border-4"
+              className="relative aspect-square lg:max-w-[380px] md:max-w-[320px] max-w-[260px] mx-auto w-full rounded-2xl overflow-hidden border-4"
               style={{
                 borderColor: isHacker ? 'rgba(0, 255, 65, 0.15)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)'
               }}
@@ -526,26 +526,10 @@ function HoloProfileCard({ isLight, isHacker }) {
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               />
 
-              {/* Retro Sci-Fi Digital Repeating Scan-line Overlay */}
-              <div 
-                className="absolute inset-0 z-10 pointer-events-none opacity-20"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%)`,
-                  backgroundSize: '100% 4px'
-                }}
-              />
-
               <img
                 src="/profile.jpg"
                 alt="Mahmud Hasan Ratul"
-                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-103"
-                style={{
-                  filter: isHacker
-                    ? "sepia(100%) hue-rotate(85deg) saturate(280%) contrast(105%) brightness(95%)"
-                    : isLight
-                      ? "brightness(102%) saturate(105%) contrast(98%)"
-                      : "hue-rotate(185deg) saturate(110%) contrast(102%) brightness(95%)"
-                }}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
                 onError={(e) => {
                   e.target.src = "/profile.jpg";
                 }}
@@ -596,7 +580,7 @@ function HoloProfileCard({ isLight, isHacker }) {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.4 }}
-              className={`p-4 rounded-xl border font-mono text-[10px] md:text-xs text-left overflow-auto md:max-h-[295px] max-h-[235px] w-full relative z-10 transition-colors duration-500 ${
+              className={`p-4 rounded-xl border font-mono text-[10px] md:text-xs text-left overflow-auto lg:max-h-[355px] md:max-h-[295px] max-h-[235px] w-full relative z-10 transition-colors duration-500 ${
                 isHacker 
                   ? 'bg-[#000a02] border-[#00ff41]/15 text-[#00ff41]' 
                   : isLight 
@@ -628,20 +612,20 @@ function HoloProfileCard({ isLight, isHacker }) {
       </div>
 
       {/* Footer Profile Details */}
-      <div className="relative z-10 text-left pt-3 border-t" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)', transform: 'translateZ(15px)' }}>
-        <div className="space-y-3.5">
-          <div className="flex flex-col gap-1">
-            <h3 className={`text-2xl sm:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>
+      <div className="relative z-10 text-left pt-2 border-t" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)', transform: 'translateZ(15px)' }}>
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-end">
+          <div>
+            <h3 className={`text-xl sm:text-2xl md:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'}`}>
               Mahmud Hasan Ratul
             </h3>
-            <p className={`flex items-center gap-2 text-xs font-mono ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <p className={`flex items-center gap-2 text-xs font-mono mt-1 ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
               <MapPin className="w-3.5 h-3.5" style={{ color: themeColors.accent }} />
               Dhaka, Bangladesh • Available
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-2.5 border-t" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.04)' : isLight ? '#f8fafc' : 'rgba(255,255,255,0.025)' }}>
-            {['Full Stack', 'AI ML', 'AI Automation', 'Research'].map((tag) => (
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            {['Full Stack', 'AI ML', 'Automation'].map((tag) => (
               <span
                 key={tag}
                 className={`px-2.5 py-0.5 sm:px-3 sm:py-1 border rounded-lg text-[9px] sm:text-[10px] font-mono font-bold tracking-wide select-none ${
@@ -2133,7 +2117,7 @@ const Portfolio = () => {
                   whileInView="show"
                   viewport={{ once: true, margin: '-80px' }}
                 >
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-none">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.6rem] xl:text-[5.2rem] font-black leading-none tracking-tight">
                     {['Building', 'Scalable', 'Systems', 'with AI'].map((word, i) => (
                       <div key={word} className="word-reveal-wrapper block">
                         <motion.span
