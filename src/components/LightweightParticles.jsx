@@ -107,6 +107,80 @@ export default function LightweightParticles() {
     // Cache font configuration to avoid recalculations inside the loop
     const cachedFont = theme === 'hacker' ? '500 11px "Fira Code", monospace' : '500 11px "JetBrains Mono", monospace';
 
+    // Dynamic token syntax highlighter mapping for authentic dark IDE coding vibe
+    const tokenizeText = (text, currentTheme) => {
+      let colors = {
+        keyword: '#c678dd',
+        function: '#61afef',
+        string: '#e5c07b',
+        variable: '#abb2bf',
+        type: '#56b6c2',
+        symbol: '#abb2bf'
+      };
+
+      if (currentTheme === 'creative') {
+        colors = {
+          keyword: '#ec4899',
+          function: '#0088ff',
+          string: '#00d8b4',
+          variable: '#ffffff',
+          type: '#0088ff',
+          symbol: 'rgba(255,255,255,0.4)'
+        };
+      } else if (currentTheme === 'light') {
+        colors = {
+          keyword: '#4f46e5',
+          function: '#0f172a',
+          string: '#06b6d4',
+          variable: '#312e81',
+          type: '#4f46e5',
+          symbol: '#64748b'
+        };
+      } else if (currentTheme === 'hacker') {
+        colors = {
+          keyword: '#c678dd', // Purple keyword
+          function: '#61afef', // Blue function
+          string: '#98c379', // Mint green strings/values
+          variable: '#e06c75', // Red variables
+          type: '#56b6c2', // Cyan types
+          symbol: '#abb2bf' // Soft grey symbols
+        };
+      } else {
+        colors = {
+          keyword: '#a855f7',
+          function: '#3b82f6',
+          string: '#06b6d4',
+          variable: '#f8fafc',
+          type: '#22d3ee',
+          symbol: '#64748b'
+        };
+      }
+
+      const tokens = [];
+      const parts = text.split(/(\s+|=|>|<|\(|\)|\[|\]|\{|\}|\.|\,)/g);
+      
+      parts.forEach(part => {
+        if (!part) return;
+        let color = colors.variable;
+        
+        if (/^(const|let|var|function|import|export|default|await|while|new|sudo|git|npm|process|docker-compose|sys|Ctrl)$/.test(part)) {
+          color = colors.keyword;
+        } else if (/^(log|generate|sync|resolve|push|run|checkout|random|getItem|sin|write|keys|useRef|useEffect|commit|apt|update)$/.test(part)) {
+          color = colors.function;
+        } else if (/^(".*"|true|false|\d+|FPS|NOT|FOUND|Antigravity|PORT|bin|adam|0\.0042|1e-4)$/.test(part)) {
+          color = colors.string;
+        } else if (/^(Object|GPT_5|Promise|AI|Math|localStorage|weights|state|dispatch|ref|inView|prev|data|response|target)$/.test(part)) {
+          color = colors.type;
+        } else if (/^(=|>|<|\(|\)|\[|\]|\{|\}|\.|\,|\+|-|\/)$/.test(part)) {
+          color = colors.symbol;
+        }
+        
+        tokens.push({ text: part, color });
+      });
+
+      return tokens;
+    };
+
     class Particle {
       constructor(w, h, text = null) {
         this.text = text;
@@ -122,6 +196,7 @@ export default function LightweightParticles() {
           this.radius = Math.random() * 3 + 5; 
           this.vx = (Math.random() - 0.5) * 0.12; 
           this.vy = (Math.random() - 0.5) * 0.12;
+          this.tokens = tokenizeText(this.text, theme);
         } else {
           this.radius = Math.random() * 1.5 + 0.6;
           this.vx = (Math.random() - 0.5) * 0.25; // Slower drift for elegance
@@ -164,9 +239,14 @@ export default function LightweightParticles() {
         if (this.text) {
           ctx.beginPath();
           ctx.font = cachedFont;
-          ctx.fillStyle = this.color;
           ctx.globalAlpha = this.opacity;
-          ctx.fillText(this.text, this.x, this.y);
+          
+          let currentX = this.x;
+          this.tokens.forEach(token => {
+            ctx.fillStyle = token.color;
+            ctx.fillText(token.text, currentX, this.y);
+            currentX += ctx.measureText(token.text).width;
+          });
         } else {
           ctx.beginPath();
           ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
