@@ -138,12 +138,12 @@ export default function LightweightParticles() {
         };
       } else if (currentTheme === 'hacker') {
         colors = {
-          keyword: '#c678dd', // Purple keyword
-          function: '#61afef', // Blue function
-          string: '#98c379', // Mint green strings/values
-          variable: '#e06c75', // Red variables
-          type: '#56b6c2', // Cyan types
-          symbol: '#abb2bf' // Soft grey symbols
+          keyword: '#ff79c6',   // Vibrant Dracula Neon Pink
+          function: '#00bfff',  // Vibrant Electric Neon Blue
+          string: '#ffb86c',    // Vibrant Neon Gold/Orange
+          variable: '#f8f8f2',  // Crisp Code White
+          type: '#39ff14',      // Vibrant Terminal Neon Green
+          symbol: '#e2e8f0'     // Bright Code Brackets/Operators
         };
       } else {
         colors = {
@@ -205,7 +205,10 @@ export default function LightweightParticles() {
         
         const colors = config.particleColors;
         this.color = colors[Math.floor(Math.random() * colors.length)];
-        this.opacity = this.text ? Math.random() * 0.1 + 0.1 : Math.random() * 0.3 + 0.2;
+        // Higher contrast opacity for the hacker/dev theme to preserve syntax highlighting separation over dark background
+        this.opacity = this.text 
+          ? (theme === 'hacker' ? Math.random() * 0.2 + 0.45 : Math.random() * 0.1 + 0.1) 
+          : (theme === 'hacker' ? Math.random() * 0.2 + 0.25 : Math.random() * 0.3 + 0.2);
       }
 
       update(w, h) {
