@@ -65,8 +65,16 @@ export default function LightweightParticles() {
       switch (currentTheme) {
         case 'hacker':
           return {
-            particleColors: ['#00ff41', '#00cc32'],
-            lineColor: 'rgba(0, 255, 65, 0.08)',
+            particleColors: [
+              '#61afef', // Keyword/Function Blue
+              '#c678dd', // Import/Control Flow Purple
+              '#e5c07b', // Variable/Class Yellow
+              '#98c379', // Comment/Constant Mint Green
+              '#e06c75', // Operator/String Pink-Red
+              '#56b6c2', // Type/Special Symbol Cyan
+              '#00ff41'  // Classic Terminal Green
+            ],
+            lineColor: 'rgba(97, 175, 239, 0.06)', // Subtle, elegant IDE-colored links
             maxDistance: 90,
             densityDivider: 18000, // lower divider = more particles
           };
