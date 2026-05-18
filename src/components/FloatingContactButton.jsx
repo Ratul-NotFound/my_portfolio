@@ -84,11 +84,11 @@ export default function FloatingContactButton() {
           {/* Waving floating action button */}
           <button
             onClick={handleClick}
-            className={`relative w-14 h-14 md:w-16 md:h-16 rounded-full border backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none ${styles.btnClass}`}
+            className={`relative w-16 h-16 md:w-[72px] md:h-[72px] rounded-full border backdrop-blur-md flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none ${styles.btnClass}`}
             aria-label="Scroll to contact section"
           >
             <Hand 
-              className={`w-6 h-6 md:w-7 md:h-7 transition-transform duration-300 group-hover:animate-wave`} 
+              className={`w-8 h-8 md:w-9 md:h-9 transition-transform duration-300 group-hover:animate-wave`} 
               style={{
                 transformOrigin: 'bottom right'
               }}
