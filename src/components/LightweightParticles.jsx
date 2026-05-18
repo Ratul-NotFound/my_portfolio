@@ -2,6 +2,21 @@
 import React, { useEffect, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
+const FLOATING_TEXTS = [
+  '404 NOT FOUND',
+  'git push --force',
+  'npm run dev',
+  '<Antigravity />',
+  'await brain.sync()',
+  'const [state, dispatch]',
+  'import { GPT_5 }',
+  'Object.assign()',
+  '120 FPS',
+  '() => resolve()',
+  'process.env.PORT',
+  'model.generate()'
+];
+
 export default function LightweightParticles() {
   const canvasRef = useRef(null);
   const { theme } = useTheme();
@@ -55,7 +70,8 @@ export default function LightweightParticles() {
     let config = getThemeConfig(theme);
 
     class Particle {
-      constructor(w, h) {
+      constructor(w, h, text = null) {
+        this.text = text;
         this.reset(w, h);
       }
 
@@ -63,16 +79,24 @@ export default function LightweightParticles() {
         this.x = Math.random() * w;
         // If starting fresh, randomize fully; if resetting on screen wrap, start at edges
         this.y = startAtEdge ? (Math.random() > 0.5 ? 0 : h) : Math.random() * h;
-        this.radius = Math.random() * 2 + 0.8;
-        this.vx = (Math.random() - 0.5) * 0.4;
-        this.vy = (Math.random() - 0.5) * 0.4;
+        
+        // Text particles can be slightly larger and move slower to be easily readable
+        if (this.text) {
+          this.radius = Math.random() * 4 + 6; 
+          this.vx = (Math.random() - 0.5) * 0.18; // Very slow ambient drift
+          this.vy = (Math.random() - 0.5) * 0.18;
+        } else {
+          this.radius = Math.random() * 2 + 0.8;
+          this.vx = (Math.random() - 0.5) * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.4;
+        }
         
         // Pick a random color from the current theme config
         const colors = config.particleColors;
         this.color = colors[Math.floor(Math.random() * colors.length)];
         
-        // Base opacity for soft fading
-        this.opacity = Math.random() * 0.4 + 0.3;
+        // Text opacity is more subtle/ghostly so it doesn't distract from actual content
+        this.opacity = this.text ? Math.random() * 0.12 + 0.12 : Math.random() * 0.4 + 0.3;
       }
 
       update(w, h) {
@@ -102,11 +126,20 @@ export default function LightweightParticles() {
       }
 
       draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.opacity;
-        ctx.fill();
+        if (this.text) {
+          ctx.beginPath();
+          const fontName = theme === 'hacker' ? '"Fira Code", monospace' : '"JetBrains Mono", monospace';
+          ctx.font = `500 11px ${fontName}`;
+          ctx.fillStyle = this.color;
+          ctx.globalAlpha = this.opacity;
+          ctx.fillText(this.text, this.x, this.y);
+        } else {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.globalAlpha = this.opacity;
+          ctx.fill();
+        }
       }
     }
 
@@ -119,10 +152,20 @@ export default function LightweightParticles() {
       const isMobile = window.innerWidth < 768 || (window.matchMedia('(pointer: coarse)').matches);
       const divider = isMobile ? config.densityDivider * 2.5 : config.densityDivider;
       
-      const count = Math.min(Math.floor(area / divider), 100); // Caps count at 100 to ensure performance
+      const count = Math.min(Math.floor(area / divider), 100); 
       
       particles = [];
-      for (let i = 0; i < count; i++) {
+      
+      // 1. Generate text particles first (between 6 and 10 depending on screen width)
+      const textCount = isMobile ? 4 : 8;
+      const selectedTexts = [...FLOATING_TEXTS].sort(() => 0.5 - Math.random()).slice(0, textCount);
+      
+      for (let i = 0; i < textCount; i++) {
+        particles.push(new Particle(w, h, selectedTexts[i]));
+      }
+
+      // 2. Generate regular particles
+      for (let i = 0; i < count - textCount; i++) {
         particles.push(new Particle(w, h));
       }
     };
