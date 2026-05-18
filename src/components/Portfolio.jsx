@@ -1836,13 +1836,20 @@ const Portfolio = () => {
   useEffect(() => {
     if (!isMounted) return;
 
-    // High performance cursor-spotlight follow via direct DOM style updates
+    // High performance cursor-spotlight follow via requestAnimationFrame throttling
+    let mouseTick = false;
     const handleMouse = (e) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      if (spotlightRef.current) {
-        spotlightRef.current.style.left = `${x}%`;
-        spotlightRef.current.style.top = `${y}%`;
+      if (!mouseTick) {
+        window.requestAnimationFrame(() => {
+          const x = (e.clientX / window.innerWidth) * 100;
+          const y = (e.clientY / window.innerHeight) * 100;
+          if (spotlightRef.current) {
+            spotlightRef.current.style.left = `${x}%`;
+            spotlightRef.current.style.top = `${y}%`;
+          }
+          mouseTick = false;
+        });
+        mouseTick = true;
       }
     };
 
@@ -1877,6 +1884,12 @@ const Portfolio = () => {
     }));
 
     const draw = () => {
+      // Freeze particle rendering on deep scroll to completely suspend graphics layer overhead
+      if (window.scrollY > 1100) {
+        animationFrame = requestAnimationFrame(draw);
+        return;
+      }
+      
       ctx.clearRect(0, 0, width, height);
       const now = Date.now();
 
