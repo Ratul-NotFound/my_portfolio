@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Download, Mail, Github, Linkedin, MapPin, Award, BookOpen, Briefcase, Code, Compass, FileText, Printer, CheckCircle, Eye, Columns } from 'lucide-react';
+import { Download, Mail, Github, Linkedin, MapPin, Award, BookOpen, Briefcase, Code, Compass, FileText, Printer, CheckCircle, Eye, Loader2 } from 'lucide-react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
@@ -47,9 +47,40 @@ export default function Resume() {
 
   // Toggle layout format: Modern Interactive vs. Standard Executive WYSIWYG
   const [isFormalView, setIsFormalView] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
-  const handleDownloadPDF = () => {
-    window.print();
+  // Direct programmatic vector PDF download using html2pdf.js
+  const handleDownloadPDF = async () => {
+    try {
+      setIsGeneratingPDF(true);
+      
+      // Dynamic import to bypass server-side rendering checks
+      const html2pdf = (await import('html2pdf.js')).default;
+      
+      // Target the pre-rendered offscreen formal resume node
+      const element = document.getElementById('formal-resume-document');
+      
+      const opt = {
+        margin:       [0.4, 0.4, 0.4, 0.4], // Clean standard formal margins
+        filename:     'Mahmud_Hasan_Ratul_CV.pdf',
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { 
+          scale: 2.2, // Crisp, ultra high-resolution text vectors
+          useCORS: true, 
+          letterRendering: true,
+          logging: false 
+        },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      
+      await html2pdf().set(opt).from(element).save();
+    } catch (error) {
+      console.error('PDF Generation Error:', error);
+      // Fallback to browser print if script failed
+      window.print();
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   useEffect(() => {
@@ -152,121 +183,173 @@ export default function Resume() {
     { name: 'Full Stack Web Development Professional', issuer: 'Meta', date: 'Sep 2023' }
   ];
 
+  // Helper component to render the formal paper layout identically (used both on screen and offscreen)
+  const FormalResumeLayout = ({ id }) => (
+    <div id={id} className="bg-white text-slate-900 p-12 md:p-16 max-w-[8.5in] min-h-[11in] font-serif border border-slate-200 print:border-none print:p-0 print:m-0" style={{ width: '8.5in' }}>
+      
+      {/* Centered Name and Subtitles */}
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-bold font-serif text-slate-950 tracking-tight" style={{ fontSize: '24px' }}>{info.name}</h1>
+        <p className="text-sm text-slate-700 font-serif italic mt-1">{info.title}</p>
+        
+        {/* Center contacts row */}
+        <div className="flex flex-wrap justify-center items-center gap-3 text-xs text-slate-600 font-sans mt-2 font-medium">
+          <span>{info.location}</span>
+          <span>•</span>
+          <a href={`mailto:${info.email}`} className="hover:text-indigo-650 hover:underline">{info.email}</a>
+          <span>•</span>
+          <a href={`https://${info.github}`} target="_blank" rel="noreferrer" className="hover:text-indigo-650 hover:underline">{info.github}</a>
+          <span>•</span>
+          <a href={`https://${info.linkedin}`} target="_blank" rel="noreferrer" className="hover:text-indigo-650 hover:underline">{info.linkedin}</a>
+        </div>
+      </div>
+
+      {/* Profile Summary */}
+      <section className="mb-6">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2 font-serif">
+          Professional Summary
+        </h2>
+        <p className="text-xs text-slate-800 text-justify leading-relaxed">
+          {info.summary}
+        </p>
+      </section>
+
+      {/* Technical Skills Block */}
+      <section className="mb-6">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2 font-serif">
+          Technical Stack
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {skills.map((skillGroup) => (
+            <div key={skillGroup.category}>
+              <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-slate-500 mb-1">
+                {skillGroup.category}
+              </h3>
+              <p className="text-xs text-slate-800 leading-normal font-sans">
+                {skillGroup.items.join(', ')}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Experiences Block */}
+      <section className="mb-6">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3 font-serif">
+          Professional Experience
+        </h2>
+        <div className="space-y-4">
+          {experience.map((exp) => (
+            <div key={exp.role} className="page-break-inside-avoid">
+              <div className="flex justify-between items-center gap-2">
+                <h3 className="text-xs font-bold text-slate-950 font-serif">{exp.role}</h3>
+                <span className="text-xs font-sans font-medium text-slate-600">{exp.duration}</span>
+              </div>
+              <div className="flex justify-between items-center text-xs italic text-slate-700 mt-0.5">
+                <span>{exp.org}</span>
+                <span className="font-sans font-medium not-italic text-[10px] text-slate-500">{exp.location}</span>
+              </div>
+              <ul className="list-disc pl-5 mt-2 space-y-1">
+                {exp.bullets.map((bullet, idx) => (
+                  <li key={idx} className="text-xs text-slate-800 text-justify leading-normal">
+                    {bullet}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Projects Block */}
+      <section className="mb-6">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3 font-serif">
+          Featured Projects
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {projects.map((proj) => (
+            <div key={proj.title} className="page-break-inside-avoid">
+              <div className="flex justify-between items-center">
+                <h3 className="text-xs font-bold text-slate-950 font-serif">{proj.title}</h3>
+                <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-405">{proj.category}</span>
+              </div>
+              <p className="text-[10px] font-sans text-slate-500 mt-0.5">
+                <span className="font-bold">Technologies:</span> {proj.tech}
+              </p>
+              <p className="text-xs text-slate-700 mt-1.5 leading-normal text-justify">
+                {proj.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Awards & Certificates */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="page-break-inside-avoid">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2 font-serif">
+            Honors & Awards
+          </h2>
+          {achievements.map((ach) => (
+            <div key={ach.title} className="space-y-0.5">
+              <div className="flex justify-between items-center text-xs">
+                <h3 className="font-bold text-slate-955">{ach.title}</h3>
+                <span className="text-slate-500 text-[10px] font-sans">{ach.date}</span>
+              </div>
+              <p className="text-xs italic text-indigo-700">{ach.issuer}</p>
+              <p className="text-[11px] text-slate-700 mt-0.5 leading-relaxed">{ach.desc}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="page-break-inside-avoid">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2 font-serif">
+            Certifications
+          </h2>
+          <div className="space-y-2">
+            {certificates.map((cert) => (
+              <div key={cert.name} className="flex justify-between items-start text-xs gap-2">
+                <div>
+                  <h3 className="font-bold text-slate-950 leading-tight">{cert.name}</h3>
+                  <p className="text-[10px] text-slate-500">{cert.issuer}</p>
+                </div>
+                <span className="text-slate-500 text-[10px] font-sans shrink-0">{cert.date}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+    </div>
+  );
+
   return (
     <div className={`min-h-screen ${isHacker ? 'bg-[#000600] text-[#00ff41]' : isCreative ? 'bg-[#030303] text-white' : isLight ? 'bg-slate-50 text-slate-900' : 'bg-slate-950 text-white'} relative overflow-hidden print:bg-white print:text-black`}>
       
-      {/* Pristine, Ivy-League Standard print rules. Configures letter paper sizes, exact page breaks, and clean margins */}
+      {/* Dynamic print settings to hide layout and clean margins during fallback window.print() */}
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          /* Force pure black-and-white formal serif rendering */
-          * {
-            background: transparent !important;
-            color: #000000 !important;
-            box-shadow: none !important;
-            text-shadow: none !important;
-            transition: none !important;
-          }
-          
-          /* Setup perfect margins and letter layout */
-          @page {
-            size: letter;
-            margin: 0.65in 0.65in 0.65in 0.65in;
-          }
-          
-          body, html, main {
-            background: #ffffff !important;
-            color: #111111 !important;
-            font-family: "Georgia", "Times New Roman", Times, serif !important;
-            font-size: 10.5px !important;
-            line-height: 1.45 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            -webkit-print-color-adjust: exact;
-          }
-          
-          /* Hide all navigational elements, background canvas and buttons */
-          .no-print, nav, footer, .custom-cursor, #floating-contact-btn, .theme-toggle-btn {
+          .no-print, nav, footer, .custom-cursor, #floating-contact-btn {
             display: none !important;
           }
-          
-          /* Standardize CV container */
-          .print-container {
-            max-width: 100% !important;
-            width: 100% !important;
-            padding: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
+          body, html, main {
             background: #ffffff !important;
-          }
-          
-          a {
-            text-decoration: none !important;
-            color: #111111 !important;
-          }
-          
-          /* Bold section headers with centered alignment */
-          .formal-title {
-            text-align: center !important;
-            font-size: 20px !important;
-            font-family: "Georgia", Times, serif !important;
-            font-weight: 700 !important;
-            letter-spacing: 0.5px !important;
-            margin-bottom: 2px !important;
-          }
-          
-          .formal-subtitle {
-            text-align: center !important;
-            font-size: 11px !important;
-            font-family: "Georgia", Times, serif !important;
-            font-weight: normal !important;
-            margin-bottom: 6px !important;
-          }
-          
-          .formal-section-header {
-            font-size: 12px !important;
-            font-family: "Georgia", Times, serif !important;
-            font-weight: bold !important;
-            text-transform: uppercase !important;
-            letter-spacing: 0.8px !important;
-            margin-top: 15px !important;
-            margin-bottom: 4px !important;
-            border-bottom: 1.5px solid #222222 !important;
-            padding-bottom: 2px !important;
-            width: 100% !important;
-          }
-          
-          /* Prevent cut-off sections on page boundaries */
-          section, .timeline-block, .project-card {
-            page-break-inside: avoid !important;
-          }
-          
-          /* Double-column skills clean separator */
-          .skills-grid-print {
-            display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 10px !important;
-          }
-          
-          .bullet-list {
-            margin-top: 4px !important;
-            padding-left: 15px !important;
-            list-style-type: disc !important;
-          }
-          
-          .bullet-point-li {
-            display: list-item !important;
-            text-align: justify !important;
-            margin-bottom: 3px !important;
+            color: #000000 !important;
           }
         }
       `}} />
 
-      {/* Ambient background particles for interactive web view */}
+      {/* Dynamic Swaying Node Canvas */}
       <div className="no-print">
         <LightweightParticles />
       </div>
 
       <Navbar />
+
+      {/* MASTER FORMAL CV CANVAS: Rendered strictly off-screen so computed layout is fully active, allowing html2pdf/html2canvas to compile it flawlessly! */}
+      <div className="no-print" style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+        <FormalResumeLayout id="formal-resume-document" />
+      </div>
 
       <main className="max-w-6xl mx-auto px-4 pt-32 pb-24 relative z-10 print:p-0 print:pt-0">
         
@@ -278,11 +361,11 @@ export default function Resume() {
               <span>ATS-Optimized Executive Format</span>
             </div>
             <h1 className={`text-2xl md:text-3xl font-bold tracking-tight ${isHacker ? 'font-mono' : ''}`}>Curriculum Vitae</h1>
-            <p className="text-slate-450 text-sm">Preview in modern theme or switch to standard paper preview before printing.</p>
+            <p className="text-slate-450 text-sm">Download a professional formal PDF or toggle A4 paper preview.</p>
           </div>
           
           <div className="flex flex-wrap gap-3">
-            {/* WYSIWYG View Toggle Switch */}
+            {/* Toggle formal paper format preview */}
             <button
               onClick={() => setIsFormalView(!isFormalView)}
               className={`inline-flex items-center gap-2.5 px-5 py-3 rounded-xl font-mono text-sm border transition-all ${isFormalView ? 'bg-white text-slate-900 border-white shadow-lg' : 'bg-white/5 text-slate-300 border-white/10 hover:bg-white/10'}`}
@@ -291,14 +374,23 @@ export default function Resume() {
               <span>{isFormalView ? 'View Modern UI' : 'Preview Paper PDF'}</span>
             </button>
 
-            {/* Premium Direct PDF Trigger */}
+            {/* Direct Programmatic PDF Download Trigger */}
             <button
               onClick={handleDownloadPDF}
-              className={`group inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)]' : isLight ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/15' : 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white hover:shadow-lg hover:shadow-cyan-500/20'}`}
+              disabled={isGeneratingPDF}
+              className={`group inline-flex items-center gap-3 px-6 py-3.5 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)]' : isLight ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/15' : 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white hover:shadow-lg hover:shadow-cyan-500/20'}`}
             >
-              <Printer className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-              <span>Print / Download PDF</span>
-              <Download className="w-3.5 h-3.5 opacity-70" />
+              {isGeneratingPDF ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <span>Compiling PDF...</span>
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+                  <span>Download Resume PDF</span>
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -306,212 +398,77 @@ export default function Resume() {
         {/* Executive Curriculum Vitae Dynamic Layout */}
         {isFormalView ? (
           
-          /* Formal Executive Paper Presentation (WYSIWYG PDF Preview Mode) */
-          <div className="print-container bg-white text-slate-900 shadow-2xl rounded-2xl mx-auto p-12 md:p-16 max-w-[8.5in] min-h-[11in] font-serif border border-slate-200">
-            
-            {/* Centered Name and Subtitles */}
-            <div className="text-center mb-6">
-              <h1 className="formal-title text-3xl font-bold font-serif text-slate-950 tracking-tight">{info.name}</h1>
-              <p className="formal-subtitle text-sm text-slate-700 font-serif italic mt-1">{info.title}</p>
-              
-              {/* Center contacts row */}
-              <div className="flex flex-wrap justify-center items-center gap-3 text-xs text-slate-600 font-sans mt-2 font-medium">
-                <span>{info.location}</span>
-                <span>•</span>
-                <a href={`mailto:${info.email}`} className="hover:text-indigo-650 hover:underline">{info.email}</a>
-                <span>•</span>
-                <a href={`https://${info.github}`} target="_blank" rel="noreferrer" className="hover:text-indigo-650 hover:underline">{info.github}</a>
-                <span>•</span>
-                <a href={`https://${info.linkedin}`} target="_blank" rel="noreferrer" className="hover:text-indigo-650 hover:underline">{info.linkedin}</a>
-              </div>
-            </div>
-
-            {/* Profile Summary */}
-            <section className="mb-6">
-              <h2 className="formal-section-header text-sm font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2">
-                Professional Summary
-              </h2>
-              <p className="text-xs text-slate-800 text-justify leading-relaxed">
-                {info.summary}
-              </p>
-            </section>
-
-            {/* Technical Skills Block */}
-            <section className="mb-6">
-              <h2 className="formal-section-header text-sm font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2">
-                Technical Stack
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {skills.map((skillGroup) => (
-                  <div key={skillGroup.category}>
-                    <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-slate-500 mb-1">
-                      {skillGroup.category}
-                    </h3>
-                    <p className="text-xs text-slate-800 leading-normal font-sans">
-                      {skillGroup.items.join(', ')}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Experiences Block */}
-            <section className="mb-6">
-              <h2 className="formal-section-header text-sm font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3">
-                Professional Experience
-              </h2>
-              <div className="space-y-4">
-                {experience.map((exp) => (
-                  <div key={exp.role} className="timeline-block">
-                    <div className="flex justify-between items-center gap-2">
-                      <h3 className="text-xs font-bold text-slate-950 font-serif">{exp.role}</h3>
-                      <span className="text-xs font-sans font-medium text-slate-600">{exp.duration}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-xs italic text-slate-700 mt-0.5">
-                      <span>{exp.org}</span>
-                      <span className="font-sans font-medium not-italic text-[10px] text-slate-500">{exp.location}</span>
-                    </div>
-                    <ul className="list-disc pl-5 mt-2 space-y-1">
-                      {exp.bullets.map((bullet, idx) => (
-                        <li key={idx} className="bullet-point-li text-xs text-slate-800 text-justify leading-normal">
-                          {bullet}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Projects Block */}
-            <section className="mb-6">
-              <h2 className="formal-section-header text-sm font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-3">
-                Featured Projects
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {projects.map((proj) => (
-                  <div key={proj.title} className="project-card">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-xs font-bold text-slate-950 font-serif">{proj.title}</h3>
-                      <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-400">{proj.category}</span>
-                    </div>
-                    <p className="text-[10px] font-sans text-slate-500 mt-0.5">
-                      <span className="font-bold">Technologies:</span> {proj.tech}
-                    </p>
-                    <p className="text-xs text-slate-750 mt-1.5 leading-normal text-justify">
-                      {proj.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Awards & Certificates */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <section>
-                <h2 className="formal-section-header text-sm font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2">
-                  Honors & Awards
-                </h2>
-                {achievements.map((ach) => (
-                  <div key={ach.title} className="space-y-0.5">
-                    <div className="flex justify-between items-center text-xs">
-                      <h3 className="font-bold text-slate-950">{ach.title}</h3>
-                      <span className="text-slate-500 text-[10px] font-sans">{ach.date}</span>
-                    </div>
-                    <p className="text-xs italic text-indigo-700">{ach.issuer}</p>
-                    <p className="text-[11px] text-slate-750 mt-0.5 leading-relaxed">{ach.desc}</p>
-                  </div>
-                ))}
-              </section>
-
-              <section>
-                <h2 className="formal-section-header text-sm font-bold uppercase tracking-wider text-slate-900 border-b-2 border-slate-900 pb-0.5 mb-2">
-                  Certifications
-                </h2>
-                <div className="space-y-2">
-                  {certificates.map((cert) => (
-                    <div key={cert.name} className="flex justify-between items-start text-xs gap-2">
-                      <div>
-                        <h3 className="font-bold text-slate-950 leading-tight">{cert.name}</h3>
-                        <p className="text-[10px] text-slate-500">{cert.issuer}</p>
-                      </div>
-                      <span className="text-slate-500 text-[10px] font-sans shrink-0">{cert.date}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </div>
-
+          /* Formal Executive Paper Presentation (WYSIWYG on Screen) */
+          <div className="flex justify-center bg-transparent no-print">
+            <FormalResumeLayout id="formal-screen-view" />
           </div>
 
         ) : (
           
-          /* Modern Interactive Theme View (Matching Hacker/Creative/Dark portfolio layouts) */
+          /* Modern Interactive Portfolio Theme View */
           <div className={`print-container bg-white/30 backdrop-blur-xl border rounded-3xl p-8 md:p-14 shadow-2xl transition-all duration-500 ${isHacker ? 'bg-black/90 border-[#00ff41]/10 hover:border-[#00ff41]/20 shadow-[#00ff41]/5' : isLight ? 'bg-white border-slate-200/80 shadow-slate-100' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'} print:border-none print:shadow-none print:p-0 print:bg-white`}>
             
             {/* Header Block */}
-            <header className="border-b border-slate-800/20 pb-8 mb-8 print:pb-4 print:mb-4 print:border-black">
+            <header className="border-b border-slate-800/20 pb-8 mb-8">
               <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                 <div>
-                  <h1 className={`text-3xl md:text-5xl font-black tracking-tight ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-900' : 'text-white'} print:text-black print:text-3xl print:font-bold`}>
+                  <h1 className={`text-3xl md:text-5xl font-black tracking-tight ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-900' : 'text-white'}`}>
                     {info.name}
                   </h1>
-                  <p className={`text-lg md:text-xl mt-2 font-mono font-medium ${isHacker ? 'text-[#39ff14]' : isLight ? 'text-indigo-650' : 'text-cyan-400'} print:text-black print:text-sm print:mt-1`}>
+                  <p className={`text-lg md:text-xl mt-2 font-mono font-medium ${isHacker ? 'text-[#39ff14]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>
                     {info.title}
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 font-mono text-sm text-slate-455 print:text-black print:text-[10px] print:items-end">
+                <div className="flex flex-col gap-2 font-mono text-sm text-slate-455">
                   <span className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-slate-500 print:hidden" />
+                    <MapPin className="w-4 h-4 text-slate-500" />
                     <span>{info.location}</span>
                   </span>
                   <span className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-slate-500 print:hidden" />
-                    <a href={`mailto:${info.email}`} className="hover:text-cyan-400 print:hover:text-black">{info.email}</a>
+                    <Mail className="w-4 h-4 text-slate-500" />
+                    <a href={`mailto:${info.email}`} className="hover:text-cyan-400">{info.email}</a>
                   </span>
                   <span className="flex items-center gap-2">
-                    <Github className="w-4 h-4 text-slate-500 print:hidden" />
-                    <a href={`https://${info.github}`} target="_blank" rel="noreferrer" className="hover:text-cyan-400 print:hover:text-black">{info.github}</a>
+                    <Github className="w-4 h-4 text-slate-500" />
+                    <a href={`https://${info.github}`} target="_blank" rel="noreferrer" className="hover:text-cyan-400">{info.github}</a>
                   </span>
                   <span className="flex items-center gap-2">
-                    <Linkedin className="w-4 h-4 text-slate-500 print:hidden" />
-                    <a href={`https://${info.linkedin}`} target="_blank" rel="noreferrer" className="hover:text-cyan-400 print:hover:text-black">{info.linkedin}</a>
+                    <Linkedin className="w-4 h-4 text-slate-500" />
+                    <a href={`https://${info.linkedin}`} target="_blank" rel="noreferrer" className="hover:text-cyan-400">{info.linkedin}</a>
                   </span>
                 </div>
               </div>
             </header>
 
             {/* Executive Summary */}
-            <section className="mb-8 print:mb-4">
-              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'} print:text-black print:text-sm print:mb-1 print:font-bold`}>
-                <Compass className="w-5 h-5 text-slate-500 print:hidden" />
+            <section className="mb-8">
+              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                <Compass className="w-5 h-5 text-slate-500" />
                 <span>Professional Summary</span>
               </h2>
-              <div className="section-divider hidden print:block"></div>
-              <p className={`text-base leading-relaxed ${isLight ? 'text-slate-600' : 'text-slate-300'} print:text-black print:text-justify`}>
+              <p className={`text-base leading-relaxed ${isLight ? 'text-slate-650' : 'text-slate-350'}`}>
                 <SyntaxHighlight text={info.summary} isHacker={isHacker} />
               </p>
             </section>
 
             {/* Core Skills Grid */}
-            <section className="mb-8 print:mb-4">
-              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'} print:text-black print:text-sm print:mb-1 print:font-bold`}>
-                <Code className="w-5 h-5 text-slate-500 print:hidden" />
+            <section className="mb-8">
+              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                <Code className="w-5 h-5 text-slate-500" />
                 <span>Core Technical Stack</span>
               </h2>
-              <div className="section-divider hidden print:block"></div>
               
-              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 print:grid-cols-4 print:gap-2">
+              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
                 {skills.map((skillGroup) => (
-                  <div key={skillGroup.category} className={`p-4 border rounded-xl bg-white/5 border-white/5 print:border-none print:bg-transparent print:p-0`}>
-                    <h3 className="font-mono text-xs text-slate-500 uppercase tracking-widest mb-2.5 print:mb-1 print:text-[9px] print:font-bold">
+                  <div key={skillGroup.category} className={`p-4 border rounded-xl bg-white/5 border-white/5`}>
+                    <h3 className="font-mono text-xs text-slate-500 uppercase tracking-widest mb-2.5">
                       {skillGroup.category}
                     </h3>
-                    <div className="flex flex-wrap gap-1.5 print:gap-1">
+                    <div className="flex flex-wrap gap-1.5">
                       {skillGroup.items.map((item) => (
                         <span
                           key={item}
-                          className={`text-xs px-2.5 py-1 rounded-md font-mono transition-all duration-300 border bg-white/5 border-white/10 text-slate-300 print:border-none print:bg-transparent print:p-0 print:text-black print:after:content-[",_"] print:last:after:content-none`}
+                          className={`text-xs px-2.5 py-1 rounded-md font-mono transition-all duration-300 border bg-white/5 border-white/10 text-slate-300`}
                         >
                           {item}
                         </span>
@@ -523,37 +480,36 @@ export default function Resume() {
             </section>
 
             {/* Experience Timeline */}
-            <section className="mb-8 print:mb-4">
-              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'} print:text-black print:text-sm print:mb-1 print:font-bold`}>
-                <Briefcase className="w-5 h-5 text-slate-500 print:hidden" />
+            <section className="mb-8">
+              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                <Briefcase className="w-5 h-5 text-slate-500" />
                 <span>Professional & Leadership Experience</span>
               </h2>
-              <div className="section-divider hidden print:block"></div>
 
-              <div className="space-y-6 print:space-y-3">
+              <div className="space-y-6">
                 {experience.map((exp) => (
                   <div key={exp.role} className="relative group">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
-                      <h3 className={`text-lg font-bold ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-909' : 'text-white'} print:text-black print:text-xs print:font-bold`}>
+                      <h3 className={`text-lg font-bold ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-900' : 'text-white'}`}>
                         {exp.role}
                       </h3>
-                      <span className="text-sm font-mono text-slate-500 print:text-black print:text-[10px]">
+                      <span className="text-sm font-mono text-slate-500">
                         {exp.duration}
                       </span>
                     </div>
                     
-                    <div className="flex flex-col sm:flex-row justify-between items-start gap-1 font-mono text-xs mt-1 text-slate-500 print:text-black print:text-[9px]">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-1 font-mono text-xs mt-1 text-slate-500">
                       <span className="font-semibold">{exp.org}</span>
                       <span>{exp.location}</span>
                     </div>
 
-                    <ul className="mt-3 space-y-1.5 print:mt-1 print:space-y-0.5">
+                    <ul className="mt-3 space-y-1.5">
                       {exp.bullets.map((bullet, index) => (
                         <li
                           key={index}
-                          className={`bullet-point text-sm flex items-start gap-2.5 leading-relaxed text-slate-400 print:text-black print:text-[10px]`}
+                          className={`text-sm flex items-start gap-2.5 leading-relaxed text-slate-400`}
                         >
-                          <CheckCircle className="w-4 h-4 mt-0.5 text-[#39ff14]/30 shrink-0 print:hidden" />
+                          <CheckCircle className="w-4 h-4 mt-0.5 text-[#39ff14]/30 shrink-0" />
                           <span>
                             <SyntaxHighlight text={bullet} isHacker={isHacker} />
                           </span>
@@ -566,31 +522,30 @@ export default function Resume() {
             </section>
 
             {/* Featured Projects */}
-            <section className="mb-8 print:mb-4">
-              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'} print:text-black print:text-sm print:mb-1 print:font-bold`}>
-                <Award className="w-5 h-5 text-slate-500 print:hidden" />
+            <section className="mb-8">
+              <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                <Award className="w-5 h-5 text-slate-500" />
                 <span>Featured Engineering Projects</span>
               </h2>
-              <div className="section-divider hidden print:block"></div>
 
-              <div className="grid sm:grid-cols-2 gap-6 print:grid-cols-2 print:gap-x-4 print:gap-y-2">
+              <div className="grid sm:grid-cols-2 gap-6">
                 {projects.map((proj) => (
                   <div
                     key={proj.title}
-                    className={`p-5 border rounded-2xl bg-white/5 border-white/5 print:border-none print:bg-transparent print:p-0`}
+                    className={`p-5 border rounded-2xl bg-white/5 border-white/5`}
                   >
                     <div className="flex justify-between items-center gap-2">
-                      <h3 className={`font-bold ${isHacker ? 'font-mono text-[#00bfff]' : isLight ? 'text-indigo-650' : 'text-cyan-400'} print:text-black print:text-xs print:font-bold`}>
+                      <h3 className={`font-bold ${isHacker ? 'font-mono text-[#00bfff]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>
                         {proj.title}
                       </h3>
-                      <span className="text-xs font-mono text-slate-500 uppercase tracking-wider print:text-black print:text-[8px]">
+                      <span className="text-xs font-mono text-slate-500 uppercase tracking-wider">
                         {proj.category}
                       </span>
                     </div>
-                    <p className="text-[11px] font-mono text-[#abb2bf]/60 mt-1 print:text-black print:text-[8px]">
+                    <p className="text-[11px] font-mono text-[#abb2bf]/60 mt-1">
                       <span className="font-semibold">Stack:</span> {proj.tech}
                     </p>
-                    <p className="text-xs text-slate-400 mt-2 print:text-black print:text-[10px] print:mt-1">
+                    <p className="text-xs text-slate-400 mt-2">
                       <SyntaxHighlight text={proj.desc} isHacker={isHacker} />
                     </p>
                   </div>
@@ -599,30 +554,29 @@ export default function Resume() {
             </section>
 
             {/* Awards & Certifications */}
-            <div className="grid sm:grid-cols-2 gap-8 print:grid-cols-2 print:gap-x-4 print:gap-0">
+            <div className="grid sm:grid-cols-2 gap-8">
               {/* Achievements */}
-              <section className="print:mb-4">
-                <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'} print:text-black print:text-sm print:mb-1 print:font-bold`}>
-                  <Award className="w-5 h-5 text-slate-500 print:hidden" />
+              <section>
+                <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                  <Award className="w-5 h-5 text-slate-500" />
                   <span>Honors & Awards</span>
                 </h2>
-                <div className="section-divider hidden print:block"></div>
 
-                <div className="space-y-4 print:space-y-1">
+                <div className="space-y-4">
                   {achievements.map((ach) => (
                     <div key={ach.title}>
                       <div className="flex justify-between items-start gap-2">
-                        <h3 className={`font-bold ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-900' : 'text-white'} print:text-black print:text-xs print:font-bold`}>
+                        <h3 className={`font-bold ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-900' : 'text-white'}`}>
                           {ach.title}
                         </h3>
-                        <span className="text-xs font-mono text-slate-500 print:text-black print:text-[9px]">
+                        <span className="text-xs font-mono text-slate-500">
                           {ach.date}
                         </span>
                       </div>
-                      <p className="text-xs font-mono text-[#ffb86c] print:text-black print:text-[9px]">
+                      <p className="text-xs font-mono text-[#ffb86c]">
                         {ach.issuer}
                       </p>
-                      <p className="text-xs text-slate-400 mt-1 print:text-black print:text-[9px] print:mt-0">
+                      <p className="text-xs text-slate-400 mt-1">
                         <SyntaxHighlight text={ach.desc} isHacker={isHacker} />
                       </p>
                     </div>
@@ -631,25 +585,24 @@ export default function Resume() {
               </section>
 
               {/* Certifications */}
-              <section className="print:mb-4">
-                <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'} print:text-black print:text-sm print:mb-1 print:font-bold`}>
-                  <BookOpen className="w-5 h-5 text-slate-500 print:hidden" />
+              <section>
+                <h2 className={`text-xl font-bold flex items-center gap-2 mb-4 uppercase tracking-wider ${isHacker ? 'font-mono text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-slate-200'}`}>
+                  <BookOpen className="w-5 h-5 text-slate-500" />
                   <span>Certifications</span>
                 </h2>
-                <div className="section-divider hidden print:block"></div>
 
-                <div className="space-y-3.5 print:space-y-1">
+                <div className="space-y-3.5">
                   {certificates.map((cert) => (
                     <div key={cert.name} className="flex justify-between items-start gap-2">
                       <div>
-                        <h3 className={`font-bold text-xs ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-900' : 'text-white'} print:text-black print:text-[10px] print:font-bold`}>
+                        <h3 className={`font-bold text-xs ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-900' : 'text-white'}`}>
                           {cert.name}
                         </h3>
-                        <p className="text-xs font-mono text-slate-500 print:text-black print:text-[9px]">
+                        <p className="text-xs font-mono text-slate-500">
                           {cert.issuer}
                         </p>
                       </div>
-                      <span className="text-xs font-mono text-slate-500 print:text-black print:text-[9px]">
+                      <span className="text-xs font-mono text-slate-500">
                         {cert.date}
                       </span>
                     </div>
