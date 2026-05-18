@@ -23,6 +23,28 @@ function useMagnetic(strength = 0.35) {
   return { ref, sx, sy, handleMouseMove, handleMouseLeave };
 }
 
+const NavbarSyntaxHighlight = ({ text, isHacker }) => {
+  if (!isHacker) return <>{text}</>;
+  const parts = text.split(/(\s+|\>|\:|\.|\,)/g);
+  return (
+    <>
+      {parts.map((part, idx) => {
+        if (!part) return null;
+        if (/^(AI|Automation|Ratul)$/i.test(part)) {
+          return <span key={idx} className="text-[#39ff14] font-semibold">{part}</span>; // Neon Green
+        }
+        if (/^(Engineer|Developer)$/i.test(part)) {
+          return <span key={idx} className="text-[#00bfff]">{part}</span>; // Neon Blue
+        }
+        if (/^(\>|\:)$/.test(part)) {
+          return <span key={idx} className="text-[#ff79c6] font-semibold">{part}</span>; // Neon Pink
+        }
+        return <span key={idx} className="text-[#abb2bf]">{part}</span>; // Crisp White
+      })}
+    </>
+  );
+};
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -178,11 +200,11 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className={`text-base md:text-xl font-bold tracking-tight ${isHacker ? 'text-[#00ff41] font-mono drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : isCreative ? 'text-white' : isLight ? 'text-slate-900' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>
-                  Ratul
+                <span className={`text-base md:text-xl font-bold tracking-tight ${isHacker ? 'font-mono drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : isCreative ? 'text-white' : isLight ? 'text-slate-900' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>
+                  <NavbarSyntaxHighlight text="Ratul" isHacker={isHacker} />
                 </span>
-                <span className={`text-[10px] md:text-xs font-mono tracking-wider ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#00d8b4]' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>
-                  {isCreative ? '> AI Automation Engineer' : '> AI Automation Engineer'}
+                <span className={`text-[10px] md:text-xs font-mono tracking-wider ${isHacker ? 'text-[#abb2bf]' : isCreative ? 'text-[#00d8b4]' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>
+                  <NavbarSyntaxHighlight text="> AI Automation Engineer" isHacker={isHacker} />
                 </span>
               </div>
               <span className={`hidden md:block w-[2px] h-6 animate-blink ml-1 ${isHacker ? 'bg-[#00ff41]' : isCreative ? 'bg-[#0088ff]' : 'bg-cyan-400'}`} />

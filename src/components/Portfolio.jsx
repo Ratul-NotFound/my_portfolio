@@ -13,23 +13,23 @@ const SyntaxHighlight = ({ text, isHacker }) => {
   if (!isHacker) return <>{text}</>;
 
   // Tokenize using typical IDE / shell command separator
-  const parts = text.split(/(\s+|\(|\)|\[|\]|\{|\}|\:|\.|\,|;|=|->|::|•)/g);
+  const parts = text.split(/(\s+|\(|\)|\[|\]|\{|\}|\:|\.|\,|;|=|->|::|•|"[^"]+")/g);
 
   return (
     <>
       {parts.map((part, idx) => {
         if (!part) return null;
 
-        // Keywords (pink)
-        if (/^(const|let|var|function|import|export|default|await|while|new|sudo|git|npm|process|docker-compose|sys|SYS|NET|GPU|DB|API|ML|MODEL|AGENT|VEC|FLOW|COMP_SELECTOR_01|LIVE|MONITOR|STATUS|COMPILED|LATENCY|SYNERGY|and|to|via|with|on|in|using|for|through|or|as|of)$/i.test(part)) {
+        // JSON keys / Code keywords (pink)
+        if (/^(const|let|var|function|import|export|default|await|while|new|sudo|git|npm|process|docker-compose|sys|SYS|NET|GPU|DB|API|ML|MODEL|AGENT|VEC|FLOW|COMP_SELECTOR_01|LIVE|MONITOR|STATUS|COMPILED|LATENCY|SYNERGY|and|to|via|with|on|in|using|for|through|or|as|of)$/i.test(part) || /^"[a-z0-9_]+"$/.test(part)) {
           return <span key={idx} className="text-[#ff79c6] font-semibold">{part}</span>;
         }
         // Functions / Action words (blue)
         if (/^(log|generate|sync|resolve|push|run|checkout|random|getItem|sin|write|keys|useRef|useEffect|commit|apt|update|establishing|initializing|loading|binding|adjusting|validation|completed|launching|validating|routing|scaling|optimizing|investigating|engineering|developing|building|leveraging|solve)$/i.test(part)) {
           return <span key={idx} className="text-[#00bfff]">{part}</span>;
         }
-        // Constants / Numbers / Metrics / Values (orange/yellow)
-        if (/^(true|false|\d+|FPS|NOT|FOUND|Antigravity|PORT|bin|adam|0\.0042|1e-4|0\.024|\d+ms|v\d+\.\d+|\d+\%|\d+\+?|avg|Pinecone|Redis|CUDA|RAG|LLM|MLOps)$/i.test(part)) {
+        // Constants / Numbers / Metrics / Values / JSON String values (orange/yellow)
+        if (/^(true|false|\d+|FPS|NOT|FOUND|Antigravity|PORT|bin|adam|0\.0042|1e-4|0\.024|\d+ms|v\d+\.\d+|\d+\%|\d+\+?|avg|Pinecone|Redis|CUDA|RAG|LLM|MLOps)$/i.test(part) || /^"[^"]+"$/.test(part)) {
           return <span key={idx} className="text-[#ffb86c]">{part}</span>;
         }
         // Types / Core subjects (neon green)
@@ -388,14 +388,14 @@ function SectionBadge({ icon: Icon, label, isHacker, isLight, isCreative }) {
       animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 badge-pulse ${
-        isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]'
+        isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#abb2bf] font-mono'
         : isCreative ? 'bg-[#0a0a0a] border-white/10 text-[#0088ff]'
         : isLight  ? 'bg-indigo-50 border-indigo-200 text-indigo-600'
         : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'
       }`}
     >
       <Icon className="w-4 h-4" />
-      <span className="font-mono">{label}</span>
+      <span className="font-mono"><SyntaxHighlight text={label} isHacker={isHacker} /></span>
     </motion.div>
   );
 }
@@ -643,8 +643,8 @@ function HoloProfileCard({ isLight, isHacker, isCreative }) {
                 <span>CORE_KERNEL_RUNSHEET</span>
                 <span>STATUS: STABLE</span>
               </div>
-              <pre className="whitespace-pre-wrap select-text leading-relaxed font-bold">
-{`{
+              <pre className="whitespace-pre-wrap select-text leading-relaxed font-bold font-mono text-[#abb2bf]">
+                <SyntaxHighlight text={`{
   "developer": "Mahmud Hasan Ratul",
   "location": "Dhaka, Bangladesh [GMT+6]",
   "active_status": "AVAILABLE_FOR_HIRE",
@@ -655,7 +655,7 @@ function HoloProfileCard({ isLight, isHacker, isCreative }) {
     "Systems Research"
   ],
   "interests": ["Scalable Systems", "Distributed Clusters", "LLM Tuning"]
-}`}
+}`} isHacker={isHacker} />
               </pre>
             </motion.div>
           )}
@@ -2320,8 +2320,8 @@ const Portfolio = () => {
               <ParallaxHeading>
                 <h2 className="text-4xl md:text-6xl font-black mb-6">
                   <span className={`kinetic-underline ${
-                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
-                  }`}>Passionate Developer</span>
+                    isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
+                  }`}><SyntaxHighlight text="Passionate Developer" isHacker={isHacker} /></span>
                 </h2>
               </ParallaxHeading>
               <motion.p
@@ -2350,12 +2350,12 @@ const Portfolio = () => {
               <ParallaxHeading>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3">
                   <span className={`kinetic-underline ${
-                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'
-                  }`}>Featured Work</span>
+                    isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-purple-600' : 'text-purple-400'
+                  }`}><SyntaxHighlight text="Featured Work" isHacker={isHacker} /></span>
                 </h2>
               </ParallaxHeading>
-              <p className={`text-base md:text-lg ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                Real-world applications with measurable impact
+              <p className={`text-base md:text-lg ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                <SyntaxHighlight text="Real-world applications with measurable impact" isHacker={isHacker} />
               </p>
             </div>
 
@@ -2607,12 +2607,12 @@ const Portfolio = () => {
               <ParallaxHeading>
                 <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
                   <span className={`kinetic-underline ${
-                    isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
-                  }`}>Technologies</span>
+                    isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
+                  }`}><SyntaxHighlight text="Technologies" isHacker={isHacker} /></span>
                 </h2>
               </ParallaxHeading>
-              <p className={`text-lg md:text-xl max-w-2xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                Modern tools and frameworks I use to craft exceptional digital experiences
+              <p className={`text-lg md:text-xl max-w-2xl mx-auto ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                <SyntaxHighlight text="Modern tools and frameworks I use to craft exceptional digital experiences" isHacker={isHacker} />
               </p>
             </div>
 
