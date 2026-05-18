@@ -30,7 +30,7 @@ export default function LightweightParticles() {
 
     let animationFrameId;
     let particles = [];
-    const mouse = { x: null, y: null, radius: 140 };
+    const mouse = { x: null, y: null, radius: 110 };
 
     // Configure particle details depending on the active theme
     const getThemeConfig = (currentTheme) => {
@@ -38,36 +38,38 @@ export default function LightweightParticles() {
         case 'hacker':
           return {
             particleColors: ['#00ff41', '#00cc32'],
-            lineColor: 'rgba(0, 255, 65, 0.12)',
-            maxDistance: 100,
-            densityDivider: 15000, // higher number = fewer particles
+            lineColor: 'rgba(0, 255, 65, 0.08)',
+            maxDistance: 90,
+            densityDivider: 32000, // much higher = fewer particles (high performance)
           };
         case 'creative':
           return {
-            particleColors: ['#0088ff', '#ec4899', '#f43f5e'],
-            lineColor: 'rgba(0, 136, 255, 0.08)',
-            maxDistance: 110,
-            densityDivider: 14000,
+            particleColors: ['#0088ff', '#ec4899'],
+            lineColor: 'rgba(0, 136, 255, 0.05)',
+            maxDistance: 95,
+            densityDivider: 30000,
           };
         case 'light':
           return {
             particleColors: ['#4f46e5', '#6366f1', '#0f172a'],
-            lineColor: 'rgba(79, 70, 229, 0.05)',
-            maxDistance: 90,
-            densityDivider: 18000,
+            lineColor: 'rgba(79, 70, 229, 0.04)',
+            maxDistance: 80,
+            densityDivider: 36000,
           };
         case 'dark':
         default:
           return {
             particleColors: ['#06b6d4', '#8b5cf6', '#3b82f6'],
-            lineColor: 'rgba(6, 182, 212, 0.08)',
-            maxDistance: 100,
-            densityDivider: 15000,
+            lineColor: 'rgba(6, 182, 212, 0.05)',
+            maxDistance: 90,
+            densityDivider: 32000,
           };
       }
     };
 
     let config = getThemeConfig(theme);
+    // Cache font configuration to avoid recalculations inside the loop
+    const cachedFont = theme === 'hacker' ? '500 11px "Fira Code", monospace' : '500 11px "JetBrains Mono", monospace';
 
     class Particle {
       constructor(w, h, text = null) {
@@ -77,26 +79,22 @@ export default function LightweightParticles() {
 
       reset(w, h, startAtEdge = false) {
         this.x = Math.random() * w;
-        // If starting fresh, randomize fully; if resetting on screen wrap, start at edges
         this.y = startAtEdge ? (Math.random() > 0.5 ? 0 : h) : Math.random() * h;
         
-        // Text particles can be slightly larger and move slower to be easily readable
+        // Text particles are slow and elegant
         if (this.text) {
-          this.radius = Math.random() * 4 + 6; 
-          this.vx = (Math.random() - 0.5) * 0.18; // Very slow ambient drift
-          this.vy = (Math.random() - 0.5) * 0.18;
+          this.radius = Math.random() * 3 + 5; 
+          this.vx = (Math.random() - 0.5) * 0.12; 
+          this.vy = (Math.random() - 0.5) * 0.12;
         } else {
-          this.radius = Math.random() * 2 + 0.8;
-          this.vx = (Math.random() - 0.5) * 0.4;
-          this.vy = (Math.random() - 0.5) * 0.4;
+          this.radius = Math.random() * 1.5 + 0.6;
+          this.vx = (Math.random() - 0.5) * 0.25; // Slower drift for elegance
+          this.vy = (Math.random() - 0.5) * 0.25;
         }
         
-        // Pick a random color from the current theme config
         const colors = config.particleColors;
         this.color = colors[Math.floor(Math.random() * colors.length)];
-        
-        // Text opacity is more subtle/ghostly so it doesn't distract from actual content
-        this.opacity = this.text ? Math.random() * 0.12 + 0.12 : Math.random() * 0.4 + 0.3;
+        this.opacity = this.text ? Math.random() * 0.1 + 0.1 : Math.random() * 0.3 + 0.2;
       }
 
       update(w, h) {
@@ -112,15 +110,16 @@ export default function LightweightParticles() {
         if (mouse.x !== null && mouse.y !== null) {
           const dx = this.x - mouse.x;
           const dy = this.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
+          const radSq = mouse.radius * mouse.radius;
           
-          if (dist < mouse.radius) {
-            // Calculate force pushing particle away from mouse
+          if (distSq < radSq) {
+            const dist = Math.sqrt(distSq);
             const force = (mouse.radius - dist) / mouse.radius;
             const angle = Math.atan2(dy, dx);
             
-            this.x += Math.cos(angle) * force * 1.5;
-            this.y += Math.sin(angle) * force * 1.5;
+            this.x += Math.cos(angle) * force * 1.2;
+            this.y += Math.sin(angle) * force * 1.2;
           }
         }
       }
@@ -128,8 +127,7 @@ export default function LightweightParticles() {
       draw() {
         if (this.text) {
           ctx.beginPath();
-          const fontName = theme === 'hacker' ? '"Fira Code", monospace' : '"JetBrains Mono", monospace';
-          ctx.font = `500 11px ${fontName}`;
+          ctx.font = cachedFont;
           ctx.fillStyle = this.color;
           ctx.globalAlpha = this.opacity;
           ctx.fillText(this.text, this.x, this.y);
@@ -148,23 +146,26 @@ export default function LightweightParticles() {
       const h = canvas.height;
       const area = w * h;
       
-      // Responsive particle count: fewer on mobile to guarantee high performance
       const isMobile = window.innerWidth < 768 || (window.matchMedia('(pointer: coarse)').matches);
-      const divider = isMobile ? config.densityDivider * 2.5 : config.densityDivider;
       
-      const count = Math.min(Math.floor(area / divider), 100); 
+      // Extremely lightweight capped density: 
+      // Desktop: max 35 particles (prevents O(N^2) links overload)
+      // Mobile: max 12 particles (zero lag on phones)
+      const maxCount = isMobile ? 12 : 35;
+      const divider = isMobile ? config.densityDivider * 2.5 : config.densityDivider;
+      const count = Math.min(Math.floor(area / divider), maxCount); 
       
       particles = [];
       
-      // 1. Generate text particles first (between 6 and 10 depending on screen width)
-      const textCount = isMobile ? 4 : 8;
+      // Desktop gets 5 floating texts, mobile gets 2
+      const textCount = isMobile ? 2 : 5;
       const selectedTexts = [...FLOATING_TEXTS].sort(() => 0.5 - Math.random()).slice(0, textCount);
       
       for (let i = 0; i < textCount; i++) {
         particles.push(new Particle(w, h, selectedTexts[i]));
       }
 
-      // 2. Generate regular particles
+      // Rest of the particles are standard small points
       for (let i = 0; i < count - textCount; i++) {
         particles.push(new Particle(w, h));
       }
@@ -180,7 +181,6 @@ export default function LightweightParticles() {
       initParticles();
     };
 
-    // Initialize layout and dimensions
     resizeCanvas();
 
     const handleMouseMove = (e) => {
@@ -194,7 +194,13 @@ export default function LightweightParticles() {
       mouse.y = null;
     };
 
-    window.addEventListener('resize', resizeCanvas);
+    let resizeTimeout;
+    const handleResizeThrottled = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resizeCanvas, 200);
+    };
+
+    window.addEventListener('resize', handleResizeThrottled);
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
 
@@ -202,39 +208,38 @@ export default function LightweightParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       config = getThemeConfig(theme);
 
-      // 1. Update and draw individual particles
-      for (let i = 0; i < particles.length; i++) {
+      // 1. Update and draw particles
+      const pLen = particles.length;
+      for (let i = 0; i < pLen; i++) {
         particles[i].update(canvas.width, canvas.height);
         particles[i].draw();
       }
 
-      // 2. Connect close particles with beautiful elegant lines (Constellation effect)
+      // 2. Connect close particles with lightweight solid color links (gradient objects removed for speed)
       ctx.globalAlpha = 1.0;
       ctx.lineWidth = 0.5;
 
-      for (let i = 0; i < particles.length; i++) {
+      for (let i = 0; i < pLen; i++) {
         const pi = particles[i];
 
-        for (let j = i + 1; j < particles.length; j++) {
+        for (let j = i + 1; j < pLen; j++) {
           const pj = particles[j];
           const dx = pi.x - pj.x;
           const dy = pi.y - pj.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
+          const maxDistSq = config.maxDistance * config.maxDistance;
 
-          if (dist < config.maxDistance) {
-            // Line opacity fades out the further apart the particles are
-            const alpha = (1 - dist / config.maxDistance) * 0.45;
+          if (distSq < maxDistSq) {
+            const dist = Math.sqrt(distSq);
+            const alpha = (1 - dist / config.maxDistance) * 0.35;
             
             ctx.beginPath();
             ctx.moveTo(pi.x, pi.y);
             ctx.lineTo(pj.x, pj.y);
             
-            // Premium gradient line connecting the particles in Creative theme!
+            // Avoid creating linear gradients inside loop - huge performance gain!
             if (theme === 'creative') {
-              const grad = ctx.createLinearGradient(pi.x, pi.y, pj.x, pj.y);
-              grad.addColorStop(0, 'rgba(0, 136, 255, ' + alpha + ')');
-              grad.addColorStop(1, 'rgba(236, 72, 153, ' + alpha + ')');
-              ctx.strokeStyle = grad;
+              ctx.strokeStyle = `rgba(0, 136, 255, ${alpha})`;
             } else {
               ctx.strokeStyle = config.lineColor.replace(/[\d\.]+\)$/, `${alpha})`);
             }
@@ -243,14 +248,16 @@ export default function LightweightParticles() {
           }
         }
 
-        // 3. Connect particles directly to the mouse cursor!
+        // 3. Connect particles directly to the mouse cursor
         if (mouse.x !== null && mouse.y !== null) {
           const dx = pi.x - mouse.x;
           const dy = pi.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
+          const mouseRadSq = mouse.radius * mouse.radius;
 
-          if (dist < mouse.radius) {
-            const alpha = (1 - dist / mouse.radius) * 0.4;
+          if (distSq < mouseRadSq) {
+            const dist = Math.sqrt(distSq);
+            const alpha = (1 - dist / mouse.radius) * 0.3;
             ctx.beginPath();
             ctx.moveTo(pi.x, pi.y);
             ctx.lineTo(mouse.x, mouse.y);
@@ -268,12 +275,12 @@ export default function LightweightParticles() {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    // Start buttery smooth render loop
     animate();
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resizeCanvas);
+      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', handleResizeThrottled);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
