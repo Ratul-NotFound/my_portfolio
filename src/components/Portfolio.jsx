@@ -2180,7 +2180,9 @@ const Portfolio = () => {
                     <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isHacker ? 'bg-[#00ff41]' : 'bg-green-400'} opacity-75`}></span>
                     <span className={`relative inline-flex rounded-full h-3 w-3 ${isHacker ? 'bg-[#00ff41]' : 'bg-green-500'}`}></span>
                   </span>
-                  <span className={`font-mono text-xs md:text-sm ${isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>system.status = <span className={isHacker ? 'text-[#00ff41]' : 'text-green-400'}>&quot;available&quot;</span></span>
+                  <span className={`font-mono text-xs md:text-sm ${isHacker ? 'text-[#abb2bf]' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>
+                    <SyntaxHighlight text='system.status = "available"' isHacker={isHacker} />
+                  </span>
                   <Coffee className={`w-4 h-4 transition-colors ${isHacker ? 'text-[#00ff41]/50 group-hover:text-[#00ff41]' : isLight ? 'text-slate-400 group-hover:text-indigo-500' : 'text-slate-400 group-hover:text-cyan-400'}`} />
                 </motion.div>
 
@@ -2192,25 +2194,31 @@ const Portfolio = () => {
                   whileInView="show"
                   viewport={{ once: true, margin: '-80px' }}
                 >
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.6rem] xl:text-[5.2rem] font-black leading-none tracking-tight">
-                    {['Building', 'Scalable', 'Systems', 'with AI'].map((word, i) => (
-                      <div key={word} className="word-reveal-wrapper block">
-                        <motion.span
-                          className={`block ${
-                            word === 'Building' || word === 'Systems'
-                              ? isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-slate-200'
-                              : word === 'Scalable'
-                                ? 'animated-gradient-text'
-                                : 'animated-gradient-text'
-                          } ${word === 'Building' || word === 'Systems' ? 'mb-2' : ''}`}
-                          initial={{ y: '110%', opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          transition={{ duration: 0.7, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                        >
-                          {word}
-                        </motion.span>
-                      </div>
-                    ))}
+                  <h1 className={`text-4xl sm:text-5xl md:text-6xl lg:text-[4.6rem] xl:text-[5.2rem] font-black leading-none tracking-tight ${isHacker ? 'font-mono' : ''}`}>
+                    {['Building', 'Scalable', 'Systems', 'with AI'].map((word, i) => {
+                      let textColorClass = 'animated-gradient-text';
+                      if (isHacker) {
+                        if (word === 'Building') textColorClass = 'text-[#00bfff]'; // Neon Blue
+                        else if (word === 'Scalable') textColorClass = 'text-[#ffb86c]'; // Neon Orange
+                        else if (word === 'Systems') textColorClass = 'text-[#39ff14]'; // Neon Green
+                        else textColorClass = 'text-[#abb2bf]'; // Crisp White-Grey
+                      } else if (word === 'Building' || word === 'Systems') {
+                        textColorClass = isLight ? 'text-slate-800' : 'text-slate-200';
+                      }
+                      
+                      return (
+                        <div key={word} className="word-reveal-wrapper block">
+                          <motion.span
+                            className={`block ${textColorClass} ${word === 'Building' || word === 'Systems' ? 'mb-2' : ''}`}
+                            initial={{ y: '110%', opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.7, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                          >
+                            <SyntaxHighlight text={word} isHacker={isHacker} />
+                          </motion.span>
+                        </div>
+                      );
+                    })}
                   </h1>
 
                   <motion.div
@@ -2226,13 +2234,19 @@ const Portfolio = () => {
                   </motion.div>
 
                   <motion.p
-                    className={`text-base md:text-lg lg:text-xl max-w-2xl leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-600' : 'text-slate-400'}`}
+                    className={`text-base md:text-lg lg:text-xl max-w-2xl leading-relaxed ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-600' : 'text-slate-400'}`}
                     variants={heroParaReveal}
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, margin: '-80px' }}
                   >
-                    Full Stack Engineer & AI Researcher specializing in <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-600' : 'text-cyan-300'}`}>high-performance applications</span>, <span className={`font-semibold ${isHacker ? 'text-[#33ff66]' : isLight ? 'text-purple-600' : 'text-indigo-300'}`}>machine learning</span>, and <span className={`font-semibold ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-pink-600' : 'text-cyan-300'}`}>scalable architecture</span>.
+                    {isHacker ? (
+                      <SyntaxHighlight text="Full Stack Engineer & AI Researcher specializing in high-performance applications, machine learning, and scalable architecture." isHacker={isHacker} />
+                    ) : (
+                      <>
+                        Full Stack Engineer & AI Researcher specializing in <span className={`font-semibold ${isLight ? 'text-indigo-650' : 'text-cyan-300'}`}>high-performance applications</span>, <span className={`font-semibold ${isLight ? 'text-purple-600' : 'text-indigo-300'}`}>machine learning</span>, and <span className={`font-semibold ${isLight ? 'text-pink-650' : 'text-cyan-300'}`}>scalable architecture</span>.
+                      </>
+                    )}
                   </motion.p>
                 </motion.div>
 
@@ -2247,7 +2261,7 @@ const Portfolio = () => {
                     href="#projects"
                     className={`group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 overflow-hidden ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-xl hover:shadow-indigo-500/20' : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'}`}
                   >
-                    <span className="relative z-10">Explore Projects</span>
+                    <span className={`relative z-10 ${isHacker ? 'font-mono' : ''}`}><SyntaxHighlight text="Explore Projects" isHacker={isHacker} /></span>
                     <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   </a>
@@ -2258,7 +2272,7 @@ const Portfolio = () => {
                     className={`group inline-flex items-center gap-3 px-8 py-4 backdrop-blur-xl border rounded-xl font-semibold transition-all hover:shadow-lg hover:scale-105 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 text-[#00ff41]/70 hover:border-[#00ff41] hover:text-[#00ff41]' : isLight ? 'bg-white/70 border-slate-200 text-slate-700 hover:border-indigo-400 hover:bg-white' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500 text-white'}`}
                   >
                     <Download className="w-5 h-5 group-hover:animate-bounce" />
-                    <span>Resume</span>
+                    <span className={isHacker ? 'font-mono' : ''}><SyntaxHighlight text="Resume" isHacker={isHacker} /></span>
                   </a>
                 </motion.div>
 
