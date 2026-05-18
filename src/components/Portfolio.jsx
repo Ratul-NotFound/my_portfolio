@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionV
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useTheme } from '../context/ThemeContext';
+import LightweightParticles from './LightweightParticles';
 const MemoNavbar = React.memo(Navbar);
 const MemoFooter = React.memo(Footer);
 import {
@@ -2036,6 +2037,7 @@ const Portfolio = () => {
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className={`absolute inset-0 ${isHacker ? 'bg-[#000400]' : isCreative ? 'bg-[#030303]' : isLight ? 'bg-[#f8fafc]' : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'}`}></div>
+        <LightweightParticles />
         <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00ff41]/5 animate-pulse' : isCreative ? 'bg-[#0088ff]/8 animate-pulse' : isLight ? 'bg-[#4f46e5]/5 animate-pulse' : 'bg-cyan-500/10 animate-pulse'}`}></div>
         <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00cc32]/5 animate-pulse' : isCreative ? 'bg-[#00d8b4]/8 animate-pulse' : isLight ? 'bg-[#8b5cf6]/5 animate-pulse' : 'bg-purple-500/10 animate-pulse'}`} style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
         {isLight && (

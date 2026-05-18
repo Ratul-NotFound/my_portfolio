@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { useTheme } from '../../context/ThemeContext';
+import LightweightParticles from '../../components/LightweightParticles';
 
 export default function Achievements() {
   const { theme } = useTheme();
@@ -200,6 +201,7 @@ export default function Achievements() {
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className={`absolute inset-0 ${isHacker ? 'bg-[#000400]' : isCreative ? 'bg-[#030303]' : isLight ? 'bg-slate-50' : 'bg-slate-950'}`}></div>
+        <LightweightParticles />
         <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00ff41]/5 animate-pulse' : isCreative ? 'bg-[#0088ff]/10 animate-pulse' : isLight ? 'bg-cyan-300/15 animate-pulse' : 'bg-cyan-500/5 animate-pulse'}`}></div>
         <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00cc32]/5 animate-pulse' : isCreative ? 'bg-[#ec4899]/10 animate-pulse' : isLight ? 'bg-purple-300/15 animate-pulse' : 'bg-purple-500/5 animate-pulse'}`} style={{ animationDelay: '1s' }}></div>
         {isLight && (

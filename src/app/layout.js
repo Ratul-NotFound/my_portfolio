@@ -2,7 +2,6 @@ import './globals.css'
 import { ThemeProvider } from '../context/ThemeContext'
 import CustomCursor from '../components/CustomCursor'
 import FloatingContactButton from '../components/FloatingContactButton'
-import LightweightParticles from '../components/LightweightParticles'
 
 export const metadata = {
   title: 'Mahmud Hasan Ratul | Full Stack & AI Engineer',
@@ -38,7 +37,6 @@ export default function RootLayout({ children }) {
       </head>
       <body className="antialiased relative min-h-screen">
         <ThemeProvider>
-          <LightweightParticles />
           <CustomCursor />
           <FloatingContactButton />
           {children}
