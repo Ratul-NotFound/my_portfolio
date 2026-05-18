@@ -2267,8 +2267,7 @@ const Portfolio = () => {
                   </a>
 
                   <a
-                    href="/resume.pdf"
-                    download
+                    href="/resume"
                     className={`group inline-flex items-center gap-3 px-8 py-4 backdrop-blur-xl border rounded-xl font-semibold transition-all hover:shadow-lg hover:scale-105 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 text-[#00ff41]/70 hover:border-[#00ff41] hover:text-[#00ff41]' : isLight ? 'bg-white/70 border-slate-200 text-slate-700 hover:border-indigo-400 hover:bg-white' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500 text-white'}`}
                   >
                     <Download className="w-5 h-5 group-hover:animate-bounce" />
