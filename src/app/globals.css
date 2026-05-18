@@ -36,7 +36,18 @@
     --text-secondary: 0, 180, 50;
     --muted: 0, 120, 30;
     --accent-cyan: 0, 255, 65;
-    --accent-purple: 0, 200, 50;
+  }
+
+  [data-theme='creative'] {
+    --bg-main: 250, 248, 245;
+    --surface-1: 247, 243, 237;
+    --surface-2: 255, 255, 255;
+    --border: 220, 212, 200;
+    --text-primary: 44, 37, 32;
+    --text-secondary: 110, 95, 85;
+    --muted: 155, 140, 130;
+    --accent-cyan: 196, 75, 49;
+    --accent-purple: 63, 102, 85;
   }
 
   * {
@@ -2134,4 +2145,153 @@ body {
 .stagger-children.in-view > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.15s; }
 .stagger-children.in-view > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.25s; }
 .stagger-children.in-view > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.35s; }
+
+/* ================== CREATIVE / STUDIO ART THEME OVERRIDES ================== */
+[data-theme='creative'] body {
+  background-color: #faf8f5 !important;
+  color: #2c2520 !important;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  background-image: radial-gradient(#d5cbbe 1.5px, transparent 1.5px) !important;
+  background-size: 24px 24px !important;
+}
+
+/* Creative: Elegant warm paper container overrides */
+[data-theme='creative'] .bg-slate-950,
+[data-theme='creative'] .bg-slate-900,
+[data-theme='creative'] .bg-slate-800,
+[data-theme='creative'] .bg-slate-900\/98,
+[data-theme='creative'] .bg-slate-900\/95,
+[data-theme='creative'] .bg-slate-900\/90,
+[data-theme='creative'] .bg-slate-900\/80,
+[data-theme='creative'] .bg-slate-900\/50,
+[data-theme='creative'] .bg-slate-900\/30 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 10px 30px rgba(44, 37, 32, 0.05) !important;
+  border: 1px solid rgba(220, 212, 200, 0.7) !important;
+}
+
+[data-theme='creative'] .bg-slate-800\/50,
+[data-theme='creative'] .bg-slate-800\/30 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(220, 212, 200, 0.5) !important;
+}
+
+[data-theme='creative'] .hover\:bg-slate-800:hover,
+[data-theme='creative'] .hover\:bg-slate-700:hover {
+  background-color: #ffffff !important;
+  box-shadow: 0 16px 40px rgba(44, 37, 32, 0.08) !important;
+}
+
+/* Creative: Black background overlays */
+[data-theme='creative'] .bg-black\/90,
+[data-theme='creative'] .bg-black\/70,
+[data-theme='creative'] .bg-black\/50 {
+  background-color: rgba(44, 37, 32, 0.8) !important;
+}
+
+/* Creative: text colors Espresso, Terracotta & Sage */
+[data-theme='creative'] .text-white,
+[data-theme='creative'] .text-slate-200 { color: #2c2520 !important; }
+[data-theme='creative'] .text-slate-300 { color: #6b5d54 !important; }
+[data-theme='creative'] .text-slate-400 { color: #9b8c82 !important; }
+[data-theme='creative'] .text-slate-500 { color: #bcaea3 !important; }
+[data-theme='creative'] .text-slate-600 { color: #6b5d54 !important; }
+[data-theme='creative'] .text-slate-700 { color: #4a3e35 !important; }
+
+[data-theme='creative'] .placeholder-slate-500::placeholder {
+  color: #bcaea3 !important;
+}
+
+/* Creative: Border overrides */
+[data-theme='creative'] .border-slate-800,
+[data-theme='creative'] .border-slate-700 {
+  border-color: rgba(220, 212, 200, 0.7) !important;
+}
+
+[data-theme='creative'] .border-slate-600 {
+  border-color: rgba(220, 212, 200, 0.9) !important;
+}
+
+/* Creative: Typography overrides */
+[data-theme='creative'] h1,
+[data-theme='creative'] h2,
+[data-theme='creative'] h3,
+[data-theme='creative'] h4 {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-style: italic !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Creative: Cursive elements accent */
+[data-theme='creative'] .font-mono,
+[data-theme='creative'] .italic,
+[data-theme='creative'] em,
+[data-theme='creative'] .cursive-accent {
+  font-family: 'Dancing Script', cursive !important;
+  font-style: normal !important;
+  font-size: 1.35em !important;
+  font-weight: 700 !important;
+  letter-spacing: 0px !important;
+  text-transform: none !important;
+}
+
+/* Creative: Accent color mappings */
+[data-theme='creative'] .text-cyan-400,
+[data-theme='creative'] .text-cyan-300,
+[data-theme='creative'] .text-cyan-500 {
+  color: #c44b31 !important; /* Rust Terracotta */
+}
+
+[data-theme='creative'] .text-purple-400,
+[data-theme='creative'] .text-purple-300,
+[data-theme='creative'] .text-purple-500 {
+  color: #3f6655 !important; /* Sage Green */
+}
+
+[data-theme='creative'] .text-pink-400,
+[data-theme='creative'] .text-pink-300,
+[data-theme='creative'] .text-pink-500 {
+  color: #8c6e58 !important; /* Studio Bronze */
+}
+
+/* Glass override for creative mode */
+[data-theme='creative'] .glass {
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  border-color: rgba(220, 212, 200, 0.5) !important;
+  box-shadow: 0 10px 30px rgba(44, 37, 32, 0.04) !important;
+}
+
+[data-theme='creative'] .glass-hover:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(196, 75, 49, 0.4) !important;
+  box-shadow: 0 15px 40px rgba(196, 75, 49, 0.08) !important;
+}
+
+/* Creative scrollbar */
+[data-theme='creative'] ::-webkit-scrollbar-track {
+  background: #faf8f5 !important;
+}
+
+[data-theme='creative'] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #c44b31, #3f6655) !important;
+  border: 2px solid #faf8f5 !important;
+  border-radius: 10px !important;
+}
+
+[data-theme='creative'] .animated-gradient-text {
+  background: linear-gradient(
+    120deg,
+    #c44b31 0%,
+    #3f6655 45%,
+    #8c6e58 85%,
+    #c44b31 100%
+  ) !important;
+  background-size: 300% 300% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gradient-text-flow 6s ease infinite !important;
+}
+
 

@@ -14,14 +14,14 @@ import {
   Circle, ChevronRight, ChevronDown, Hand, BookOpen
 } from 'lucide-react';
 
-const springConfig = { stiffness: 80, damping: 20, restDelta: 0.001 };
+const springConfig = { stiffness: 90, damping: 26, mass: 0.5, restDelta: 0.01 };
 const heroReveal = {
   hidden: { opacity: 0, y: 28, scale: 0.98 },
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
 };
 const heroBadgeReveal = {
-  hidden: { opacity: 0, x: -18, y: -10, filter: 'blur(6px)' },
-  show: { opacity: 1, x: 0, y: 0, filter: 'blur(0px)', transition: { duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] } }
+  hidden: { opacity: 0, x: -18, y: -10 },
+  show: { opacity: 1, x: 0, y: 0, transition: { duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] } }
 };
 const heroHeadlineReveal = {
   hidden: { opacity: 0, y: 30 },
@@ -48,8 +48,8 @@ const heroCardReveal = {
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] } }
 };
 const heroImageReveal = {
-  hidden: { opacity: 0, x: 40, y: 20, scale: 0.98, filter: 'blur(8px)' },
-  show: { opacity: 1, x: 0, y: 0, scale: 1, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+  hidden: { opacity: 0, x: 40, y: 20, scale: 0.98 },
+  show: { opacity: 1, x: 0, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
 };
 
 const ScrollAnimatedCard = ({ children, className, index = 0 }) => {
@@ -64,12 +64,11 @@ const ScrollAnimatedCard = ({ children, className, index = 0 }) => {
   const scale = useTransform(smoothProgress, [0, 0.25], [0.5, 1]);
   const opacity = useTransform(smoothProgress, [0, 0.2], [0, 1]);
   const y = useTransform(smoothProgress, [0, 0.25], [400, 0]);
-  const blurValue = useTransform(smoothProgress, [0, 0.2], [15, 0]);
 
   return (
     <motion.div
       ref={ref}
-      style={{ scale, opacity, y, filter: `blur(${blurValue}px)` }}
+      style={{ scale, opacity, y }}
       className={className}
     >
       {children}
@@ -105,7 +104,6 @@ const ScrollProjectCard = ({ children, className, onMouseEnter, onMouseLeave, on
   const scale = useTransform(smoothProgress, [0, 0.3], [0.6, 1]);
   const opacity = useTransform(smoothProgress, [0, 0.25], [0, 1]);
   const y = useTransform(smoothProgress, [0, 0.3], [500, 0]);
-  const blurValue = useTransform(smoothProgress, [0, 0.25], [20, 0]);
 
   return (
     <motion.div
@@ -114,7 +112,7 @@ const ScrollProjectCard = ({ children, className, onMouseEnter, onMouseLeave, on
       onMouseLeave={onMouseLeave}
       onMouseMove={onMouseMove}
       animate={animate}
-      style={{ ...style, scale, opacity, y, filter: `blur(${blurValue}px)` }}
+      style={{ ...style, scale, opacity, y }}
       className={className}
     >
       {children}
@@ -134,12 +132,11 @@ const ScrollHeading = ({ children, className }) => {
   const y = useTransform(smoothProgress, [0, 0.25], [60, 0]);
   const opacity = useTransform(smoothProgress, [0, 0.2], [0, 1]);
   const rotateX = useTransform(smoothProgress, [0, 0.25], [35, 0]);
-  const blurValue = useTransform(smoothProgress, [0, 0.2], [10, 0]);
 
   return (
     <motion.h2
       ref={ref}
-      style={{ y, opacity, rotateX, filter: `blur(${blurValue}px)`, transformOrigin: 'bottom center', transformStyle: 'preserve-3d' }}
+      style={{ y, opacity, rotateX, transformOrigin: 'bottom center', transformStyle: 'preserve-3d' }}
       className={className}
     >
       {children}
@@ -156,14 +153,13 @@ const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }
 
   const scale = useTransform(clampedProgress, [start, end], [0.94, 1]);
   const opacity = useTransform(clampedProgress, [start, end], [0.05, 1]);
-  const blurValue = useTransform(clampedProgress, [start, end], [8, 0]);
   const y = useTransform(clampedProgress, [start, end], [30, 0]);
   const x = useTransform(clampedProgress, [start, end], [-25, 0]);
   const rotateZ = useTransform(clampedProgress, [start, end], [-0.8, 0]);
 
   return (
     <motion.div
-      style={{ scale, opacity, x, y, rotateZ, filter: `blur(${blurValue}px)` }}
+      style={{ scale, opacity, x, y, rotateZ }}
       className={className}
     >
       {children}
@@ -171,7 +167,7 @@ const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }
   );
 };
 
-const TechGrid = ({ skills, isHacker, isLight }) => {
+const TechGrid = ({ skills, isHacker, isLight, isCreative }) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -188,7 +184,7 @@ const TechGrid = ({ skills, isHacker, isLight }) => {
           index={i}
           total={skills.length}
           progress={smoothProgress}
-          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
+          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isCreative ? 'bg-white border-[#dcd4c8] hover:border-[#c44b31]/40 hover:shadow-[#8c6e58]/5 shadow-sm' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
 
@@ -196,7 +192,7 @@ const TechGrid = ({ skills, isHacker, isLight }) => {
             <div className="relative w-16 h-16 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
 
-              <div className={`relative w-full h-full p-2 rounded-xl border transition-all group-hover/card:scale-110 ${isHacker ? 'bg-[#000a02] border-[#00ff41]/15 group-hover/card:border-[#00ff41]/30' : isLight ? 'bg-white border-slate-200 group-hover/card:border-indigo-300 shadow-sm' : 'bg-slate-800/50 border-slate-700 group-hover/card:border-slate-600'}`}>
+              <div className={`relative w-full h-full p-2 rounded-xl border transition-all group-hover/card:scale-110 ${isHacker ? 'bg-[#000a02] border-[#00ff41]/15 group-hover/card:border-[#00ff41]/30' : isCreative ? 'bg-[#faf8f5] border-[#dcd4c8] group-hover/card:border-[#c44b31]/30 shadow-sm' : isLight ? 'bg-white border-slate-200 group-hover/card:border-indigo-300 shadow-sm' : 'bg-slate-800/50 border-slate-700 group-hover/card:border-slate-600'}`}>
                 <img
                   src={skill.icon}
                   alt={skill.name}
@@ -211,7 +207,7 @@ const TechGrid = ({ skills, isHacker, isLight }) => {
             </div>
 
             <div className="text-center">
-              <span className={`text-sm font-semibold transition-colors block ${isHacker ? 'text-[#00cc32]/70 group-hover/card:text-[#00ff41]' : isLight ? 'text-slate-600 group-hover/card:text-indigo-600' : 'text-slate-300 group-hover/card:text-cyan-300'}`}>
+              <span className={`text-sm font-semibold transition-colors block ${isHacker ? 'text-[#00cc32]/70 group-hover/card:text-[#00ff41]' : isCreative ? 'text-[#6b5d54] group-hover/card:text-[#c44b31]' : isLight ? 'text-slate-600 group-hover/card:text-indigo-600' : 'text-slate-300 group-hover/card:text-cyan-300'}`}>
                 {skill.name}
               </span>
             </div>
@@ -224,9 +220,8 @@ const TechGrid = ({ skills, isHacker, isLight }) => {
     </div>
   );
 };
-const ShufflingProjectWrapper = ({ children, index, total, progress }) => {
+const ShufflingProjectWrapper = ({ children, index, total, progress, activeProject }) => {
     const xDir = index % 2 === 0 ? -1 : 1;
-    const rotationDir = index % 2 === 0 ? -10 : 10;
 
     // Clamp the scroll progress between 0 and 1 to prevent spring overshoot from sliding out the last card
     const clampedProgress = useTransform(progress, p => Math.min(1.0, Math.max(0.0, p)));
@@ -241,67 +236,60 @@ const ShufflingProjectWrapper = ({ children, index, total, progress }) => {
         [startVal, endVal, endVal]
     );
 
-    // Scale: shifts forward in the stack (from 0.88 to 1.0)
-    const scale = useTransform(
-        deckPosition,
-        [-3, -1, 0, 1, 2, 3],
-        [1.0, 1.0, 1.0, 0.96, 0.92, 0.88]
-    );
-
-    // Y Translation (Perspective stack offset): moves up as cards in front exit
-    const y = useTransform(
-        deckPosition,
-        [-3, -1, 0, 1, 2, 3],
-        [0, 0, 0, 15, 30, 45]
-    );
-
-    // X Translation (Slide out): slides card horizontally when it becomes the exiting top card
-    const x = useTransform(
-        deckPosition,
-        [-3, -1, 0, 3],
-        [`${xDir * 125}%`, `${xDir * 125}%`, "0%", "0%"]
-    );
-
-    // Rotation: rotates card slightly as it slides out
-    const rotate = useTransform(
-        deckPosition,
-        [-3, -1, 0, 3],
-        [rotationDir, rotationDir, 0, 0]
-    );
+    // High performance unified 3D Transform: computes translate, scale, and rotate in a single pass to save CPU cycles
+    const transform3d = useTransform(deckPosition, (pos) => {
+        let scaleVal = 1.0;
+        let yVal = 0;
+        let zVal = 0;
+        let xVal = "0vw";
+        let rotateVal = 0;
+        
+        if (pos >= 0) {
+            // Cards behind in stack
+            scaleVal = 1.0 - Math.min(3, pos) * 0.04;
+            yVal = Math.min(3, pos) * 12;
+            zVal = Math.min(3, pos) * -20;
+        } else {
+            // Top card exiting
+            zVal = 10;
+            const exitP = Math.min(1.0, Math.abs(pos));
+            xVal = `${xDir * exitP * 100}vw`;
+            rotateVal = xDir * exitP * 8;
+        }
+        
+        return `translateX(${xVal}) translateY(${yVal}px) translateZ(${zVal}px) rotate(${rotateVal}deg) scale(${scaleVal})`;
+    });
 
     // Opacity: cards at the back are partially transparent, top card is fully opaque, exited card is hidden
-    const opacity = useTransform(
-        deckPosition,
-        [-3, -1, -0.7, 0, 1, 2, 3],
-        [0, 0, 1.0, 1.0, 0.75, 0.5, 0.3]
-    );
+    const opacity = useTransform(deckPosition, (pos) => {
+        if (pos >= 0) {
+            return 1.0 - Math.min(3, pos) * 0.25; // 1.0 -> 0.75 -> 0.5 -> 0.25
+        } else {
+            const exitP = Math.abs(pos);
+            return Math.max(0, 1.0 - exitP);
+        }
+    });
 
-    // Dynamic Z-Index based on current stack position (higher stack index = closer to front)
-    const zIndexVal = useTransform(
-        deckPosition,
-        [-3, -1, 0, 1, 2, 3],
-        [50, 50, 40, 30, 20, 10]
-    );
-    const zIndex = useTransform(zIndexVal, Math.round);
-
-    // Z Translation (3D depth layering): physically layers the cards in 3D space (preserve-3d ignores z-index)
-    const z = useTransform(
-        deckPosition,
-        [-3, -1, 0, 1, 2, 3],
-        [10, 10, 0, -20, -40, -60]
-    );
+    // Dynamic static computed Z-Index to avoid main-thread compositing thrashes
+    const activeIndex = activeProject - 1;
+    let computedZIndex = 10;
+    if (index === activeIndex) {
+        computedZIndex = 40; // Active top card
+    } else if (index < activeIndex) {
+        computedZIndex = 50; // Slide-out exit card stays on top of everything
+    } else {
+        computedZIndex = 30 - (index - activeIndex) * 5; // Stacked behind cards
+    }
 
     return (
         <motion.div
             style={{
-                zIndex,
-                x,
-                y,
-                z,
-                rotate,
-                scale,
+                zIndex: computedZIndex,
+                transform: transform3d,
                 opacity,
                 transformStyle: 'preserve-3d',
+                backfaceVisibility: 'hidden',
+                willChange: 'transform, opacity'
             }}
             className="absolute inset-0 m-auto h-[390px] max-h-[70vh] w-[94vw] md:w-[850px] will-change-transform"
         >
@@ -327,12 +315,12 @@ const staggerContainer = {
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
 };
 const staggerItem = {
-  hidden: { opacity: 0, y: 32, filter: 'blur(6px)' },
-  show:   { opacity: 1, y: 0,  filter: 'blur(0px)', transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 32 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
 // ── Section badge component ──
-function SectionBadge({ icon: Icon, label, isHacker, isLight }) {
+function SectionBadge({ icon: Icon, label, isHacker, isLight, isCreative }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-60px' });
   return (
@@ -343,6 +331,7 @@ function SectionBadge({ icon: Icon, label, isHacker, isLight }) {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className={`inline-flex items-center gap-2 px-4 py-2 border rounded-full text-sm mb-6 badge-pulse ${
         isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/20 text-[#00ff41]'
+        : isCreative ? 'bg-[#faf8f5] border-[#dcd4c8] text-[#c44b31]'
         : isLight  ? 'bg-indigo-50 border-indigo-200 text-indigo-600'
         : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'
       }`}
@@ -354,14 +343,14 @@ function SectionBadge({ icon: Icon, label, isHacker, isLight }) {
 }
 
 // ── Draw-on section title line ──
-function SectionTitleLine({ isHacker, isLight }) {
+function SectionTitleLine({ isHacker, isLight, isCreative }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-40px' });
   return (
     <motion.div
       ref={ref}
       className={`h-[2px] rounded-full mx-auto mb-4 ${
-        isHacker ? 'bg-[#00ff41]/40' : isLight ? 'bg-indigo-300' : 'bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500'
+        isHacker ? 'bg-[#00ff41]/40' : isCreative ? 'bg-[#c44b31]' : isLight ? 'bg-indigo-300' : 'bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500'
       }`}
       initial={{ scaleX: 0, opacity: 0 }}
       animate={isInView ? { scaleX: 1, opacity: 1 } : {}}
@@ -372,7 +361,7 @@ function SectionTitleLine({ isHacker, isLight }) {
 }
 
 // ── HoloProfileCard (Interactive 3D Sci-Fi Profile) ──
-function HoloProfileCard({ isLight, isHacker }) {
+function HoloProfileCard({ isLight, isHacker, isCreative }) {
   const [activeTab, setActiveTab] = useState('avatar');
   const cardRef = useRef(null);
   
@@ -406,9 +395,9 @@ function HoloProfileCard({ isLight, isHacker }) {
   };
 
   const themeColors = {
-    spotlight: isHacker ? "rgba(0, 255, 65, 0.12)" : isLight ? "rgba(79, 70, 229, 0.12)" : "rgba(34, 211, 238, 0.12)",
-    accent: isHacker ? "#00ff41" : isLight ? "#4f46e5" : "#22d3ee",
-    scanner: isHacker ? "rgba(0, 255, 65, 0.5)" : isLight ? "rgba(79, 70, 229, 0.5)" : "rgba(34, 211, 238, 0.6)"
+    spotlight: isHacker ? "rgba(0, 255, 65, 0.12)" : isCreative ? "rgba(196, 75, 49, 0.12)" : isLight ? "rgba(79, 70, 229, 0.12)" : "rgba(34, 211, 238, 0.12)",
+    accent: isHacker ? "#00ff41" : isCreative ? "#c44b31" : isLight ? "#4f46e5" : "#22d3ee",
+    scanner: isHacker ? "rgba(0, 255, 65, 0.5)" : isCreative ? "rgba(196, 75, 49, 0.5)" : isLight ? "rgba(79, 70, 229, 0.5)" : "rgba(34, 211, 238, 0.6)"
   };
 
   const metrics = [
@@ -431,9 +420,11 @@ function HoloProfileCard({ isLight, isHacker }) {
       className={`group relative w-full max-w-lg mx-auto backdrop-blur-2xl border rounded-3xl p-6 md:p-8 space-y-6 transition-all duration-500 cursor-default select-none overflow-hidden ${
         isHacker
           ? 'bg-[#000401]/90 border-[#00ff41]/15 hover:border-[#00ff41]/45 shadow-[0_0_35px_rgba(0,255,65,0.02)]'
-          : isLight
-            ? 'bg-white border-slate-200 shadow-2xl hover:border-indigo-400'
-            : 'bg-[#0d1323]/85 border-slate-900 shadow-2xl hover:border-cyan-500/30'
+          : isCreative
+            ? 'bg-white/95 border-[#dcd4c8] hover:border-[#c44b31]/40 shadow-xl shadow-[#8c6e58]/5'
+            : isLight
+              ? 'bg-white border-slate-200 shadow-2xl hover:border-indigo-400'
+              : 'bg-[#0d1323]/85 border-slate-900 shadow-2xl hover:border-cyan-500/30'
       }`}
     >
       {/* Refraction Overlay Glare */}
@@ -449,14 +440,14 @@ function HoloProfileCard({ isLight, isHacker }) {
 
       {/* Cybernetic HUD Frame Coordinates */}
       <div className="absolute top-3 left-4 font-mono text-[8px] opacity-35 tracking-wider">
-        {"SYS.HUD // DHAKA.BD [N 23° 42' E 90° 22']"}
+        {isCreative ? "STUDIO.HUD // DHAKA.BD" : "SYS.HUD // DHAKA.BD [N 23° 42' E 90° 22']"}
       </div>
       <div className="absolute top-3 right-4 font-mono text-[8px] opacity-35 tracking-wider">
-        {"VER.2.08 // SECURE_CON"}
+        {isCreative ? "EST.2026 // CREATIVE_CON" : "VER.2.08 // SECURE_CON"}
       </div>
 
       {/* Interactive Tabs Header Control Panel */}
-      <div className="relative z-10 flex items-center justify-between border-b pb-4 mt-2" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.1)' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' }}>
+      <div className="relative z-10 flex items-center justify-between border-b pb-4 mt-2" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.1)' : isCreative ? '#dcd4c8' : isLight ? '#f1f5f9' : 'rgba(255,255,255,0.05)' }}>
         <div className="flex gap-1.5 sm:gap-2.5">
           {['avatar', 'metrics', 'kernel'].map((tab) => {
             const isTabActive = activeTab === tab;
@@ -479,7 +470,7 @@ function HoloProfileCard({ isLight, isHacker }) {
                 }`}
               >
                 <span className="hidden sm:inline">
-                  [{tab === 'avatar' ? 'HOLO_AVATAR' : tab === 'metrics' ? 'SYS_STATS' : 'CODE_KERNEL'}]
+                  [{tab === 'avatar' ? (isCreative ? 'STUDIO_AVATAR' : 'HOLO_AVATAR') : tab === 'metrics' ? 'SYS_STATS' : 'CODE_KERNEL'}]
                 </span>
                 <span className="inline sm:hidden">
                   [{tab === 'avatar' ? 'AVATAR' : tab === 'metrics' ? 'STATS' : 'KERNEL'}]
@@ -508,7 +499,7 @@ function HoloProfileCard({ isLight, isHacker }) {
               transition={{ duration: 0.4 }}
               className="relative aspect-square lg:max-w-[380px] md:max-w-[320px] max-w-[260px] mx-auto w-full rounded-2xl overflow-hidden border-4"
               style={{
-                borderColor: isHacker ? 'rgba(0, 255, 65, 0.15)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)'
+                borderColor: isHacker ? 'rgba(0, 255, 65, 0.15)' : isCreative ? 'rgba(220, 212, 200, 0.7)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)'
               }}
             >
               {/* Spinning compass HUD overlays inside the image frame */}
@@ -534,7 +525,7 @@ function HoloProfileCard({ isLight, isHacker }) {
                   e.target.src = "/profile.jpg";
                 }}
               />
-              <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]/80' : isLight ? 'from-white/70' : 'from-[#0d1323]/80'} via-transparent to-transparent opacity-60`} />
+              <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]/80' : isCreative ? 'from-[#faf8f5]/80' : isLight ? 'from-white/70' : 'from-[#0d1323]/80'} via-transparent to-transparent opacity-60`} />
             </motion.div>
           )}
 
@@ -554,11 +545,11 @@ function HoloProfileCard({ isLight, isHacker }) {
               {metrics.map((metric, i) => (
                 <div key={i} className="space-y-1">
                   <div className="flex justify-between items-center text-xs md:text-sm font-mono font-bold">
-                    <span className={isHacker ? 'text-[#00cc32]' : isLight ? 'text-slate-700' : 'text-slate-300'}>{metric.name}</span>
+                    <span className={isHacker ? 'text-[#00cc32]' : isCreative ? 'text-[#2c2520]' : isLight ? 'text-slate-700' : 'text-slate-300'}>{metric.name}</span>
                     <span style={{ color: themeColors.accent }}>{metric.val}%</span>
                   </div>
                   {/* Gauge Tracker */}
-                  <div className={`h-2 rounded-full overflow-hidden w-full relative ${isHacker ? 'bg-[#00ff41]/5' : isLight ? 'bg-slate-100' : 'bg-slate-900'}`}>
+                  <div className={`h-2 rounded-full overflow-hidden w-full relative ${isHacker ? 'bg-[#00ff41]/5' : isCreative ? 'bg-[#dcd4c8]/40' : isLight ? 'bg-slate-100' : 'bg-slate-900'}`}>
                     <motion.div 
                       className="h-full rounded-full"
                       style={{ backgroundColor: themeColors.accent }}
@@ -583,12 +574,14 @@ function HoloProfileCard({ isLight, isHacker }) {
               className={`p-4 rounded-xl border font-mono text-[10px] md:text-xs text-left overflow-auto lg:max-h-[355px] md:max-h-[295px] max-h-[235px] w-full relative z-10 transition-colors duration-500 ${
                 isHacker 
                   ? 'bg-[#000a02] border-[#00ff41]/15 text-[#00ff41]' 
-                  : isLight 
-                    ? 'bg-slate-50 border-slate-200 text-slate-600' 
-                    : 'bg-[#0b0f19] border-slate-900 text-cyan-400'
+                  : isCreative
+                    ? 'bg-[#faf8f5] border-[#dcd4c8] text-[#2c2520]'
+                    : isLight 
+                      ? 'bg-slate-50 border-slate-200 text-slate-600' 
+                      : 'bg-[#0b0f19] border-slate-900 text-cyan-400'
               }`}
             >
-              <div className="opacity-45 border-b pb-2 mb-2 select-none flex justify-between text-[9px]">
+              <div className="opacity-45 border-b pb-2 mb-2 select-none flex justify-between text-[9px]" style={{ borderColor: isCreative ? '#dcd4c8' : '' }}>
                 <span>CORE_KERNEL_RUNSHEET</span>
                 <span>STATUS: STABLE</span>
               </div>
@@ -647,7 +640,7 @@ function HoloProfileCard({ isLight, isHacker }) {
 }
 
 // ── CompetencyConsole (Sci-Fi Cybernetic Control Panel) ──
-function CompetencyConsole({ isLight, isHacker }) {
+function CompetencyConsole({ isLight, isHacker, isCreative }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [terminalLogs, setTerminalLogs] = useState([]);
@@ -666,8 +659,8 @@ function CompetencyConsole({ isLight, isHacker }) {
         "DB: Caching query results via Redis...",
         "API: Route maps successfully compiled."
       ],
-      color: isHacker ? "#00ff41" : isLight ? "#4f46e5" : "#22d3ee",
-      glow: isHacker ? "rgba(0, 255, 65, 0.15)" : isLight ? "rgba(79, 70, 229, 0.15)" : "rgba(34, 211, 238, 0.15)"
+      color: isHacker ? "#00ff41" : isCreative ? "#c44b31" : isLight ? "#4f46e5" : "#22d3ee",
+      glow: isHacker ? "rgba(0, 255, 65, 0.15)" : isCreative ? "rgba(196, 75, 49, 0.15)" : isLight ? "rgba(79, 70, 229, 0.15)" : "rgba(34, 211, 238, 0.15)"
     },
     {
       icon: Brain,
@@ -682,8 +675,8 @@ function CompetencyConsole({ isLight, isHacker }) {
         "ML: Adjusting hyperparameter weights...",
         "MODEL: Epoch validation completed (Loss: 0.024)."
       ],
-      color: isHacker ? "#00ff66" : isLight ? "#9333ea" : "#a855f7",
-      glow: isHacker ? "rgba(0, 255, 102, 0.15)" : isLight ? "rgba(147, 51, 234, 0.15)" : "rgba(168, 85, 247, 0.15)"
+      color: isHacker ? "#00ff66" : isCreative ? "#8c6e58" : isLight ? "#9333ea" : "#a855f7",
+      glow: isHacker ? "rgba(0, 255, 102, 0.15)" : isCreative ? "rgba(140, 110, 88, 0.15)" : isLight ? "rgba(147, 51, 234, 0.15)" : "rgba(168, 85, 247, 0.15)"
     },
     {
       icon: Zap,
@@ -698,8 +691,8 @@ function CompetencyConsole({ isLight, isHacker }) {
         "VEC: Similarity queries routing to Pinecone...",
         "FLOW: Execution loop completed safely."
       ],
-      color: isHacker ? "#00c8ff" : isLight ? "#ec4899" : "#f43f5e",
-      glow: isHacker ? "rgba(0, 200, 255, 0.15)" : isLight ? "rgba(236, 72, 153, 0.15)" : "rgba(244, 63, 94, 0.15)"
+      color: isHacker ? "#00c8ff" : isCreative ? "#b08968" : isLight ? "#ec4899" : "#f43f5e",
+      glow: isHacker ? "rgba(0, 200, 255, 0.15)" : isCreative ? "rgba(176, 137, 104, 0.15)" : isLight ? "rgba(236, 72, 153, 0.15)" : "rgba(244, 63, 94, 0.15)"
     },
     {
       icon: BookOpen,
@@ -714,10 +707,10 @@ function CompetencyConsole({ isLight, isHacker }) {
         "LATENCY: RTT metrics analyzed (4.2ms avg)...",
         "SYS: Next-generation cluster specs generated."
       ],
-      color: isHacker ? "#ffd700" : isLight ? "#f59e0b" : "#eab308",
-      glow: isHacker ? "rgba(255, 215, 0, 0.15)" : isLight ? "rgba(245, 158, 11, 0.15)" : "rgba(234, 179, 8, 0.15)"
+      color: isHacker ? "#ffd700" : isCreative ? "#a98467" : isLight ? "#f59e0b" : "#eab308",
+      glow: isHacker ? "rgba(255, 215, 0, 0.15)" : isCreative ? "rgba(169, 132, 103, 0.15)" : isLight ? "rgba(245, 158, 11, 0.15)" : "rgba(234, 179, 8, 0.15)"
     }
-  ], [isLight, isHacker]);
+  ], [isLight, isHacker, isCreative]);
 
   // Auto-rotate tabs slowly
   useEffect(() => {
@@ -753,7 +746,7 @@ function CompetencyConsole({ isLight, isHacker }) {
       {/* LEFT SELECTOR NODE PANEL */}
       <div className="lg:col-span-5 flex flex-col justify-center gap-4">
         <div className="mb-2">
-          <span className={`text-[10px] font-mono tracking-[0.25em] font-black uppercase ${isHacker ? 'text-[#00ff41]/50' : 'text-slate-400'}`}>
+          <span className={`text-[10px] font-mono tracking-[0.25em] font-black uppercase ${isHacker ? 'text-[#00ff41]/50' : isCreative ? 'text-[#8c6e58]/70' : 'text-slate-400'}`}>
             SELECT TERMINAL COMPETENCY
           </span>
         </div>
@@ -775,14 +768,18 @@ function CompetencyConsole({ isLight, isHacker }) {
                 isSelected
                   ? isHacker 
                     ? 'bg-[#000a02]/90 border-[#00ff41] shadow-[0_0_25px_rgba(0,255,65,0.08)]' 
-                    : isLight 
-                      ? 'bg-white border-indigo-500 shadow-xl shadow-indigo-500/10' 
-                      : 'bg-[#0d1527]/90 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.08)]'
+                    : isCreative
+                      ? 'bg-white border-[#c44b31] shadow-xl shadow-[#8c6e58]/5'
+                      : isLight 
+                        ? 'bg-white border-indigo-500 shadow-xl shadow-indigo-500/10' 
+                        : 'bg-[#0d1527]/90 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.08)]'
                   : isHacker
                     ? 'bg-transparent border-[#00ff41]/10 hover:border-[#00ff41]/30 hover:bg-[#00ff41]/5'
-                    : isLight
-                      ? 'bg-white/40 border-slate-200/80 hover:border-slate-300 hover:bg-white/60 shadow-sm'
-                      : 'bg-[#0b0f19]/30 border-slate-900/80 hover:border-slate-800 hover:bg-[#0b0f19]/60'
+                    : isCreative
+                      ? 'bg-white/40 border-[#dcd4c8] hover:border-[#c44b31]/30 hover:bg-white/60 shadow-sm'
+                      : isLight
+                        ? 'bg-white/40 border-slate-200/80 hover:border-slate-300 hover:bg-white/60 shadow-sm'
+                        : 'bg-[#0b0f19]/30 border-slate-900/80 hover:border-slate-800 hover:bg-[#0b0f19]/60'
               }`}
             >
               {/* Dynamic Accent Line */}
@@ -828,8 +825,8 @@ function CompetencyConsole({ isLight, isHacker }) {
                 <div>
                   <h4 className={`font-black tracking-tight text-sm md:text-base transition-colors duration-300 ${
                     isSelected
-                      ? isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-950' : 'text-white'
-                      : isHacker ? 'text-[#00cc32]/60 group-hover:text-[#00cc32]' : isLight ? 'text-slate-650' : 'text-slate-400'
+                      ? isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#2c2520] font-serif italic' : isLight ? 'text-slate-950' : 'text-white'
+                      : isHacker ? 'text-[#00cc32]/60 group-hover:text-[#00cc32]' : isCreative ? 'text-[#6b5d54] group-hover:text-[#2c2520]' : isLight ? 'text-slate-650' : 'text-slate-400'
                   }`}>
                     {comp.title}
                   </h4>
@@ -857,9 +854,11 @@ function CompetencyConsole({ isLight, isHacker }) {
           className={`flex-1 rounded-3xl border backdrop-blur-xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden transition-all duration-700 ${
             isHacker 
               ? 'bg-[#000401]/95 border-[#00ff41]/20 shadow-[0_0_35px_rgba(0,255,65,0.03)]' 
-              : isLight 
-                ? 'bg-white border-slate-200 shadow-2xl shadow-indigo-500/5' 
-                : 'bg-[#0b0f19]/80 border-slate-900 shadow-2xl shadow-cyan-500/2'
+              : isCreative
+                ? 'bg-white/95 border-[#dcd4c8] shadow-xl shadow-[#8c6e58]/5'
+                : isLight 
+                  ? 'bg-white border-slate-200 shadow-2xl shadow-indigo-500/5' 
+                  : 'bg-[#0b0f19]/80 border-slate-900 shadow-2xl shadow-cyan-500/2'
           }`}
           style={{
             boxShadow: `0 0 40px ${active.glow}20`
@@ -967,11 +966,11 @@ function CompetencyConsole({ isLight, isHacker }) {
 
             {/* Content Details right (md:col-span-8) */}
             <div className="md:col-span-8 space-y-4">
-              <h3 className={`text-2xl md:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-900' : 'text-white'}`}>
+              <h3 className={`text-2xl md:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#2c2520] font-serif italic' : isLight ? 'text-slate-900' : 'text-white'}`}>
                 {active.title}
               </h3>
               
-              <p className={`text-sm md:text-base leading-relaxed leading-7 ${isHacker ? 'text-[#00cc32]/80' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
+              <p className={`text-sm md:text-base leading-relaxed leading-7 ${isHacker ? 'text-[#00cc32]/80' : isCreative ? 'text-[#6b5d54]' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
                 {active.desc}
               </p>
 
@@ -1001,9 +1000,11 @@ function CompetencyConsole({ isLight, isHacker }) {
           <div className={`mt-6 p-4 rounded-xl border font-mono text-[10px] md:text-xs relative z-10 transition-colors duration-500 overflow-hidden ${
             isHacker 
               ? 'bg-[#000a02] border-[#00ff41]/15 text-[#00ff41]' 
-              : isLight 
-                ? 'bg-slate-50 border-slate-200 text-slate-600' 
-                : 'bg-[#0d1527] border-slate-900 text-cyan-400'
+              : isCreative
+                ? 'bg-[#faf8f5] border-[#dcd4c8] text-[#2c2520]'
+                : isLight 
+                  ? 'bg-slate-50 border-slate-200 text-slate-600' 
+                  : 'bg-[#0d1527] border-slate-900 text-cyan-400'
           }`}>
             {/* Blinking prompt */}
             <div className="flex items-center justify-between border-b pb-2 mb-2 select-none opacity-45" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.03)' }}>
@@ -1278,7 +1279,7 @@ function useCountUp(target, duration = 1800, inView = false) {
 
 // ── StatCard with count-up ──
 // ── StatCard with count-up ──
-function StatCard({ stat, isLight, isHacker }) {
+function StatCard({ stat, isLight, isHacker, isCreative }) {
   const cardRef = useRef(null);
   const [inView, setInView] = useState(false);
   
@@ -1336,9 +1337,11 @@ function StatCard({ stat, isLight, isHacker }) {
       className={`group relative p-6 md:p-8 backdrop-blur-xl border rounded-2xl cursor-default overflow-hidden transition-all duration-500 ${
         isHacker
           ? 'bg-[#000401]/85 border-[#00ff41]/10 hover:border-[#00ff41]/30 shadow-[0_0_20px_rgba(0,255,65,0.02)]'
-          : isLight
-            ? 'bg-white/40 border-slate-200/80 shadow-lg shadow-indigo-500/5 hover:border-indigo-400'
-            : 'bg-[#0b0f19]/40 border-slate-900 shadow-2xl hover:border-cyan-500/30'
+          : isCreative
+            ? 'bg-white/95 border-[#dcd4c8] hover:border-[#c44b31] shadow-lg shadow-[#8c6e58]/5'
+            : isLight
+              ? 'bg-white/40 border-slate-200/80 shadow-lg shadow-indigo-500/5 hover:border-indigo-400'
+              : 'bg-[#0b0f19]/40 border-slate-900 shadow-2xl hover:border-cyan-500/30'
       }`}
     >
       {/* 3D Glass Reflective Glare */}
@@ -1351,7 +1354,7 @@ function StatCard({ stat, isLight, isHacker }) {
           backgroundImage: isHacker
             ? `radial-gradient(circle 120px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(0, 255, 65, 0.15), transparent 80%)`
             : `radial-gradient(circle 140px at var(--spotlight-x, 50%) var(--spotlight-y, 50%), ${
-                isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'
+                isCreative ? 'rgba(196, 75, 49, 0.15)' : isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'
               }, transparent 80%)`
         }}
       />
@@ -1361,15 +1364,15 @@ function StatCard({ stat, isLight, isHacker }) {
         {/* Icon & Status header */}
         <div className="flex items-center justify-between mb-6">
           <div className={`p-3 rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 ${
-            isHacker ? 'bg-[#00ff41]/5 text-[#00ff41]' : isLight ? 'bg-indigo-50 text-indigo-650' : 'bg-cyan-500/10 text-cyan-400'
+            isHacker ? 'bg-[#00ff41]/5 text-[#00ff41]' : isCreative ? 'bg-[#c44b31]/5 text-[#c44b31]' : isLight ? 'bg-indigo-50 text-indigo-650' : 'bg-cyan-500/10 text-cyan-400'
           }`}>
             <stat.icon className="w-6 h-6 animate-pulse" />
           </div>
           
           {/* Active status pulse */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-dashed text-[9px] font-mono font-bold tracking-wider uppercase select-none pointer-events-none leading-none scale-90 origin-right opacity-60 group-hover:opacity-100 transition-opacity duration-300">
-            <span className={`w-1.5 h-1.5 rounded-full animate-ping ${isHacker ? 'bg-[#00ff41]' : isLight ? 'bg-indigo-600' : 'bg-cyan-400'}`} />
-            <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}>Live</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-dashed text-[9px] font-mono font-bold tracking-wider uppercase select-none pointer-events-none leading-none scale-90 origin-right opacity-60 group-hover:opacity-100 transition-opacity duration-300" style={{ borderColor: isCreative ? 'rgba(196,75,49,0.2)' : '' }}>
+            <span className={`w-1.5 h-1.5 rounded-full animate-ping ${isHacker ? 'bg-[#00ff41]' : isCreative ? 'bg-[#3f6655]' : isLight ? 'bg-indigo-600' : 'bg-cyan-400'}`} />
+            <span className={isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#3f6655]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}>Live</span>
           </div>
         </div>
 
@@ -1378,21 +1381,23 @@ function StatCard({ stat, isLight, isHacker }) {
           <div className={`stat-number text-4xl md:text-5xl font-black tracking-tight leading-none bg-gradient-to-r bg-clip-text text-transparent select-none ${
             isHacker
               ? 'from-[#00ff41] to-[#00cc32]'
-              : isLight
-                ? 'from-indigo-600 to-purple-600'
-                : 'from-cyan-400 via-indigo-400 to-purple-400'
+              : isCreative
+                ? 'from-[#c44b31] to-[#3f6655]'
+                : isLight
+                  ? 'from-indigo-600 to-purple-600'
+                  : 'from-cyan-400 via-indigo-400 to-purple-400'
           }`}>
             {displayed || stat.value}
           </div>
           
           <div className={`text-[10px] font-black font-mono tracking-[0.2em] uppercase select-none ${
-            isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-550 font-extrabold' : 'text-slate-300'
+            isHacker ? 'text-[#00cc32]/60' : isCreative ? 'text-[#8c6e58] cursive-accent' : isLight ? 'text-slate-550 font-extrabold' : 'text-slate-300'
           }`}>
             {stat.label}
           </div>
           
           <div className={`text-xs select-none ${
-            isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-400' : 'text-slate-500'
+            isHacker ? 'text-[#00ff41]/30' : isCreative ? 'text-[#9b8c82]' : isLight ? 'text-slate-400' : 'text-slate-500'
           }`}>
             {stat.desc}
           </div>
@@ -1403,15 +1408,17 @@ function StatCard({ stat, isLight, isHacker }) {
       <div className={`absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r ${
         isHacker 
           ? 'from-transparent via-[#00ff41]/50 to-transparent' 
-          : isLight 
-            ? 'from-transparent via-indigo-500/55 to-transparent' 
-            : 'from-transparent via-cyan-500/60 to-transparent'
+          : isCreative
+            ? 'from-transparent via-[#c44b31]/50 to-transparent'
+            : isLight 
+              ? 'from-transparent via-indigo-500/55 to-transparent' 
+              : 'from-transparent via-cyan-500/60 to-transparent'
       } opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20`} />
     </motion.div>
   );
 }
 
-const InteractiveText = ({ text, className, isHacker, isLight }) => {
+const InteractiveText = ({ text, className, isHacker, isLight, isCreative }) => {
   return (
     <span className={`inline-flex flex-wrap ${className}`}>
       {text.split(' ').map((word, wi) => (
@@ -1424,8 +1431,8 @@ const InteractiveText = ({ text, className, isHacker, isLight }) => {
                 scale: 1.3,
                 y: -6,
                 rotate: Math.random() * 20 - 10,
-                color: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee',
-                textShadow: isHacker ? '0 0 12px rgba(0, 255, 65, 0.9)' : isLight ? '0 0 10px rgba(79, 70, 229, 0.5)' : '0 0 12px rgba(34, 211, 238, 0.9)'
+                color: isHacker ? '#00ff41' : isCreative ? '#c44b31' : isLight ? '#4f46e5' : '#22d3ee',
+                textShadow: isHacker ? '0 0 12px rgba(0, 255, 65, 0.9)' : isCreative ? '0 0 10px rgba(196, 75, 49, 0.5)' : isLight ? '0 0 10px rgba(79, 70, 229, 0.5)' : '0 0 12px rgba(34, 211, 238, 0.9)'
               }}
               transition={{ type: "spring", stiffness: 450, damping: 10 }}
             >
@@ -1469,7 +1476,7 @@ const topicsConfig = {
   }
 };
 
-const HandshakeConnector = ({ isHacker, isLight }) => {
+const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -1484,9 +1491,11 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
       className={`relative w-full max-w-md mx-auto h-[240px] rounded-2xl border overflow-hidden flex flex-col items-center justify-center p-4 transition-all duration-500 cursor-pointer group/handshake ${
         isHacker
           ? 'bg-[#000401]/95 border-[#00ff41]/10 hover:border-[#00ff41]/30 shadow-[0_0_30px_rgba(0,255,65,0.02)]'
-          : isLight
-            ? 'bg-white/80 border-slate-200/80 shadow-xl shadow-indigo-500/5'
-            : 'bg-[#0b0f19]/80 border-slate-900 shadow-2xl'
+          : isCreative
+            ? 'bg-white/95 border-[#dcd4c8] hover:border-[#c44b31] shadow-xl shadow-[#8c6e58]/5'
+            : isLight
+              ? 'bg-white/80 border-slate-200/80 shadow-xl shadow-indigo-500/5'
+              : 'bg-[#0b0f19]/80 border-slate-900 shadow-2xl'
       }`}
       onHoverStart={() => setIsConnected(true)}
       onHoverEnd={() => setIsConnected(false)}
@@ -1499,7 +1508,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
         style={{
           backgroundImage: isHacker
             ? `radial-gradient(circle 120px at 50% 50%, rgba(0, 255, 65, 0.15), transparent 80%)`
-            : `radial-gradient(circle 130px at 50% 50%, ${isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'}, transparent 80%)`
+            : `radial-gradient(circle 130px at 50% 50%, ${isCreative ? 'rgba(196, 75, 49, 0.15)' : isLight ? 'rgba(99, 102, 241, 0.15)' : 'rgba(34, 211, 238, 0.12)'}, transparent 80%)`
         }}
       />
 
@@ -1515,7 +1524,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
           }}
           transition={{ type: "spring", stiffness: 180, damping: 20 }}
           className={`absolute flex items-center gap-1 ${
-            isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'
+            isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#c44b31]' : isLight ? 'text-indigo-650' : 'text-cyan-400'
           }`}
           style={{ left: 'calc(50% - 60px)' }}
         >
@@ -1532,7 +1541,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
           }}
           transition={{ type: "spring", stiffness: 180, damping: 20 }}
           className={`absolute flex items-center gap-1 ${
-            isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'
+            isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#3f6655]' : isLight ? 'text-purple-600' : 'text-purple-400'
           }`}
           style={{ right: 'calc(50% - 60px)' }}
         >
@@ -1550,9 +1559,11 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
               className={`absolute w-10 h-10 rounded-full border pointer-events-none z-10 ${
                 isHacker 
                   ? 'border-[#00ff41] bg-[#00ff41]/20 shadow-[0_0_15px_rgba(0,255,65,0.5)]' 
-                  : isLight 
-                    ? 'border-indigo-500 bg-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.5)]' 
-                    : 'border-cyan-400 bg-cyan-400/20 shadow-[0_0_15px_rgba(34,211,238,0.5)]'
+                  : isCreative
+                    ? 'border-[#c44b31] bg-[#c44b31]/20 shadow-[0_0_15px_rgba(196,75,49,0.5)]'
+                    : isLight 
+                      ? 'border-indigo-500 bg-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.5)]' 
+                      : 'border-cyan-400 bg-cyan-400/20 shadow-[0_0_15px_rgba(34,211,238,0.5)]'
               }`}
             />
           )}
@@ -1565,13 +1576,13 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
               animate={{ scale: [1, 1.1, 1] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               className={`w-5 h-5 rounded-full border border-dashed mx-auto mb-1 flex items-center justify-center ${
-                isHacker ? 'border-[#00ff41]/40' : isLight ? 'border-indigo-300' : 'border-cyan-500/40'
+                isHacker ? 'border-[#00ff41]/40' : isCreative ? 'border-[#c44b31]/40' : isLight ? 'border-indigo-300' : 'border-cyan-500/40'
               }`}
             >
-              <div className={`w-2 h-2 rounded-full ${isHacker ? 'bg-[#00ff41]/50' : isLight ? 'bg-indigo-550' : 'bg-cyan-400'}`} />
+              <div className={`w-2 h-2 rounded-full ${isHacker ? 'bg-[#00ff41]/50' : isCreative ? 'bg-[#c44b31]' : isLight ? 'bg-indigo-550' : 'bg-cyan-400'}`} />
             </motion.div>
             <p className={`text-[9px] font-bold tracking-widest uppercase ${
-              isHacker ? 'text-[#00cc32]/60' : 'text-slate-400'
+              isHacker ? 'text-[#00cc32]/60' : isCreative ? 'text-[#8c6e58] cursive-accent' : 'text-slate-400'
             }`}>
               Hover to Connect
             </p>
@@ -1586,7 +1597,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
             className="absolute z-10 select-none pointer-events-none"
           >
             <Sparkles className={`w-6 h-6 animate-pulse ${
-              isHacker ? 'text-[#00ff41]' : isLight ? 'text-amber-500' : 'text-cyan-300'
+              isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#c44b31]' : isLight ? 'text-amber-500' : 'text-cyan-300'
             }`} />
           </motion.div>
         )}
@@ -1603,7 +1614,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
               exit={{ opacity: 0, y: -6 }}
               className="space-y-2.5"
             >
-              <p className={`text-xs font-mono uppercase tracking-wider ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>
+              <p className={`text-xs font-mono uppercase tracking-wider ${isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#3f6655] font-serif italic' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>
                 Connection Established! 🤝
               </p>
               
@@ -1613,9 +1624,11 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
                   className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all hover:scale-105 ${
                     isHacker
                       ? 'bg-[#00ff41]/20 border border-[#00ff41] text-[#00ff41] shadow-[0_0_15px_rgba(0,255,65,0.2)]'
-                      : isLight
-                        ? 'bg-indigo-600 hover:bg-indigo-550 text-white shadow-md'
-                        : 'bg-gradient-to-r from-cyan-600 to-cyan-500 text-white shadow-md'
+                      : isCreative
+                        ? 'bg-[#c44b31] hover:bg-[#a93b22] text-white shadow-md'
+                        : isLight
+                          ? 'bg-indigo-600 hover:bg-indigo-550 text-white shadow-md'
+                          : 'bg-gradient-to-r from-cyan-600 to-cyan-500 text-white shadow-md'
                   }`}
                 >
                   <Mail className="w-4 h-4" />
@@ -1632,9 +1645,11 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
                       ? 'bg-green-500 border-green-500 text-white'
                       : isHacker
                         ? 'bg-black border-[#00ff41]/30 text-[#00ff41]/80 hover:text-[#00ff41] hover:border-[#00ff41]'
-                        : isLight
-                          ? 'bg-white border-slate-200 text-slate-600 hover:border-slate-400'
-                          : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                        : isCreative
+                          ? 'bg-[#faf8f5] border-[#dcd4c8] text-[#6b5d54] hover:border-[#c44b31]'
+                          : isLight
+                            ? 'bg-white border-slate-200 text-slate-650 hover:border-slate-400'
+                            : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
                   }`}
                 >
                   {copied ? "Copied!" : "Copy Email"}
@@ -1648,7 +1663,7 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               className={`text-xs leading-relaxed select-none ${
-                isHacker ? 'text-[#00cc32]/50' : 'text-slate-500'
+                isHacker ? 'text-[#00cc32]/50' : isCreative ? 'text-[#6b5d54]' : 'text-slate-500'
               }`}
             >
               Move your cursor into this card to reach out. Two hands will connect in a digital handshake to establish direct mail channels!
@@ -1659,18 +1674,83 @@ const HandshakeConnector = ({ isHacker, isLight }) => {
     </motion.div>
   );
 };
+const HeroTypewriter = ({ isHacker, isLight, isCreative }) => {
+  const [typedText, setTypedText] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
+  const [activePhraseIdx, setActivePhraseIdx] = useState(0);
+
+  const phrases = useMemo(() => {
+    if (isHacker) {
+      return [
+        "Initializing neural subnetworks...",
+        "Executing low-level secure pipelines...",
+        "Compiling deep-learning models...",
+        "Establishing decrypted connections..."
+      ];
+    }
+    if (isCreative) {
+      return [
+        "Crafting premium minimalist interfaces...",
+        "Painting terracotta and sage-toned canvases...",
+        "Sculpting responsive human-centric designs...",
+        "Curating bespoke editorial typographies..."
+      ];
+    }
+    return [
+      "Building scalable Full Stack systems...",
+      "Designing custom Deep Learning models...",
+      "Architecting autonomous AI Agentic flows...",
+      "Investigating next-gen computer science Research..."
+    ];
+  }, [isHacker, isCreative]);
+
+  useEffect(() => {
+    const currentPhrase = phrases[activePhraseIdx];
+
+    if (isTyping) {
+      if (typedText.length < currentPhrase.length) {
+        const timeout = setTimeout(() => {
+          setTypedText(currentPhrase.slice(0, typedText.length + 1));
+        }, 65);
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          setIsTyping(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+      }
+    } else {
+      if (typedText.length > 0) {
+        const timeout = setTimeout(() => {
+          setTypedText(typedText.slice(0, -1));
+        }, 25);
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          setIsTyping(true);
+          setActivePhraseIdx((prev) => (prev + 1) % phrases.length);
+        }, 400);
+        return () => clearTimeout(timeout);
+      }
+    }
+  }, [typedText, isTyping, activePhraseIdx, phrases]);
+
+  return (
+    <>
+      <span>{typedText}</span>
+      <span className={`w-2 h-5 animate-blink ${isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_rgba(0,255,65,0.6)]' : isLight ? 'bg-indigo-500' : 'bg-cyan-400'}`}></span>
+    </>
+  );
+};
 
 const Portfolio = () => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
   const isHacker = theme === 'hacker';
-  const [contactCoords, setContactCoords] = useState({ x: 0, y: 0 });
+  const isCreative = theme === 'creative';
   const [selectedTopic, setSelectedTopic] = useState('web-app');
   const [isMounted, setIsMounted] = useState(false);
   const [activeTech, setActiveTech] = useState('all');
-  const [typedText, setTypedText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-  const [activePhraseIdx, setActivePhraseIdx] = useState(0);
   const [activeProject, setActiveProject] = useState(1);
   const [activeSection, setActiveSection] = useState('hero');
   const heroRef = useRef(null);
@@ -1679,7 +1759,6 @@ const Portfolio = () => {
   const heroOpacity  = useTransform(scrollY, [0, 400], [1, 0.3]);
   const blobParallax = useTransform(scrollY, [0, 800], [0, -120]);
   const heroLeftX = useTransform(scrollY, [0, 120, 600], [0, 0, -18]);
-  const heroLeftBlur = useTransform(scrollY, [0, 200, 600], [0, 0, 3]);
 
   const spotlightRef = useRef(null);
   const canvasRef = useRef(null);
@@ -1727,11 +1806,13 @@ const Portfolio = () => {
   );
 
   const snappyProjectsProgress = useSpring(projectsScrollProgress, {
-    stiffness: 120,
-    damping: 25,
-    mass: 0.6,
-    restDelta: 0.0001
+    stiffness: 180,
+    damping: 32,
+    mass: 0.4,
+    restDelta: 0.008
   });
+
+  const activeProjectRef = useRef(1);
 
   // Dynamically sync the active highlight with the scrolling top-card matching the 75% shuffle timeline
   useMotionValueEvent(snappyProjectsProgress, "change", (latest) => {
@@ -1741,47 +1822,16 @@ const Portfolio = () => {
       projects.length - 1,
       Math.round(activeP * (projects.length - 1))
     );
-    setActiveProject(projects[activeIndex].id);
+    const newActiveId = projects[activeIndex].id;
+    if (activeProjectRef.current !== newActiveId) {
+      activeProjectRef.current = newActiveId;
+      setActiveProject(newActiveId);
+    }
   });
-
-  const phrases = useMemo(() => [
-    "Building scalable Full Stack systems...",
-    "Designing custom Deep Learning models...",
-    "Architecting autonomous AI Agentic flows...",
-    "Investigating next-gen computer science Research..."
-  ], []);
 
   useEffect(() => {
     setIsMounted(true);
-    const currentPhrase = phrases[activePhraseIdx];
-
-    if (isTyping) {
-      if (typedText.length < currentPhrase.length) {
-        const timeout = setTimeout(() => {
-          setTypedText(currentPhrase.slice(0, typedText.length + 1));
-        }, 65);
-        return () => clearTimeout(timeout);
-      } else {
-        const timeout = setTimeout(() => {
-          setIsTyping(false);
-        }, 2000);
-        return () => clearTimeout(timeout);
-      }
-    } else {
-      if (typedText.length > 0) {
-        const timeout = setTimeout(() => {
-          setTypedText(typedText.slice(0, -1));
-        }, 25);
-        return () => clearTimeout(timeout);
-      } else {
-        const timeout = setTimeout(() => {
-          setIsTyping(true);
-          setActivePhraseIdx((prev) => (prev + 1) % phrases.length);
-        }, 400);
-        return () => clearTimeout(timeout);
-      }
-    }
-  }, [typedText, isTyping, activePhraseIdx, phrases]);
+  }, []);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -1793,13 +1843,6 @@ const Portfolio = () => {
       if (spotlightRef.current) {
         spotlightRef.current.style.left = `${x}%`;
         spotlightRef.current.style.top = `${y}%`;
-      }
-      if (contactSpotlightRef.current) {
-        const rect = contactSpotlightRef.current.getBoundingClientRect();
-        const px = e.clientX - rect.left;
-        const py = e.clientY - rect.top;
-        contactSpotlightRef.current.style.setProperty('--spotlight-x', `${px}px`);
-        contactSpotlightRef.current.style.setProperty('--spotlight-y', `${py}px`);
       }
     };
 
@@ -1815,75 +1858,49 @@ const Portfolio = () => {
     let height = canvas.height = window.innerHeight;
 
     const handleResize = () => {
+      if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
     // Create particles
-    const particles = Array.from({ length: 45 }, (_, i) => ({
+    const particles = Array.from({ length: 24 }, (_, i) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 2 + 0.6,
-      speedY: Math.random() * 0.35 + 0.1,
-      speedX: Math.random() * 0.1 - 0.05,
-      opacity: Math.random() * 0.45 + 0.15,
+      size: Math.random() * 2.2 + 0.8,
+      speedY: Math.random() * 0.2 + 0.05,
+      speedX: Math.random() * 0.06 - 0.03,
+      opacity: Math.random() * 0.4 + 0.1,
       color: ['cyan', 'purple', 'pink'][Math.floor(Math.random() * 3)],
       angle: Math.random() * Math.PI * 2
     }));
 
-    // Create code lines
-    const snippets = [
-      '$ npm run dev',
-      'const build = async () => {',
-      '  return await deploy();',
-      '}',
-      '// Optimizing...',
-      'docker-compose up -d',
-      'export default App;',
-      'git push origin main',
-      '✓ Compiled successfully'
-    ];
-    const codeLines = Array.from({ length: 10 }, (_, i) => ({
-      text: snippets[Math.floor(Math.random() * snippets.length)],
-      x: Math.random() * width,
-      y: Math.random() * height,
-      speedY: Math.random() * 0.25 + 0.05,
-      opacity: Math.random() * 0.12 + 0.03
-    }));
-
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
+      const now = Date.now();
 
       // Draw particles
       particles.forEach(p => {
         p.y = (p.y + p.speedY) % (height + 10);
-        p.x = (p.x + p.speedX + Math.sin(Date.now() * 0.001 + p.angle) * 0.04 + width) % width;
+        p.x = (p.x + p.speedX + Math.sin(now * 0.001 + p.angle) * 0.03 + width) % width;
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         
         let colorStr = '#06b6d4';
         if (isHacker) colorStr = '#00ff41';
+        else if (isCreative) {
+          if (p.color === 'purple') colorStr = '#3f6655'; // Sage Green
+          else if (p.color === 'pink') colorStr = '#8c6e58'; // Studio Bronze
+          else colorStr = '#c44b31'; // Terracotta
+        }
         else if (p.color === 'purple') colorStr = '#8b5cf6';
         else if (p.color === 'pink') colorStr = '#ec4899';
 
         ctx.fillStyle = colorStr;
-        ctx.globalAlpha = isHacker ? p.opacity * 0.65 : isLight ? p.opacity * 0.4 : p.opacity;
-        ctx.shadowBlur = p.size * 3;
-        ctx.shadowColor = colorStr;
+        ctx.globalAlpha = isHacker ? p.opacity * 0.65 : isCreative ? p.opacity * 0.35 : isLight ? p.opacity * 0.4 : p.opacity;
         ctx.fill();
-      });
-
-      // Draw code lines
-      ctx.shadowBlur = 0;
-      ctx.font = '11px monospace';
-      ctx.fillStyle = isHacker ? '#00ff41' : isLight ? '#0e7490' : '#06b6d4';
-      
-      codeLines.forEach(line => {
-        line.y = (line.y + line.speedY) % (height + 20);
-        ctx.globalAlpha = isHacker ? line.opacity * 0.7 : isLight ? line.opacity * 0.4 : line.opacity;
-        ctx.fillText(line.text, line.x, line.y);
       });
 
       animationFrame = requestAnimationFrame(draw);
@@ -1896,25 +1913,34 @@ const Portfolio = () => {
       window.removeEventListener('mousemove', handleMouse);
       window.removeEventListener('resize', handleResize);
     };
-  }, [isMounted, isHacker, isLight]);
+  }, [isMounted, isHacker, isLight, isCreative]);
 
   useEffect(() => {
     if (!isMounted) return;
-    const handleSectionScroll = () => {
-      const sections = ['hero', 'about', 'projects', 'skills', 'contact'];
-      const current = sections.find(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          return rect.top <= 200 && rect.bottom >= 200;
-        }
-        return false;
-      });
-      if (current) setActiveSection(current);
+    const sections = ['hero', 'about', 'projects', 'skills', 'contact'];
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -55% 0px',
+      threshold: 0
     };
-    window.addEventListener('scroll', handleSectionScroll, { passive: true });
-    handleSectionScroll();
-    return () => window.removeEventListener('scroll', handleSectionScroll);
+
+    const observerCallback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, [isMounted]);
 
   const stats = useMemo(() => ([
@@ -2128,8 +2154,7 @@ const Portfolio = () => {
                 style={{
                   y: heroParallaxY,
                   opacity: heroOpacity,
-                  x: heroLeftX,
-                  filter: `blur(${heroLeftBlur}px)`
+                  x: heroLeftX
                 }}
               >
                 {/* Status badge */}
@@ -2185,8 +2210,7 @@ const Portfolio = () => {
                   >
                     <Terminal className={`w-5 h-5 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}`} />
                     <span className={isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-500' : 'text-cyan-400'}>$</span>
-                    <span>{typedText}</span>
-                    <span className={`w-2 h-5 animate-blink ${isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_rgba(0,255,65,0.6)]' : isLight ? 'bg-indigo-500' : 'bg-cyan-400'}`}></span>
+                    <HeroTypewriter isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
                   </motion.div>
 
                   <motion.p
@@ -2259,7 +2283,7 @@ const Portfolio = () => {
                 whileInView="show"
                 viewport={{ once: true, margin: '-80px' }}
               >
-                <HoloProfileCard isLight={isLight} isHacker={isHacker} />
+                <HoloProfileCard isLight={isLight} isHacker={isHacker} isCreative={isCreative} />
               </motion.div>
             </div>
 
@@ -2272,7 +2296,7 @@ const Portfolio = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
-                  <StatCard stat={stat} isLight={isLight} isHacker={isHacker} />
+                  <StatCard stat={stat} isLight={isLight} isHacker={isHacker} isCreative={isCreative} />
                 </motion.div>
               ))}
             </div>
@@ -2287,8 +2311,8 @@ const Portfolio = () => {
 
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-10">
-              <SectionBadge icon={Sparkles} label="About Me" isHacker={isHacker} isLight={isLight} />
-              <SectionTitleLine isHacker={isHacker} isLight={isLight} />
+              <SectionBadge icon={Sparkles} label="About Me" isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
+              <SectionTitleLine isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
               <ParallaxHeading>
                 <h2 className="text-4xl md:text-6xl font-black mb-6">
                   <span className={`kinetic-underline ${
@@ -2307,7 +2331,7 @@ const Portfolio = () => {
               </motion.p>
             </div>
 
-            <CompetencyConsole isLight={isLight} isHacker={isHacker} />
+            <CompetencyConsole isLight={isLight} isHacker={isHacker} isCreative={isCreative} />
 
             {/* Removed Tech Marquee Belt */}
           </div>
@@ -2317,8 +2341,8 @@ const Portfolio = () => {
         <section id="projects" ref={projectsRef} className="relative bg-transparent" style={{ height: `${projects.length * 100 + 100}vh` }}>
           <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden py-4 md:py-8 z-10">
             <div className="text-center mb-2 md:mb-4 shrink-0 pointer-events-none">
-              <SectionBadge icon={Rocket} label="Case Studies" isHacker={isHacker} isLight={isLight} />
-              <SectionTitleLine isHacker={isHacker} isLight={isLight} />
+              <SectionBadge icon={Rocket} label="Case Studies" isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
+              <SectionTitleLine isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
               <ParallaxHeading>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-3">
                   <span className={`kinetic-underline ${
@@ -2338,19 +2362,24 @@ const Portfolio = () => {
               {projects.map((project, index) => {
                 const activeIndex = projects.findIndex(p => p.id === activeProject);
                 const isBehind = index > activeIndex;
+                const isActive = project.id === activeProject;
+                const isVisible = index >= activeIndex - 1 && index <= activeIndex + 3;
                 return (
                   <ShufflingProjectWrapper
                     key={project.id}
                     index={index}
                     total={projects.length}
                     progress={snappyProjectsProgress}
+                    activeProject={activeProject}
                   >
                     <motion.div 
                       whileHover={{ y: -8, scale: 1.015 }}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                      className={`group relative backdrop-blur-xl border rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl w-full h-full ${isHacker ? 'border-[#00ff41]/20 hover:border-[#00ff41]/60' : isLight ? 'border-slate-200 shadow-xl' : 'border-slate-700 shadow-cyan-500/10'}`}
+                      className={`group relative backdrop-blur-xl border rounded-3xl overflow-hidden transition-[border-color,box-shadow] duration-300 hover:shadow-2xl w-full h-full ${isHacker ? 'border-[#00ff41]/20 hover:border-[#00ff41]/60' : isLight ? 'border-slate-200 shadow-xl' : 'border-slate-700 shadow-cyan-500/10'}`}
                       style={{ backgroundColor: isHacker ? "#000a02" : isLight ? "#ffffff" : "#0f172a" }}
                     >
+                      {isVisible ? (
+                        <>
                       {/* Decorative HUD Corner Brackets - Refined to premium slim accents */}
                       <div className="absolute top-3 left-3 w-3 h-3 border-t border-l opacity-20 transition-all duration-500 group-hover:scale-105" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
                       <div className="absolute top-3 right-3 w-3 h-3 border-t border-r opacity-20 transition-all duration-500 group-hover:scale-105" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee' }} />
@@ -2378,21 +2407,23 @@ const Portfolio = () => {
                         <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-950 via-slate-950/20 to-transparent"></div>
                         
                         {/* Sweeping Project Laser Scanner Beam - Made thin and hover-only */}
-                        <motion.div 
-                          className="absolute left-0 right-0 h-[1px] z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                          style={{
-                            background: `linear-gradient(to right, transparent, ${isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee'}, transparent)`,
-                            boxShadow: `0 0 8px ${isHacker ? '#00ff41' : isLight ? '#818cf8' : '#22d3ee'}`,
-                            top: 0
-                          }}
-                          animate={{ top: ['0%', '98%', '0%'] }}
-                          transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }}
-                        />
+                        {isActive && (
+                          <motion.div 
+                            className="absolute left-0 right-0 h-[1px] z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                            style={{
+                              background: `linear-gradient(to right, transparent, ${isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee'}, transparent)`,
+                              boxShadow: `0 0 8px ${isHacker ? '#00ff41' : isLight ? '#818cf8' : '#22d3ee'}`,
+                              top: 0
+                            }}
+                            animate={{ y: ['0px', '220px', '0px'] }}
+                            transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }}
+                          />
+                        )}
 
                         {/* Elite High-Performance Project Health Monitor */}
                         <div className="absolute bottom-3 left-4 font-mono text-[8px] uppercase tracking-wider text-white bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 pointer-events-none select-none z-10 flex items-center gap-1.5 shadow-sm">
                           <span className="relative flex h-1.5 w-1.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            {isActive && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>}
                             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                           </span>
                           <span className="opacity-90">{`ENGINE ACTIVE // PORT_0${project.id} // SECURE`}</span>
@@ -2407,7 +2438,7 @@ const Portfolio = () => {
 
                         {/* Tech Logo with spinning HUD Compass background */}
                         <div className="absolute top-4 right-4 w-10 h-10 bg-black/45 backdrop-blur-md border border-white/10 rounded-xl p-2 group-hover:scale-110 transition-all duration-500 shadow-xl flex items-center justify-center z-10">
-                          <div className="absolute inset-0 border border-dashed rounded-lg opacity-25 animate-spin pointer-events-none" style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee', animationDuration: '8s' }} />
+                          <div className={`absolute inset-0 border border-dashed rounded-lg opacity-25 pointer-events-none ${isActive ? 'animate-spin' : ''}`} style={{ borderColor: isHacker ? '#00ff41' : isLight ? '#4f46e5' : '#22d3ee', animationDuration: '8s' }} />
                           <img
                             src={project.logo}
                             alt={`${project.title} logo`}
@@ -2474,7 +2505,7 @@ const Portfolio = () => {
                             </div>
                           </div>
                           
-                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-650' : 'text-slate-350'}`}>
+                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#8c6e58]' : isLight ? 'text-slate-650' : 'text-slate-350'}`}>
                             {project.description}
                           </p>
 
@@ -2488,7 +2519,7 @@ const Portfolio = () => {
                                 <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover/metric:opacity-10 transition-opacity`}></div>
                                 <div className="relative flex items-center justify-center gap-1.5">
                                   <span className="relative flex h-1.5 w-1.5 shrink-0">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 animate-duration-1000" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
+                                    {isActive && <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 animate-duration-1000" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />}
                                     <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
                                   </span>
                                   <span className={`text-[10px] sm:text-xs font-bold leading-none ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>{metric}</span>
@@ -2512,7 +2543,7 @@ const Portfolio = () => {
                                       : 'bg-slate-800/40 border-slate-800 text-slate-300 hover:border-slate-700 shadow-sm'
                                 }`}
                               >
-                                <span className="w-1.5 h-1.5 rounded-full mr-1.5 shrink-0 opacity-80 animate-pulse" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
+                                <span className={`w-1.5 h-1.5 rounded-full mr-1.5 shrink-0 opacity-80 ${isActive ? 'animate-pulse' : ''}`} style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
                                 {tech}
                               </span>
                             ))}
@@ -2525,6 +2556,8 @@ const Portfolio = () => {
                         </div>
                       </div>
                     </div>
+                    </>
+                    ) : null}
                     <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${project.gradient} transform transition-transform duration-500 ${activeProject === project.id ? 'scale-x-100' : 'scale-x-0'}`}></div>
                   </motion.div>
                 </ShufflingProjectWrapper>
@@ -2565,8 +2598,8 @@ const Portfolio = () => {
           <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full blur-[80px] orb-float-delay ${isHacker ? 'bg-[#00ff41]/4' : isLight ? 'bg-indigo-200/20' : 'bg-cyan-500/6'}`} />
           <div className="max-w-7xl mx-auto relative z-10">
             <div className="text-center mb-8 md:mb-10">
-              <SectionBadge icon={Zap} label="Tech Stack" isHacker={isHacker} isLight={isLight} />
-              <SectionTitleLine isHacker={isHacker} isLight={isLight} />
+              <SectionBadge icon={Zap} label="Tech Stack" isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
+              <SectionTitleLine isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
               <ParallaxHeading>
                 <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6">
                   <span className={`kinetic-underline ${
@@ -2643,7 +2676,7 @@ const Portfolio = () => {
                       </div>
                     </div>
 
-                    <TechGrid skills={skills} isHacker={isHacker} isLight={isLight} />
+                    <TechGrid skills={skills} isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
                   </div>
                 )
               ))}
@@ -2670,7 +2703,6 @@ const Portfolio = () => {
                 const y = Math.round(e.clientY - rect.top);
                 e.currentTarget.style.setProperty('--mx', `${x}px`);
                 e.currentTarget.style.setProperty('--my', `${y}px`);
-                setContactCoords({ x, y });
               }}
               initial={{ opacity: 0, scale: 0.97 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -2698,11 +2730,11 @@ const Portfolio = () => {
               <div className="relative z-10 text-center space-y-6">
                 <div className="space-y-3">
                   <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-tight">
-                    <InteractiveText text="Let's Build Something" isHacker={isHacker} isLight={isLight} />
+                    <InteractiveText text="Let's Build Something" isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
                     <br className="my-1" />
-                    <InteractiveText text="Amazing Together" isHacker={isHacker} isLight={isLight} className={isHacker ? 'text-[#00ff41]/80' : isLight ? 'text-slate-800' : 'text-white'} />
+                    <InteractiveText text="Amazing Together" isHacker={isHacker} isLight={isLight} isCreative={isCreative} className={isHacker ? 'text-[#00ff41]/80' : isCreative ? 'text-[#2c2520] font-serif italic' : isLight ? 'text-slate-800' : 'text-white'} />
                   </h2>
-                  <p className={`text-xs md:text-sm max-w-md mx-auto leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <p className={`text-xs md:text-sm max-w-md mx-auto leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isCreative ? 'text-[#6b5d54]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                     Bring the hands together in a digital handshake to establish a direct connection and reveal my contact details!
                   </p>
                 </div>
@@ -2710,6 +2742,7 @@ const Portfolio = () => {
                 <HandshakeConnector 
                   isHacker={isHacker} 
                   isLight={isLight} 
+                  isCreative={isCreative}
                 />
 
                 <div className="flex justify-center gap-3 pt-4">

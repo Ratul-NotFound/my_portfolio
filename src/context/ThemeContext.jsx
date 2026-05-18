@@ -7,7 +7,7 @@ const ThemeContext = createContext({
     setTheme: () => { },
 });
 
-const THEMES = ['dark', 'light', 'hacker'];
+const THEMES = ['dark', 'light', 'hacker', 'creative'];
 
 export function ThemeProvider({ children }) {
     const [theme, setTheme] = useState('dark');
@@ -31,9 +31,11 @@ export function ThemeProvider({ children }) {
         document.body?.setAttribute('data-theme', theme);
         localStorage.setItem('portfolio-theme', theme);
 
-        // Set font family for hacker theme
+        // Set font family for hacker and creative themes
         if (theme === 'hacker') {
             document.body.style.fontFamily = "'Fira Code', 'JetBrains Mono', 'Source Code Pro', 'Cascadia Code', 'Consolas', monospace";
+        } else if (theme === 'creative') {
+            document.body.style.fontFamily = "'Playfair Display', Georgia, Cambria, serif";
         } else {
             document.body.style.fontFamily = '';
         }

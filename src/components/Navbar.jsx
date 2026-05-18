@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence, useMotionValue, useTransform, useSpring as useSpring2 } from 'framer-motion';
-import { Menu, X, Terminal, ChevronRight, Home, User, Briefcase, Wrench, Mail, Award, Sun, Moon, Sparkles } from 'lucide-react';
+import { Menu, X, Terminal, ChevronRight, Home, User, Briefcase, Wrench, Mail, Award, Sun, Moon, Sparkles, Palette } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from '../context/ThemeContext';
@@ -32,6 +32,7 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const isLight = theme === 'light';
   const isHacker = theme === 'hacker';
+  const isCreative = theme === 'creative';
   const { ref: magRef, sx, sy, handleMouseMove: mm, handleMouseLeave: ml } = useMagnetic(0.3);
 
   // Scroll progress
@@ -41,22 +42,36 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-      if (!isAchievementsPage) {
-        const sections = ['hero', 'about', 'projects', 'skills', 'contact'];
-        const current = sections.find(section => {
-          const element = document.getElementById(section);
-          if (element) {
-            const rect = element.getBoundingClientRect();
-            return rect.top <= 150 && rect.bottom >= 150;
-          }
-          return false;
-        });
-        if (current) setActiveSection(current);
-      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    let observer;
+    if (!isAchievementsPage) {
+      const sections = ['hero', 'about', 'projects', 'skills', 'contact'];
+      const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -55% 0px',
+        threshold: 0
+      };
+      const observerCallback = (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      };
+      observer = new IntersectionObserver(observerCallback, observerOptions);
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (observer) observer.disconnect();
+    };
   }, [isAchievementsPage]);
 
   const scrollTo = (id) => {
@@ -88,7 +103,9 @@ export default function Navbar() {
           scaleX,
           background: isHacker
             ? 'linear-gradient(90deg, #00ff41, #00cc32, #39ff14)'
-            : 'linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899)'
+            : isCreative
+              ? 'linear-gradient(90deg, #c44b31, #3f6655, #8c6e58)'
+              : 'linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899)'
         }}
       />
 
@@ -100,14 +117,16 @@ export default function Navbar() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
           ? isHacker
             ? 'bg-[#000400]/95 backdrop-blur-2xl border-b border-[#00ff41]/15 shadow-[0_0_20px_rgba(0,255,65,0.08)]'
-            : isLight
-              ? 'bg-white/90 backdrop-blur-2xl border-b border-slate-200 shadow-lg shadow-slate-200/50'
-              : 'bg-slate-900/95 backdrop-blur-2xl border-b border-slate-800/50 shadow-2xl shadow-black/20'
+            : isCreative
+              ? 'bg-[#faf8f5]/90 backdrop-blur-2xl border-b border-[#dcd4c8] shadow-lg shadow-slate-300/20'
+              : isLight
+                ? 'bg-white/90 backdrop-blur-2xl border-b border-slate-200 shadow-lg shadow-slate-200/50'
+                : 'bg-slate-900/95 backdrop-blur-2xl border-b border-slate-800/50 shadow-2xl shadow-black/20'
           : 'bg-transparent'
           }`}
       >
         {/* Top Gradient Line */}
-        <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${isHacker ? 'from-transparent via-[#00ff41] to-transparent' : 'from-transparent via-cyan-500 to-transparent'} opacity-50`} />
+        <div className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${isHacker ? 'from-transparent via-[#00ff41] to-transparent' : isCreative ? 'from-transparent via-[#c44b31] to-transparent' : 'from-transparent via-cyan-500 to-transparent'} opacity-50`} />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
@@ -118,18 +137,20 @@ export default function Navbar() {
                 <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-xl blur-md opacity-0 group-hover:opacity-75 transition-all duration-500" />
                 <div className={`relative p-2 md:p-2.5 rounded-xl border transition-all duration-300 shadow-lg ${isHacker
                   ? 'bg-[#000a02] border-[#00ff41]/20 group-hover:border-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.1)]'
-                  : isLight
-                    ? 'bg-gradient-to-br from-slate-100 to-white border-slate-200 group-hover:border-cyan-500'
-                    : 'bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700 group-hover:border-cyan-500'
+                  : isCreative
+                    ? 'bg-[#faf8f5] border-[#dcd4c8] group-hover:border-[#c44b31] shadow-md shadow-[#8c6e58]/5'
+                    : isLight
+                      ? 'bg-gradient-to-br from-slate-100 to-white border-slate-200 group-hover:border-cyan-500'
+                      : 'bg-gradient-to-br from-slate-800 to-slate-900 border-slate-700 group-hover:border-cyan-500'
                   }`}>
                   <svg 
                     viewBox="0 0 64 64" 
                     className="w-5 h-5 md:w-6 md:h-6 group-hover:scale-110 transition-transform duration-300"
                   >
                     <linearGradient id="navLogoGrad" x1="0" x2="1" y1="0" y2="1">
-                      <stop offset="0%" stopColor={isHacker ? "#00ff41" : "#22d3ee"} />
-                      <stop offset="50%" stopColor={isHacker ? "#39ff14" : "#6366f1"} />
-                      <stop offset="100%" stopColor={isHacker ? "#00ff41" : "#ec4899"} />
+                      <stop offset="0%" stopColor={isHacker ? "#00ff41" : isCreative ? "#c44b31" : "#22d3ee"} />
+                      <stop offset="50%" stopColor={isHacker ? "#39ff14" : isCreative ? "#3f6655" : "#6366f1"} />
+                      <stop offset="100%" stopColor={isHacker ? "#00ff41" : isCreative ? "#8c6e58" : "#ec4899"} />
                     </linearGradient>
 
                     <g fill="none" stroke="url(#navLogoGrad)" strokeWidth="4.8" strokeLinecap="round" strokeLinejoin="round">
@@ -141,28 +162,28 @@ export default function Navbar() {
                       <path d="M 36,32 L 48,48" />
                     </g>
                     
-                    <g fill={isHacker ? "#00ff41" : "#22d3ee"}>
+                    <g fill={isHacker ? "#00ff41" : isCreative ? "#c44b31" : "#22d3ee"}>
                       <circle cx="18" cy="16" r="2" />
-                      <circle cx="36" cy="16" r="2" fill={isHacker ? "#00ff41" : "#ec4899"} />
+                      <circle cx="36" cy="16" r="2" fill={isHacker ? "#00ff41" : isCreative ? "#8c6e58" : "#ec4899"} />
                       <circle cx="27" cy="32" r="2" />
                       <circle cx="18" cy="32" r="2" />
-                      <circle cx="36" cy="32" r="2" fill={isHacker ? "#00ff41" : "#6366f1"} />
+                      <circle cx="36" cy="32" r="2" fill={isHacker ? "#00ff41" : isCreative ? "#3f6655" : "#6366f1"} />
                       <circle cx="18" cy="48" r="2" />
-                      <circle cx="36" cy="48" r="2" fill={isHacker ? "#00ff41" : "#6366f1"} />
-                      <circle cx="48" cy="48" r="2" fill={isHacker ? "#00ff41" : "#ec4899"} />
+                      <circle cx="36" cy="48" r="2" fill={isHacker ? "#00ff41" : isCreative ? "#3f6655" : "#6366f1"} />
+                      <circle cx="48" cy="48" r="2" fill={isHacker ? "#00ff41" : isCreative ? "#8c6e58" : "#ec4899"} />
                     </g>
                   </svg>
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className={`text-base md:text-xl font-bold tracking-tight ${isHacker ? 'text-[#00ff41] font-mono drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>
+                <span className={`text-base md:text-xl font-bold tracking-tight ${isHacker ? 'text-[#00ff41] font-mono drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : isCreative ? 'text-[#2c2520] font-serif italic' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>
                   Ratul
                 </span>
-                <span className={`text-[10px] md:text-xs font-mono tracking-wider ${isHacker ? 'text-[#00cc32]/70' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>
-                  {'>'} Ai Automation Engineer
+                <span className={`text-[10px] md:text-xs font-mono tracking-wider ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#8c6e58] cursive-accent' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>
+                  {isCreative ? 'Creative Studio' : '> Ai Automation Engineer'}
                 </span>
               </div>
-              <span className={`hidden md:block w-[2px] h-6 animate-blink ml-1 ${isHacker ? 'bg-[#00ff41]' : 'bg-cyan-400'}`} />
+              <span className={`hidden md:block w-[2px] h-6 animate-blink ml-1 ${isHacker ? 'bg-[#00ff41]' : isCreative ? 'bg-[#c44b31]' : 'bg-cyan-400'}`} />
             </Link>
 
             {/* Desktop Nav */}
@@ -172,8 +193,8 @@ export default function Navbar() {
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
                   className={`group relative px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${activeSection === item.id && !isAchievementsPage
-                    ? isHacker ? 'text-[#00ff41]' : isLight ? 'text-cyan-600' : 'text-cyan-400'
-                    : isHacker ? 'text-[#00cc32]/70 hover:text-[#00ff41]' : isLight ? 'text-slate-600 hover:text-slate-900' : 'text-slate-300 hover:text-white'
+                    ? isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#c44b31]' : isLight ? 'text-cyan-600' : 'text-cyan-400'
+                    : isHacker ? 'text-[#00cc32]/70 hover:text-[#00ff41]' : isCreative ? 'text-[#6b5d54] hover:text-[#2c2520] font-serif italic' : isLight ? 'text-slate-600 hover:text-slate-900' : 'text-slate-300 hover:text-white'
                     }`}
                 >
                   {/* Animated background pill */}
@@ -184,9 +205,11 @@ export default function Navbar() {
                       style={{
                         background: isHacker
                           ? 'rgba(0,255,65,0.1)'
-                          : isLight
-                            ? 'rgba(6,182,212,0.08)'
-                            : 'rgba(6,182,212,0.1)'
+                          : isCreative
+                            ? 'rgba(196,75,49,0.08)'
+                            : isLight
+                              ? 'rgba(6,182,212,0.08)'
+                              : 'rgba(6,182,212,0.1)'
                       }}
                       initial={false}
                       transition={{ type: 'spring', stiffness: 400, damping: 35 }}
@@ -200,28 +223,28 @@ export default function Navbar() {
                   {activeSection === item.id && !isAchievementsPage && (
                     <motion.span
                       layoutId="nav-underline"
-                      className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[2px] rounded-full ${isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_rgba(0,255,65,0.6)]' : 'bg-gradient-to-r from-cyan-500 to-purple-500'}`}
+                      className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[2px] rounded-full ${isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_rgba(0,255,65,0.6)]' : isCreative ? 'bg-[#c44b31]' : 'bg-gradient-to-r from-cyan-500 to-purple-500'}`}
                     />
                   )}
                 </button>
               ))}
 
               {/* Divider */}
-              <div className={`w-[1px] h-8 mx-2 ${isHacker ? 'bg-[#00ff41]/20' : isLight ? 'bg-slate-200' : 'bg-slate-700'}`} />
+              <div className={`w-[1px] h-8 mx-2 ${isHacker ? 'bg-[#00ff41]/20' : isCreative ? 'bg-[#dcd4c8]' : isLight ? 'bg-slate-200' : 'bg-slate-700'}`} />
 
               {/* Achievements */}
               <Link
                 href="/achievements"
                 className={`group relative px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${isAchievementsPage
-                  ? isHacker ? 'text-[#00ff41]' : isLight ? 'text-purple-600' : 'text-purple-400'
-                  : isHacker ? 'text-[#00cc32]/70 hover:text-[#00ff41]' : isLight ? 'text-slate-600 hover:text-slate-900' : 'text-slate-300 hover:text-white'
+                  ? isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#3f6655]' : isLight ? 'text-purple-600' : 'text-purple-400'
+                  : isHacker ? 'text-[#00cc32]/70 hover:text-[#00ff41]' : isCreative ? 'text-[#6b5d54] hover:text-[#2c2520] font-serif italic' : isLight ? 'text-slate-600 hover:text-slate-900' : 'text-slate-300 hover:text-white'
                   }`}
               >
                 {isAchievementsPage && (
                   <motion.div
                     layoutId="nav-active-pill"
                     className="absolute inset-0 rounded-lg"
-                    style={{ background: isHacker ? 'rgba(0,255,65,0.1)' : isLight ? 'rgba(139,92,246,0.08)' : 'rgba(139,92,246,0.1)' }}
+                    style={{ background: isHacker ? 'rgba(0,255,65,0.1)' : isCreative ? 'rgba(63,102,85,0.08)' : isLight ? 'rgba(139,92,246,0.08)' : 'rgba(139,92,246,0.1)' }}
                     initial={false}
                     transition={{ type: 'spring', stiffness: 400, damping: 35 }}
                   />
@@ -229,7 +252,7 @@ export default function Navbar() {
                 <span className="relative flex items-center gap-2">
                   <Award className="w-4 h-4" />
                   Achievements
-                  <Sparkles className={`w-3 h-3 ${isHacker ? 'text-[#00ff41]' : 'text-purple-400'}`} />
+                  <Sparkles className={`w-3 h-3 ${isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#c44b31]' : 'text-purple-400'}`} />
                 </span>
               </Link>
             </div>
@@ -243,18 +266,21 @@ export default function Navbar() {
                   ? 'bg-[#000a02] border-[#00ff41]/20 hover:border-[#00ff41] hover:shadow-[0_0_15px_rgba(0,255,65,0.15)]'
                   : isLight
                     ? 'bg-white/80 border-slate-200 hover:border-indigo-400 shadow-sm hover:shadow-md'
-                    : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500 hover:bg-slate-800'
+                    : isCreative
+                      ? 'bg-[#faf8f5] border-[#dcd4c8] hover:border-[#c44b31] shadow-sm text-[#c44b31]'
+                      : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500 hover:bg-slate-800'
                   }`}
                 aria-label={`Switch theme (current: ${theme})`}
-                title={theme === 'dark' ? 'Switch to Light' : theme === 'light' ? 'Switch to Hacker' : 'Switch to Dark'}
+                title={theme === 'dark' ? 'Switch to Light' : theme === 'light' ? 'Switch to Hacker' : theme === 'hacker' ? 'Switch to Creative' : 'Switch to Dark'}
               >
                 <div className="relative w-5 h-5 md:w-[22px] md:h-[22px]">
                   <Sun className={`absolute inset-0 w-full h-full text-yellow-400 transition-all duration-300 ${theme === 'dark' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50'}`} />
                   <Moon className={`absolute inset-0 w-full h-full text-indigo-500 transition-all duration-300 ${theme === 'light' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-50'}`} />
                   <Terminal className={`absolute inset-0 w-full h-full text-[#00ff41] transition-all duration-300 ${theme === 'hacker' ? 'opacity-100 rotate-0 scale-100 drop-shadow-[0_0_4px_rgba(0,255,65,0.6)]' : 'opacity-0 rotate-90 scale-50'}`} />
+                  <Palette className={`absolute inset-0 w-full h-full text-[#c44b31] transition-all duration-300 ${theme === 'creative' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50'}`} />
                 </div>
-                <span className={`hidden lg:block text-xs font-medium ${isHacker ? 'text-[#00ff41]/80 font-mono' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                  {theme === 'dark' ? 'Dark' : theme === 'light' ? 'Light' : 'Dev'}
+                <span className={`hidden lg:block text-xs font-medium ${isHacker ? 'text-[#00ff41]/80 font-mono' : isLight ? 'text-slate-500' : isCreative ? 'text-[#c44b31]' : 'text-slate-400'}`}>
+                  {theme === 'dark' ? 'Dark' : theme === 'light' ? 'Light' : theme === 'hacker' ? 'Dev' : 'Creative'}
                 </span>
               </button>
 
