@@ -31,11 +31,9 @@ export function ThemeProvider({ children }) {
         document.body?.setAttribute('data-theme', theme);
         localStorage.setItem('portfolio-theme', theme);
 
-        // Set font family for hacker and creative themes
+        // Set font family for hacker theme
         if (theme === 'hacker') {
             document.body.style.fontFamily = "'Fira Code', 'JetBrains Mono', 'Source Code Pro', 'Cascadia Code', 'Consolas', monospace";
-        } else if (theme === 'creative') {
-            document.body.style.fontFamily = "'Playfair Display', Georgia, Cambria, serif";
         } else {
             document.body.style.fontFamily = '';
         }
