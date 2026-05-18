@@ -2,6 +2,7 @@ import './globals.css'
 import { ThemeProvider } from '../context/ThemeContext'
 import CustomCursor from '../components/CustomCursor'
 import FloatingContactButton from '../components/FloatingContactButton'
+import LightweightParticles from '../components/LightweightParticles'
 
 export const metadata = {
   title: 'Mahmud Hasan Ratul | Full Stack & AI Engineer',
@@ -35,8 +36,9 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,300;1,14..32,400;1,14..32,500;1,14..32,600;1,14..32,700;1,14..32,800;1,14..32,900&family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Dancing+Script:wght@400..700&family=Alex+Brush&family=Caveat:wght@400..700&family=Sacramento&display=swap" rel="stylesheet" />
       </head>
-      <body className="antialiased">
+      <body className="antialiased relative min-h-screen">
         <ThemeProvider>
+          <LightweightParticles />
           <CustomCursor />
           <FloatingContactButton />
           {children}
