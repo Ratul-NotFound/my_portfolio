@@ -826,7 +826,7 @@ function CompetencyConsole({ isLight, isHacker, isCreative }) {
                   <h4 className={`font-black tracking-tight text-sm md:text-base transition-colors duration-300 ${
                     isSelected
                       ? isHacker ? 'text-[#00ff41]' : isCreative ? 'text-white' : isLight ? 'text-slate-950' : 'text-white'
-                      : isHacker ? 'text-[#00cc32]/60 group-hover:text-[#00cc32]' : isCreative ? 'text-slate-400 group-hover:text-white' : isLight ? 'text-slate-650' : 'text-slate-400'
+                      : isHacker ? 'text-[#00cc32]/60 group-hover:text-[#00cc32]' : isCreative ? 'text-slate-400 group-hover:text-white' : isLight ? 'text-slate-500' : 'text-slate-400'
                   }`}>
                     {comp.title}
                   </h4>
@@ -1523,7 +1523,7 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
           }}
           transition={{ type: "spring", stiffness: 180, damping: 20 }}
           className={`absolute flex items-center gap-1 ${
-            isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#0088ff]' : isLight ? 'text-indigo-650' : 'text-cyan-400'
+            isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#0088ff]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
           }`}
           style={{ left: 'calc(50% - 60px)' }}
         >
@@ -2098,18 +2098,18 @@ const Portfolio = () => {
   if (!isMounted) return null;
 
   return (
-    <div className={`min-h-screen ${isHacker ? 'bg-[#000600] text-[#00ff41]' : isCreative ? 'bg-[#030303] text-white' : isLight ? 'bg-gradient-to-br from-blue-50 via-indigo-50/60 to-purple-50/50 text-slate-900' : 'bg-slate-950 text-white'} relative`}>
+    <div className={`min-h-screen ${isHacker ? 'bg-[#000600] text-[#00ff41]' : isCreative ? 'bg-[#030303] text-white' : isLight ? 'bg-[#f8fafc] text-slate-900' : 'bg-slate-950 text-white'} relative`}>
       <MemoNavbar />
 
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className={`absolute inset-0 ${isHacker ? 'bg-[#000400]' : isCreative ? 'bg-[#030303]' : isLight ? 'bg-gradient-to-br from-blue-50 via-indigo-50/60 to-purple-50/50' : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'}`}></div>
-        <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00ff41]/5 animate-pulse' : isCreative ? 'bg-[#0088ff]/8 animate-pulse' : isLight ? 'bg-gradient-to-br from-cyan-300/25 to-blue-300/20 animate-pulse' : 'bg-cyan-500/10 animate-pulse'}`}></div>
-        <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00cc32]/5 animate-pulse' : isCreative ? 'bg-[#00d8b4]/8 animate-pulse' : isLight ? 'bg-gradient-to-tl from-purple-300/25 to-indigo-300/20 animate-pulse' : 'bg-purple-500/10 animate-pulse'}`} style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+        <div className={`absolute inset-0 ${isHacker ? 'bg-[#000400]' : isCreative ? 'bg-[#030303]' : isLight ? 'bg-[#f8fafc]' : 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'}`}></div>
+        <div className={`absolute top-0 -left-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00ff41]/5 animate-pulse' : isCreative ? 'bg-[#0088ff]/8 animate-pulse' : isLight ? 'bg-[#4f46e5]/5 animate-pulse' : 'bg-cyan-500/10 animate-pulse'}`}></div>
+        <div className={`absolute bottom-0 -right-40 w-96 h-96 rounded-full blur-3xl ${isHacker ? 'bg-[#00cc32]/5 animate-pulse' : isCreative ? 'bg-[#00d8b4]/8 animate-pulse' : isLight ? 'bg-[#8b5cf6]/5 animate-pulse' : 'bg-purple-500/10 animate-pulse'}`} style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
         {isLight && (
           <>
-            <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-gradient-to-br from-pink-300/15 to-rose-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
-            <div className="absolute bottom-1/3 left-1/3 w-80 h-80 bg-gradient-to-tr from-cyan-300/15 to-teal-300/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '6s' }}></div>
+            <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#4f46e5]/4 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }}></div>
+            <div className="absolute bottom-1/3 left-1/3 w-80 h-80 bg-[#06b6d4]/4 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '6s' }}></div>
           </>
         )}
         {isCreative && (
@@ -2251,7 +2251,7 @@ const Portfolio = () => {
                 >
                   <a
                     href="#projects"
-                    className={`group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 overflow-hidden ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-indigo-500/30' : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'}`}
+                    className={`group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 overflow-hidden ${isHacker ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_25px_rgba(0,255,65,0.2)]' : isLight ? 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-xl hover:shadow-indigo-500/20' : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-2xl hover:shadow-cyan-500/40'}`}
                   >
                     <span className="relative z-10">Explore Projects</span>
                     <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
@@ -2505,7 +2505,7 @@ const Portfolio = () => {
                                     className={`p-2 border rounded-xl transition-all hover:scale-105 ${isHacker ? 'bg-black border-[#00ff41]/20 hover:border-[#00ff41]' : isLight ? 'bg-slate-50 border-slate-200 hover:border-indigo-400' : 'bg-slate-800/80 border-slate-700 hover:border-cyan-500'}`}
                                     onClick={(e) => e.stopPropagation()}
                                   >
-                                    <Github className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-650' : 'text-white'}`} />
+                                    <Github className={`w-4 h-4 ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-600' : 'text-white'}`} />
                                   </a>
                                 )}
                                 {project.links.live && project.links.live !== '#' && (
@@ -2513,7 +2513,7 @@ const Portfolio = () => {
                                     href={project.links.live}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="p-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl transition-all hover:scale-105 shadow-md shadow-cyan-500/20"
+                                    className={`p-2 rounded-xl transition-all hover:scale-105 shadow-md ${isHacker ? 'bg-[#00ff41]/20 hover:bg-[#00ff41]/30 text-[#00ff41] shadow-[#00ff41]/10' : isCreative ? 'bg-[#0088ff] hover:bg-[#0077ee] text-white shadow-[#0088ff]/10' : isLight ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-500/10' : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-cyan-500/20'}`}
                                     onClick={(e) => e.stopPropagation()}
                                   >
                                     <ExternalLink className="w-4 h-4 text-white" />
@@ -2523,7 +2523,7 @@ const Portfolio = () => {
                             </div>
                           </div>
                           
-                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#8c6e58]' : isLight ? 'text-slate-650' : 'text-slate-350'}`}>
+                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#8c6e58]' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
                             {project.description}
                           </p>
 
@@ -2643,7 +2643,7 @@ const Portfolio = () => {
                     key={tech.id}
                     onClick={() => handleSetActiveTech(tech.id)}
                     className={`group relative flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 ${activeTech === tech.id
-                      ? isHacker ? 'bg-[#00ff41]/15 text-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.15)]' : isLight ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30'
+                      ? isHacker ? 'bg-[#00ff41]/15 text-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.15)]' : isLight ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' : 'bg-gradient-to-r from-cyan-600 to-purple-600 text-white shadow-lg shadow-cyan-500/30'
                       : isHacker ? 'text-[#00cc32]/50 hover:text-[#00ff41] hover:bg-[#00ff41]/5' : isLight ? 'text-slate-500 hover:text-indigo-600 hover:bg-indigo-50' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                       }`}
                   >

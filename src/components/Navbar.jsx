@@ -105,7 +105,9 @@ export default function Navbar() {
             ? 'linear-gradient(90deg, #00ff41, #00cc32, #39ff14)'
             : isCreative
               ? 'linear-gradient(90deg, #0088ff, #ec4899, #8b5cf6)'
-              : 'linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899)'
+              : isLight
+                ? '#4f46e5'
+                : 'linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899)'
         }}
       />
 
@@ -176,7 +178,7 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className={`text-base md:text-xl font-bold tracking-tight ${isHacker ? 'text-[#00ff41] font-mono drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : isCreative ? 'text-white' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>
+                <span className={`text-base md:text-xl font-bold tracking-tight ${isHacker ? 'text-[#00ff41] font-mono drop-shadow-[0_0_8px_rgba(0,255,65,0.5)]' : isCreative ? 'text-white' : isLight ? 'text-slate-900' : 'bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent'}`}>
                   Ratul
                 </span>
                 <span className={`text-[10px] md:text-xs font-mono tracking-wider ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#00d8b4]' : isLight ? 'text-slate-400' : 'text-slate-500'}`}>
@@ -271,7 +273,7 @@ export default function Navbar() {
                       : 'bg-slate-800/50 border-slate-700 hover:border-cyan-500 hover:bg-slate-800'
                   }`}
                 aria-label={`Switch theme (current: ${theme})`}
-                title={theme === 'dark' ? 'Switch to Light' : theme === 'light' ? 'Switch to Hacker' : theme === 'hacker' ? 'Switch to Creative' : 'Switch to Dark'}
+                title={theme === 'dark' ? 'Switch to Creative' : theme === 'creative' ? 'Switch to Light' : theme === 'light' ? 'Switch to Hacker' : 'Switch to Dark'}
               >
                 <div className="relative w-5 h-5 md:w-[22px] md:h-[22px]">
                   <Sun className={`absolute inset-0 w-full h-full text-yellow-400 transition-all duration-300 ${theme === 'dark' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-50'}`} />
@@ -298,7 +300,9 @@ export default function Navbar() {
                   className={`flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-sm font-semibold transition-colors overflow-hidden relative ${
                     isHacker
                       ? 'bg-[#00ff41]/15 border border-[#00ff41]/30 text-[#00ff41] hover:bg-[#00ff41]/25 hover:shadow-[0_0_20px_rgba(0,255,65,0.2)] font-mono'
-                      : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-lg hover:shadow-cyan-500/30'
+                      : isLight
+                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white hover:shadow-lg hover:shadow-indigo-500/20'
+                        : 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white hover:shadow-lg hover:shadow-cyan-500/30'
                   }`}
                 >
                   <span className="relative z-10 hidden md:inline">Hire Me</span>
