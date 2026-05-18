@@ -1497,10 +1497,7 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
               ? 'bg-white/80 border-slate-200/80 shadow-xl shadow-indigo-500/5'
               : 'bg-[#0b0f19]/80 border-slate-900 shadow-2xl'
       }`}
-      onHoverStart={() => setIsConnected(true)}
-      onHoverEnd={() => setIsConnected(false)}
-      onTouchStart={() => setIsConnected(true)}
-      onTouchEnd={() => setIsConnected(false)}
+      onClick={() => setIsConnected(prev => !prev)}
     >
       {/* Delicate background spotlight */}
       <div 
@@ -1584,7 +1581,7 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
             <p className={`text-[9px] font-bold tracking-widest uppercase ${
               isHacker ? 'text-[#00cc32]/60' : isCreative ? 'text-[#8c6e58] cursive-accent' : 'text-slate-400'
             }`}>
-              Hover to Connect
+              Tap to Connect
             </p>
           </div>
         )}
@@ -1618,7 +1615,7 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
                 Connection Established! 🤝
               </p>
               
-              <div className="flex items-center justify-center gap-2.5">
+              <div className="flex flex-wrap items-center justify-center gap-2.5">
                 <a
                   href="mailto:m.h.ratul18@gmail.com?subject=Let's%20Get%20In%20Touch!&body=Hi%20Ratul,%20I%20reached%20out%20to%20you%20via%20your%20digital%20handshake%20portal.%20Let's%20connect%20and%20build%20something%20amazing%20together!"
                   className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all hover:scale-105 ${
