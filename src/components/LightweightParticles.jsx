@@ -194,9 +194,41 @@ export default function LightweightParticles() {
           this.vy = (Math.random() - 0.5) * 0.12;
           this.tokens = tokenizeText(this.text, theme);
         } else {
-          this.radius = Math.random() * 1.5 + 0.6;
-          this.vx = (Math.random() - 0.5) * 0.25; // Slower drift for elegance
-          this.vy = (Math.random() - 0.5) * 0.25;
+          this.radius = Math.random() * 2.2 + 0.6; // Wider radius scope for gorgeous symbols
+          
+          // Parallax velocity based on depth (radius): closer (larger) objects move slightly faster
+          const speedMultiplier = this.radius * 0.15;
+          this.vx = (Math.random() - 0.5) * speedMultiplier;
+          this.vy = (Math.random() - 0.5) * speedMultiplier;
+          
+          // Micro-sway wave details for gas/dust-like fluid float
+          this.swaySpeed = Math.random() * 0.008 + 0.004;
+          this.swayRange = Math.random() * 0.12 + 0.04;
+          this.swayOffset = Math.random() * Math.PI * 2;
+          
+          // Shape & Programming Symbol Assignment depending on Active Theme
+          if (theme === 'hacker') {
+            const hackerSymbols = ['{', '}', '[', ']', ';', '+', '*', '=', '<', '>', '0', '1', '!', '$', '&', '_', '?', '~'];
+            this.symbol = hackerSymbols[Math.floor(Math.random() * hackerSymbols.length)];
+            const fontSize = Math.round(this.radius * 3.5 + 5.5);
+            this.symbolFont = `600 ${fontSize}px "Fira Code", "Courier New", monospace`;
+          } else if (theme === 'creative') {
+            const creativeSymbols = ['★', '✦', '◆', '▲', '●'];
+            this.symbol = creativeSymbols[Math.floor(Math.random() * creativeSymbols.length)];
+            const fontSize = Math.round(this.radius * 3.8 + 4.5);
+            this.symbolFont = `${fontSize}px sans-serif`;
+          } else {
+            // standard / dark / light themes: mix of geometric star sparks and soft circular points
+            const standardSymbols = ['✦', '◆', null];
+            const chosen = standardSymbols[Math.floor(Math.random() * standardSymbols.length)];
+            if (chosen) {
+              this.symbol = chosen;
+              const fontSize = Math.round(this.radius * 3.2 + 4.5);
+              this.symbolFont = `${fontSize}px sans-serif`;
+            } else {
+              this.symbol = null;
+            }
+          }
         }
         
         const colors = config.particleColors;
@@ -210,6 +242,11 @@ export default function LightweightParticles() {
       update(w, h) {
         this.x += this.vx;
         this.y += this.vy;
+        
+        // Dynamic sine sway to prevent boring straight line travel
+        if (!this.text) {
+          this.x += Math.sin(Date.now() * this.swaySpeed + this.swayOffset) * this.swayRange;
+        }
 
         // Wrap around boundaries
         if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) {
@@ -248,10 +285,16 @@ export default function LightweightParticles() {
           });
         } else {
           ctx.beginPath();
-          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          ctx.fillStyle = this.color;
           ctx.globalAlpha = this.opacity;
-          ctx.fill();
+          ctx.fillStyle = this.color;
+          
+          if (this.symbol) {
+            ctx.font = this.symbolFont;
+            ctx.fillText(this.symbol, this.x, this.y);
+          } else {
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
       }
     }
