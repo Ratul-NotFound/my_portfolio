@@ -245,10 +245,18 @@ const TechGrid = ({ skills, isHacker, isLight, isCreative }) => {
               <div className="absolute inset-0 border-2 border-cyan-500/0 group-hover/card:border-cyan-500/50 rounded-xl transition-all duration-500 group-hover/card:scale-125"></div>
             </div>
 
-            <div className="text-center">
-              <span className={`text-sm font-semibold transition-colors block ${isHacker ? 'text-[#00cc32]/70 group-hover/card:text-[#00ff41]' : isCreative ? 'text-slate-400 group-hover/card:text-[#0088ff]' : isLight ? 'text-slate-600 group-hover/card:text-indigo-600' : 'text-slate-300 group-hover/card:text-cyan-300'}`}>
-                {skill.name}
-              </span>
+            <div className="text-center font-mono text-[9px] select-none leading-tight">
+              {isHacker ? (
+                <div className="flex flex-col items-center">
+                  <span className="text-[#5c6370] text-[8px] opacity-40">{"// import"}</span>
+                  <span className="text-[#ff79c6]">import <span className="text-[#39ff14] font-bold">{skill.name}</span></span>
+                  <span className="text-[#ff79c6]">from <span className="text-[#ffb86c]">{"\"stack\""}</span>;</span>
+                </div>
+              ) : (
+                <span className={`text-sm font-semibold transition-colors block ${isCreative ? 'text-slate-400 group-hover/card:text-[#0088ff]' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
+                  {skill.name}
+                </span>
+              )}
             </div>
           </div>
 
@@ -1671,8 +1679,8 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
               exit={{ opacity: 0, y: -6 }}
               className="space-y-2.5"
             >
-              <p className={`text-xs font-mono uppercase tracking-wider ${isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#0088ff] cursive-accent' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>
-                Connection Established! 🤝
+              <p className={`text-xs font-mono uppercase tracking-wider ${isHacker ? 'text-[#abb2bf]' : isCreative ? 'text-[#0088ff] cursive-accent' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>
+                <SyntaxHighlight text="Connection Established! 🤝" isHacker={isHacker} />
               </p>
               
               <div className="flex flex-wrap items-center justify-center gap-2.5">
@@ -1689,7 +1697,7 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
                   }`}
                 >
                   <Mail className="w-4 h-4" />
-                  <span>Send Mail</span>
+                  <span><SyntaxHighlight text="Send Mail" isHacker={isHacker} /></span>
                 </a>
                 
                 <button
@@ -1709,7 +1717,7 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
                             : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
                   }`}
                 >
-                  {copied ? "Copied!" : "Copy Email"}
+                  {copied ? <SyntaxHighlight text="Copied!" isHacker={isHacker} /> : <SyntaxHighlight text="Copy Email" isHacker={isHacker} />}
                 </button>
               </div>
             </motion.div>
@@ -1720,10 +1728,10 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               className={`text-xs leading-relaxed select-none ${
-                isHacker ? 'text-[#00cc32]/50' : isCreative ? 'text-slate-400' : 'text-slate-500'
+                isHacker ? 'font-mono text-[#abb2bf]' : isCreative ? 'text-slate-400' : 'text-slate-500'
               }`}
             >
-              Move your cursor into this card to reach out. Two hands will connect in a digital handshake to establish direct mail channels!
+              <SyntaxHighlight text="Move your cursor into this card to reach out. Two hands will connect in a digital handshake to establish direct mail channels!" isHacker={isHacker} />
             </motion.p>
           )}
         </AnimatePresence>
@@ -1794,7 +1802,7 @@ const HeroTypewriter = ({ isHacker, isLight, isCreative }) => {
 
   return (
     <>
-      <span>{typedText}</span>
+       <span><SyntaxHighlight text={typedText} isHacker={isHacker} /></span>
       <span className={`w-2 h-5 animate-blink ${isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_rgba(0,255,65,0.6)]' : isLight ? 'bg-indigo-500' : 'bg-cyan-400'}`}></span>
     </>
   );
@@ -2435,8 +2443,8 @@ const Portfolio = () => {
 
                         {/* Category badge */}
                         <div className="absolute top-4 left-4 z-10">
-                          <span className="px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold text-white shadow-lg">
-                            {project.category}
+                          <span className={`px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-bold text-white shadow-lg ${isHacker ? 'font-mono' : ''}`}>
+                            <SyntaxHighlight text={project.category} isHacker={isHacker} />
                           </span>
                         </div>
 
@@ -2471,15 +2479,15 @@ const Portfolio = () => {
 
                         <div className="space-y-3.5 relative z-10">
                           <div className="flex justify-between items-start gap-4">
-                            <h3 className={`text-xl md:text-3xl font-black transition-colors leading-tight tracking-tight ${isHacker ? 'text-[#00ff41] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>
+                            <h3 className={`text-xl md:text-3xl font-black transition-colors leading-tight tracking-tight ${isHacker ? 'font-mono text-[#abb2bf] group-hover:drop-shadow-[0_0_6px_rgba(0,255,65,0.4)]' : isLight ? 'text-slate-800 group-hover:text-indigo-600' : 'text-white group-hover:text-cyan-300'}`}>
                               <span className="font-mono text-xs font-semibold mr-2.5 px-2 py-0.5 rounded border border-current opacity-40 select-none">0{project.id}</span>
-                              {project.title}
+                              <SyntaxHighlight text={project.title} isHacker={isHacker} />
                             </h3>
                             
                             {/* Project External Links & Registry ID */}
                             <div className="flex items-center gap-2 shrink-0 relative z-20">
                               <span className="font-mono text-[8px] opacity-25 uppercase tracking-widest hidden lg:inline">
-                                REG_ID: 0x9F{project.id}
+                                <SyntaxHighlight text={`REG_ID: 0x9F${project.id}`} isHacker={isHacker} />
                               </span>
 
                               <div className="flex gap-1.5">
@@ -2509,8 +2517,8 @@ const Portfolio = () => {
                             </div>
                           </div>
                           
-                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#8c6e58]' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
-                            {project.description}
+                          <p className={`text-xs md:text-sm leading-relaxed ${isHacker ? 'font-mono text-[#abb2bf]' : isCreative ? 'text-[#8c6e58]' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
+                            <SyntaxHighlight text={project.description} isHacker={isHacker} />
                           </p>
 
                           {/* Metrics Grid with active pulsing indicator */}
@@ -2518,7 +2526,7 @@ const Portfolio = () => {
                             {project.metrics.map((metric, j) => (
                               <div
                                 key={j}
-                                className={`relative group/metric py-1.5 px-3 backdrop-blur-sm border rounded-xl text-center transition-all hover:scale-105 cursor-default overflow-hidden ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/10 hover:border-[#00ff41]/30' : isLight ? 'bg-indigo-50/50 border-indigo-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/30 border-slate-700 hover:border-cyan-500/50'}`}
+                                className={`relative group/metric py-1.5 px-3 backdrop-blur-sm border rounded-xl text-center transition-all hover:scale-105 cursor-default overflow-hidden ${isHacker ? 'bg-[#00ff41]/5 border-[#00ff41]/10 hover:border-[#00ff41]/35' : isLight ? 'bg-indigo-50/50 border-indigo-200 hover:border-indigo-400 shadow-sm' : 'bg-slate-800/30 border-slate-700 hover:border-cyan-500/50'}`}
                               >
                                 <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover/metric:opacity-10 transition-opacity`}></div>
                                 <div className="relative flex items-center justify-center gap-1.5">
@@ -2526,7 +2534,7 @@ const Portfolio = () => {
                                     {isActive && <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 animate-duration-1000" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />}
                                     <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
                                   </span>
-                                  <span className={`text-[10px] sm:text-xs font-bold leading-none ${isHacker ? 'text-[#00ff41]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}>{metric}</span>
+                                  <span className={`text-[10px] sm:text-xs font-bold leading-none ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-indigo-650' : 'text-cyan-400'}`}><SyntaxHighlight text={metric} isHacker={isHacker} /></span>
                                 </div>
                               </div>
                             ))}
@@ -2541,20 +2549,20 @@ const Portfolio = () => {
                                 key={j}
                                 className={`inline-flex items-center px-2.5 py-0.5 border rounded-full text-[9px] md:text-[10px] font-mono font-bold tracking-wide transition-all ${
                                   isHacker 
-                                    ? 'bg-[#00ff41]/5 border-[#00ff41]/10 text-[#00ff41]/80 hover:border-[#00ff41]/35 shadow-sm' 
+                                    ? 'bg-[#00ff41]/5 border-[#00ff41]/10 text-[#abb2bf] hover:border-[#00ff41]/35 shadow-sm' 
                                     : isLight 
                                       ? 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-350 shadow-sm' 
                                       : 'bg-slate-800/40 border-slate-800 text-slate-300 hover:border-slate-700 shadow-sm'
                                 }`}
                               >
                                 <span className={`w-1.5 h-1.5 rounded-full mr-1.5 shrink-0 opacity-80 ${isActive ? 'animate-pulse' : ''}`} style={{ backgroundColor: isHacker ? '#00ff41' : isLight ? '#6366f1' : '#22d3ee' }} />
-                                {tech}
+                                <SyntaxHighlight text={tech} isHacker={isHacker} />
                               </span>
                             ))}
                           </div>
 
                           <div className={`flex items-center gap-2 text-xs font-black transition-all duration-300 ${activeProject === project.id ? 'text-cyan-400 translate-x-2' : 'text-transparent'}`}>
-                            <span>Explore Case Study</span>
+                            <span className={isHacker ? 'font-mono text-[#abb2bf]' : ''}><SyntaxHighlight text="Explore Case Study" isHacker={isHacker} /></span>
                             <ChevronRight className="w-3.5 h-3.5" />
                           </div>
                         </div>
@@ -2738,8 +2746,8 @@ const Portfolio = () => {
                     <br className="my-1" />
                     <InteractiveText text="Amazing Together" isHacker={isHacker} isLight={isLight} isCreative={isCreative} className={isHacker ? 'text-[#00ff41]/80' : isCreative ? 'text-[#2c2520] font-serif italic' : isLight ? 'text-slate-800' : 'text-white'} />
                   </h2>
-                  <p className={`text-xs md:text-sm max-w-md mx-auto leading-relaxed ${isHacker ? 'text-[#00cc32]/60' : isCreative ? 'text-[#6b5d54]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                    Bring the hands together in a digital handshake to establish a direct connection and reveal my contact details!
+                  <p className={`text-xs md:text-sm max-w-md mx-auto leading-relaxed ${isHacker ? 'font-mono text-[#abb2bf]' : isCreative ? 'text-[#6b5d54]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    <SyntaxHighlight text="Bring the hands together in a digital handshake to establish a direct connection and reveal my contact details!" isHacker={isHacker} />
                   </p>
                 </div>
 

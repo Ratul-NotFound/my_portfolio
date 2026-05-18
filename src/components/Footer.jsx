@@ -4,6 +4,31 @@ import { motion, useInView } from 'framer-motion';
 import { Github, Linkedin, Mail, Terminal, Heart, ArrowUp } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
+const FooterSyntaxHighlight = ({ text, isHacker }) => {
+  if (!isHacker) return <>{text}</>;
+  const parts = text.split(/(\s+|\(|\)|\[|\]|\{|\}|\:|\.|\,|;|=|->|::|•)/g);
+  return (
+    <>
+      {parts.map((part, idx) => {
+        if (!part) return null;
+        if (/^(Full-Stack|AI\/ML|System|Engineer|Researcher|Architect|Next\.js|Tailwind)$/i.test(part)) {
+          return <span key={idx} className="text-[#39ff14] font-semibold">{part}</span>; // Neon Green
+        }
+        if (/^(whoami|built|operational)$/i.test(part)) {
+          return <span key={idx} className="text-[#00bfff]">{part}</span>; // Neon Blue
+        }
+        if (/^(systems|all)$/i.test(part)) {
+          return <span key={idx} className="text-[#ffb86c]">{part}</span>; // Gold
+        }
+        if (/^(\$|\@|\©)$/.test(part)) {
+          return <span key={idx} className="text-[#ff79c6] font-semibold">{part}</span>; // Neon Pink
+        }
+        return <span key={idx} className="text-[#abb2bf]">{part}</span>;
+      })}
+    </>
+  );
+};
+
 export default function Footer() {
   const { theme } = useTheme();
   const isLight = theme === 'light';
@@ -66,13 +91,13 @@ export default function Footer() {
               </div>
             </div>
             <div className="space-y-2 text-sm">
-              <p className={`font-mono ${isHacker ? 'text-[#00cc32]/70' : isCreative ? 'text-[#0088ff] cursive-accent' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                <span className={isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#0088ff] cursive-accent' : 'text-cyan-400'}>$</span> whoami
+              <p className={`font-mono ${isHacker ? 'text-[#abb2bf]' : isCreative ? 'text-[#0088ff] cursive-accent' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                <FooterSyntaxHighlight text="$ whoami" isHacker={isHacker} />
               </p>
-              <p className={`pl-4 ${isHacker ? 'text-[#00cc32]' : isCreative ? 'text-slate-300' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>
-                Full-Stack Engineer<br />
-                AI/ML Researcher<br />
-                System Architect
+              <p className={`pl-4 font-mono ${isHacker ? 'text-[#abb2bf]' : isCreative ? 'text-slate-300' : isLight ? 'text-slate-600' : 'text-slate-300'}`}>
+                <FooterSyntaxHighlight text="Full-Stack Engineer" isHacker={isHacker} /><br />
+                <FooterSyntaxHighlight text="AI/ML Researcher" isHacker={isHacker} /><br />
+                <FooterSyntaxHighlight text="System Architect" isHacker={isHacker} />
               </p>
             </div>
           </motion.div>
@@ -132,12 +157,12 @@ export default function Footer() {
         {/* Bottom Bar */}
         <motion.div variants={itemVariants} className={`mt-12 pt-8 border-t ${isHacker ? 'border-[#00ff41]/15' : isCreative ? 'border-white/10' : isLight ? 'border-slate-200' : 'border-slate-800'}`}>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className={`flex items-center gap-2 text-sm ${isHacker ? 'text-[#00cc32]/60' : isCreative ? 'text-slate-400' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-              <span>© {new Date().getFullYear()}</span>
-              <span className={isHacker ? 'text-[#00ff41]/30' : isLight ? 'text-slate-300' : 'text-slate-600'}>•</span>
-              <span>Built with</span>
+            <div className={`flex items-center gap-2 text-sm ${isHacker ? 'font-mono text-[#abb2bf]' : isCreative ? 'text-slate-400' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              <span><FooterSyntaxHighlight text={`© ${new Date().getFullYear()}`} isHacker={isHacker} /></span>
+              <span className={isHacker ? 'text-[#ff79c6]/30' : isLight ? 'text-slate-300' : 'text-slate-600'}>•</span>
+              <span><FooterSyntaxHighlight text="Built with" isHacker={isHacker} /></span>
               <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />
-              <span>using Next.js & Tailwind</span>
+              <span><FooterSyntaxHighlight text="using Next.js & Tailwind" isHacker={isHacker} /></span>
             </div>
 
             <div className="flex items-center gap-4">
@@ -146,8 +171,8 @@ export default function Footer() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                 </span>
-                <span className={`text-xs font-mono ${isHacker ? 'text-[#00ff41]/60' : isCreative ? 'text-[#00ff41]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                  All systems operational
+                <span className={`text-xs font-mono ${isHacker ? 'text-[#abb2bf]' : isCreative ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                  <FooterSyntaxHighlight text="All systems operational" isHacker={isHacker} />
                 </span>
               </div>
 
