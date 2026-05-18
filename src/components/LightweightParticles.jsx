@@ -14,7 +14,19 @@ const FLOATING_TEXTS = [
   '120 FPS',
   '() => resolve()',
   'process.env.PORT',
-  'model.generate()'
+  'model.generate()',
+  'deep_learning',
+  'new Promise()',
+  'docker-compose up',
+  'while(alive) { learn() }',
+  'console.log("hello")',
+  'git checkout -b',
+  'Ctrl + Z',
+  'flex-direction',
+  'const AI = true',
+  'sudo apt update',
+  'Math.random()',
+  'useEffect(() => {}, [])'
 ];
 
 export default function LightweightParticles() {
@@ -40,21 +52,21 @@ export default function LightweightParticles() {
             particleColors: ['#00ff41', '#00cc32'],
             lineColor: 'rgba(0, 255, 65, 0.08)',
             maxDistance: 90,
-            densityDivider: 32000, // much higher = fewer particles (high performance)
+            densityDivider: 18000, // lower divider = more particles
           };
         case 'creative':
           return {
             particleColors: ['#0088ff', '#ec4899'],
             lineColor: 'rgba(0, 136, 255, 0.05)',
             maxDistance: 95,
-            densityDivider: 30000,
+            densityDivider: 16000,
           };
         case 'light':
           return {
             particleColors: ['#4f46e5', '#6366f1', '#0f172a'],
             lineColor: 'rgba(79, 70, 229, 0.04)',
             maxDistance: 80,
-            densityDivider: 36000,
+            densityDivider: 20000,
           };
         case 'dark':
         default:
@@ -149,16 +161,16 @@ export default function LightweightParticles() {
       const isMobile = window.innerWidth < 768 || (window.matchMedia('(pointer: coarse)').matches);
       
       // Extremely lightweight capped density: 
-      // Desktop: max 35 particles (prevents O(N^2) links overload)
-      // Mobile: max 12 particles (zero lag on phones)
-      const maxCount = isMobile ? 12 : 35;
-      const divider = isMobile ? config.densityDivider * 2.5 : config.densityDivider;
+      // Desktop: max 55 particles (beautiful density, O(N^2) link speed maintained)
+      // Mobile: max 22 particles (lag-free on mobile)
+      const maxCount = isMobile ? 22 : 55;
+      const divider = isMobile ? config.densityDivider * 1.5 : config.densityDivider;
       const count = Math.min(Math.floor(area / divider), maxCount); 
       
       particles = [];
       
-      // Desktop gets 5 floating texts, mobile gets 2
-      const textCount = isMobile ? 2 : 5;
+      // Desktop gets 10 floating texts, mobile gets 4
+      const textCount = isMobile ? 4 : 10;
       const selectedTexts = [...FLOATING_TEXTS].sort(() => 0.5 - Math.random()).slice(0, textCount);
       
       for (let i = 0; i < textCount; i++) {
