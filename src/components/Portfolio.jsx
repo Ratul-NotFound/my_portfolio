@@ -1854,78 +1854,10 @@ const Portfolio = () => {
 
     window.addEventListener('mousemove', handleMouse, { passive: true });
 
-    // High performance Canvas particle loop
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    
-    let animationFrame;
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    // Create particles
-    const particles = Array.from({ length: 24 }, (_, i) => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: Math.random() * 2.2 + 0.8,
-      speedY: Math.random() * 0.2 + 0.05,
-      speedX: Math.random() * 0.06 - 0.03,
-      opacity: Math.random() * 0.4 + 0.1,
-      color: ['cyan', 'purple', 'pink'][Math.floor(Math.random() * 3)],
-      angle: Math.random() * Math.PI * 2
-    }));
-
-    const draw = () => {
-      // Freeze particle rendering on deep scroll to completely suspend graphics layer overhead
-      if (window.scrollY > 1100) {
-        animationFrame = requestAnimationFrame(draw);
-        return;
-      }
-      
-      ctx.clearRect(0, 0, width, height);
-      const now = Date.now();
-
-      // Draw particles
-      particles.forEach(p => {
-        p.y = (p.y + p.speedY) % (height + 10);
-        p.x = (p.x + p.speedX + Math.sin(now * 0.001 + p.angle) * 0.03 + width) % width;
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        
-        let colorStr = '#06b6d4';
-        if (isHacker) colorStr = '#00ff41';
-        else if (isCreative) {
-          if (p.color === 'purple') colorStr = '#8b5cf6'; // Creative Purple
-          else if (p.color === 'pink') colorStr = '#00d8b4'; // Electric Teal
-          else colorStr = '#0088ff'; // Electric Blue
-        }
-        else if (p.color === 'purple') colorStr = '#8b5cf6';
-        else if (p.color === 'pink') colorStr = '#ec4899';
-
-        ctx.fillStyle = colorStr;
-        ctx.globalAlpha = isHacker ? p.opacity * 0.65 : isCreative ? p.opacity * 0.35 : isLight ? p.opacity * 0.4 : p.opacity;
-        ctx.fill();
-      });
-
-      animationFrame = requestAnimationFrame(draw);
-    };
-
-    draw();
-
     return () => {
-      cancelAnimationFrame(animationFrame);
       window.removeEventListener('mousemove', handleMouse);
-      window.removeEventListener('resize', handleResize);
     };
-  }, [isMounted, isHacker, isLight, isCreative]);
+  }, [isMounted]);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -2125,11 +2057,6 @@ const Portfolio = () => {
           </>
         )}
         <div className={`absolute inset-0 ${isHacker ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgwLDI1NSw2NSwwLjA2KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-60" : isCreative ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNDAsIDExMCwgODgsIDAuMDQpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-45" : isLight ? "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNikiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" : "bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg2LDE4MiwyMTIsMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"}`}></div>
-
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 pointer-events-none opacity-50 z-0"
-        />
 
         <div
           ref={spotlightRef}
