@@ -66,17 +66,13 @@ export default function LightweightParticles() {
         case 'hacker':
           return {
             particleColors: [
-              '#61afef', // Keyword/Function Blue
-              '#c678dd', // Import/Control Flow Purple
-              '#e5c07b', // Variable/Class Yellow
-              '#98c379', // Comment/Constant Mint Green
-              '#e06c75', // Operator/String Pink-Red
-              '#56b6c2', // Type/Special Symbol Cyan
-              '#00ff41'  // Classic Terminal Green
+              'rgba(0, 255, 65, 0.20)',  // Subtle Terminal Neon Green
+              'rgba(0, 204, 50, 0.12)',  // Subdued Green
+              'rgba(0, 102, 25, 0.08)'   // Ultra Dim Ambient Matrix Green
             ],
-            lineColor: 'rgba(97, 175, 239, 0.06)', // Subtle, elegant IDE-colored links
-            maxDistance: 90,
-            densityDivider: 18000, // lower divider = more particles
+            lineColor: 'rgba(0, 255, 65, 0.02)', // Extremely subtle links
+            maxDistance: 85,
+            densityDivider: 10000, // More dots, but very light weight!
           };
         case 'creative':
           return {
@@ -207,8 +203,8 @@ export default function LightweightParticles() {
         this.color = colors[Math.floor(Math.random() * colors.length)];
         // Higher contrast opacity for the hacker/dev theme to preserve syntax highlighting separation over dark background
         this.opacity = this.text 
-          ? (theme === 'hacker' ? Math.random() * 0.2 + 0.45 : Math.random() * 0.1 + 0.1) 
-          : (theme === 'hacker' ? Math.random() * 0.2 + 0.25 : Math.random() * 0.3 + 0.2);
+          ? (theme === 'hacker' ? Math.random() * 0.1 + 0.15 : Math.random() * 0.1 + 0.1) 
+          : (theme === 'hacker' ? Math.random() * 0.12 + 0.04 : Math.random() * 0.3 + 0.2);
       }
 
       update(w, h) {
@@ -276,17 +272,25 @@ export default function LightweightParticles() {
       
       particles = [];
       
-      // Desktop gets 18 floating texts, mobile gets 8
-      const textCount = isMobile ? 8 : 18;
-      const selectedTexts = [...FLOATING_TEXTS].sort(() => 0.5 - Math.random()).slice(0, textCount);
-      
-      for (let i = 0; i < textCount; i++) {
-        particles.push(new Particle(w, h, selectedTexts[i]));
-      }
+      const isHacker = theme === 'hacker';
+      if (isHacker) {
+        // Dev theme: purely simple, elegant, ultra-subtle matrix point particles!
+        // No large floating text backgrounds that conflict with readable foreground text!
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle(w, h));
+        }
+      } else {
+        // Other themes: standard text + point layout
+        const textCount = isMobile ? 8 : 18;
+        const selectedTexts = [...FLOATING_TEXTS].sort(() => 0.5 - Math.random()).slice(0, textCount);
+        
+        for (let i = 0; i < textCount; i++) {
+          particles.push(new Particle(w, h, selectedTexts[i]));
+        }
 
-      // Rest of the particles are standard small points
-      for (let i = 0; i < count - textCount; i++) {
-        particles.push(new Particle(w, h));
+        for (let i = 0; i < count - textCount; i++) {
+          particles.push(new Particle(w, h));
+        }
       }
     };
 
