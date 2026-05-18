@@ -230,41 +230,56 @@ const ShufflingProjectWrapper = ({ children, index, total, progress, activeProje
     const startVal = index;
     const endVal = index - (total - 1);
 
-    // Dynamic stack position: maps progress to stacking index using a direct linear range to keep Framer Motion's compiler happy
+    // Dynamic stack position
     const deckPosition = useTransform(
         clampedProgress,
         [0, 0.75, 1.0],
         [startVal, endVal, endVal]
     );
 
-    // High performance unified 3D Transform: computes translate, scale, and rotate in a single pass to save CPU cycles
-    const transform3d = useTransform(deckPosition, (pos) => {
-        let scaleVal = 1.0;
-        let yVal = 0;
-        let zVal = 0;
-        let xVal = "0vw";
-        let rotateVal = 0;
-        
+    // GPU-accelerated individual transformations to run on the compositor thread
+    const cardScale = useTransform(deckPosition, (pos) => {
         if (pos >= 0) {
-            // Cards behind in stack
-            scaleVal = 1.0 - Math.min(3, pos) * 0.04;
-            yVal = Math.min(3, pos) * 12;
-            zVal = Math.min(3, pos) * -20;
-        } else {
-            // Top card exiting
-            zVal = 10;
-            const exitP = Math.min(1.0, Math.abs(pos));
-            xVal = `${xDir * exitP * 100}vw`;
-            rotateVal = xDir * exitP * 8;
+            return 1.0 - Math.min(3, pos) * 0.04;
         }
-        
-        return `translateX(${xVal}) translateY(${yVal}px) translateZ(${zVal}px) rotate(${rotateVal}deg) scale(${scaleVal})`;
+        return 1.0;
+    });
+
+    const cardY = useTransform(deckPosition, (pos) => {
+        if (pos >= 0) {
+            return Math.min(3, pos) * 12;
+        }
+        return 0;
+    });
+
+    const cardZ = useTransform(deckPosition, (pos) => {
+        if (pos >= 0) {
+            return Math.min(3, pos) * -20;
+        }
+        return 10;
+    });
+
+    const cardXRaw = useTransform(deckPosition, (pos) => {
+        if (pos >= 0) {
+            return 0;
+        }
+        const exitP = Math.min(1.0, Math.abs(pos));
+        return xDir * exitP * 100;
+    });
+    const cardX = useTransform(cardXRaw, x => `${x}vw`);
+
+    const cardRotate = useTransform(deckPosition, (pos) => {
+        if (pos >= 0) {
+            return 0;
+        }
+        const exitP = Math.min(1.0, Math.abs(pos));
+        return xDir * exitP * 8;
     });
 
     // Opacity: cards at the back are partially transparent, top card is fully opaque, exited card is hidden
     const opacity = useTransform(deckPosition, (pos) => {
         if (pos >= 0) {
-            return 1.0 - Math.min(3, pos) * 0.25; // 1.0 -> 0.75 -> 0.5 -> 0.25
+            return 1.0 - Math.min(3, pos) * 0.25;
         } else {
             const exitP = Math.abs(pos);
             return Math.max(0, 1.0 - exitP);
@@ -286,13 +301,17 @@ const ShufflingProjectWrapper = ({ children, index, total, progress, activeProje
         <motion.div
             style={{
                 zIndex: computedZIndex,
-                transform: transform3d,
+                x: cardX,
+                y: cardY,
+                z: cardZ,
+                scale: cardScale,
+                rotate: cardRotate,
                 opacity,
                 transformStyle: 'preserve-3d',
                 backfaceVisibility: 'hidden',
                 willChange: 'transform, opacity'
             }}
-            className="absolute inset-0 m-auto h-[390px] max-h-[70vh] w-[94vw] md:w-[850px] will-change-transform"
+            className="absolute inset-0 m-auto h-[390px] max-h-[70vh] w-[94vw] md:w-[850px]"
         >
             {children}
         </motion.div>
