@@ -8,6 +8,44 @@ import { useTheme } from '../context/ThemeContext';
 import LightweightParticles from './LightweightParticles';
 const MemoNavbar = React.memo(Navbar);
 const MemoFooter = React.memo(Footer);
+
+const SyntaxHighlight = ({ text, isHacker }) => {
+  if (!isHacker) return <>{text}</>;
+
+  // Tokenize using typical IDE / shell command separator
+  const parts = text.split(/(\s+|\(|\)|\[|\]|\{|\}|\:|\.|\,|;|=|->|::|•)/g);
+
+  return (
+    <>
+      {parts.map((part, idx) => {
+        if (!part) return null;
+
+        // Keywords (pink)
+        if (/^(const|let|var|function|import|export|default|await|while|new|sudo|git|npm|process|docker-compose|sys|SYS|NET|GPU|DB|API|ML|MODEL|AGENT|VEC|FLOW|COMP_SELECTOR_01|LIVE|MONITOR|STATUS|COMPILED|LATENCY|SYNERGY|and|to|via|with|on|in|using|for|through|or|as|of)$/i.test(part)) {
+          return <span key={idx} className="text-[#ff79c6] font-semibold">{part}</span>;
+        }
+        // Functions / Action words (blue)
+        if (/^(log|generate|sync|resolve|push|run|checkout|random|getItem|sin|write|keys|useRef|useEffect|commit|apt|update|establishing|initializing|loading|binding|adjusting|validation|completed|launching|validating|routing|scaling|optimizing|investigating|engineering|developing|building|leveraging|solve)$/i.test(part)) {
+          return <span key={idx} className="text-[#00bfff]">{part}</span>;
+        }
+        // Constants / Numbers / Metrics / Values (orange/yellow)
+        if (/^(true|false|\d+|FPS|NOT|FOUND|Antigravity|PORT|bin|adam|0\.0042|1e-4|0\.024|\d+ms|v\d+\.\d+|\d+\%|\d+\+?|avg|Pinecone|Redis|CUDA|RAG|LLM|MLOps)$/i.test(part)) {
+          return <span key={idx} className="text-[#ffb86c]">{part}</span>;
+        }
+        // Types / Core subjects (neon green)
+        if (/^(Object|GPT_4|GPT_5|Promise|AI|Math|localStorage|weights|state|dispatch|ref|inView|prev|data|response|target|Full|Stack|Development|Machine|Learning|Automation|Research|Scientist|Compiler|Theory|Cloud|Scale|systems|problems|backends|protocols|layers|controls|embeddings|transformers|frameworks|paradigms|nodes|clusters|pipelines)$/i.test(part)) {
+          return <span key={idx} className="text-[#39ff14] font-semibold">{part}</span>;
+        }
+        // Operators & punctuation (bright grey/white)
+        if (/^(\(|\)|\[|\]|\{|\}|\:|\.|\,|;|=|->|::|•)$/.test(part)) {
+          return <span key={idx} className="text-[#e2e8f0] opacity-90">{part}</span>;
+        }
+        // Normal text (code silver-grey)
+        return <span key={idx} className="text-[#abb2bf]">{part}</span>;
+      })}
+    </>
+  );
+};
 import {
   Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2,
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
@@ -848,10 +886,10 @@ function CompetencyConsole({ isLight, isHacker, isCreative }) {
                       ? isHacker ? 'text-[#00ff41]' : isCreative ? 'text-white' : isLight ? 'text-slate-950' : 'text-white'
                       : isHacker ? 'text-[#00cc32]/60 group-hover:text-[#00cc32]' : isCreative ? 'text-slate-400 group-hover:text-white' : isLight ? 'text-slate-500' : 'text-slate-400'
                   }`}>
-                    {comp.title}
+                    <SyntaxHighlight text={comp.title} isHacker={isHacker} />
                   </h4>
                   <span className="text-[8px] md:text-[9px] font-mono font-bold tracking-wider uppercase opacity-55 select-none leading-none">
-                    {comp.role}
+                    <SyntaxHighlight text={comp.role} isHacker={isHacker} />
                   </span>
                 </div>
               </div>
@@ -987,11 +1025,11 @@ function CompetencyConsole({ isLight, isHacker, isCreative }) {
             {/* Content Details right (md:col-span-8) */}
             <div className="md:col-span-8 space-y-4">
               <h3 className={`text-2xl md:text-3xl font-black tracking-tight ${isHacker ? 'text-[#00ff41]' : isCreative ? 'text-white' : isLight ? 'text-slate-900' : 'text-white'}`}>
-                {active.title}
+                <SyntaxHighlight text={active.title} isHacker={isHacker} />
               </h3>
               
-              <p className={`text-sm md:text-base leading-relaxed leading-7 ${isHacker ? 'text-[#00cc32]/80' : isCreative ? 'text-slate-350' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
-                {active.desc}
+              <p className={`text-sm md:text-base leading-relaxed leading-7 ${isHacker ? 'font-mono text-[#abb2bf]' : isCreative ? 'text-slate-350' : isLight ? 'text-slate-600' : 'text-slate-350'}`}>
+                <SyntaxHighlight text={active.desc} isHacker={isHacker} />
               </p>
 
               {/* Dynamic tag cluster */}
@@ -1027,16 +1065,16 @@ function CompetencyConsole({ isLight, isHacker, isCreative }) {
                   : 'bg-[#0d1527] border-slate-900 text-cyan-400'
           }`}>
             {/* Blinking prompt */}
-            <div className="flex items-center justify-between border-b pb-2 mb-2 select-none opacity-45" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.03)' }}>
-              <span>TERMINAL COMPILER SHELL v2.08</span>
-              <span>STATUS: COMPILED</span>
+            <div className="flex items-center justify-between border-b pb-2 mb-2 select-none opacity-80" style={{ borderColor: isHacker ? 'rgba(0,255,65,0.08)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.03)' }}>
+              <span><SyntaxHighlight text="TERMINAL COMPILER SHELL v2.08" isHacker={isHacker} /></span>
+              <span><SyntaxHighlight text="STATUS: COMPILED" isHacker={isHacker} /></span>
             </div>
 
             <div className="space-y-1 select-none">
               {terminalLogs.map((log, index) => (
                 <div key={index} className="flex items-center gap-1">
                   <span className="opacity-40">&gt;</span>
-                  <span>{log}</span>
+                  <span><SyntaxHighlight text={log} isHacker={isHacker} /></span>
                 </div>
               ))}
               {terminalLogs.length < active.logs.length && (
@@ -2287,13 +2325,13 @@ const Portfolio = () => {
                 </h2>
               </ParallaxHeading>
               <motion.p
-                className={`text-lg md:text-xl max-w-3xl mx-auto ${isHacker ? 'text-[#00cc32]/60' : isLight ? 'text-slate-500' : 'text-slate-400'}`}
+                className={`text-lg md:text-xl max-w-3xl mx-auto ${isHacker ? 'font-mono text-[#abb2bf]' : isLight ? 'text-slate-500' : 'text-slate-400'}`}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                Building scalable systems and leveraging AI to solve real-world problems
+                <SyntaxHighlight text="Building scalable systems and leveraging AI to solve real-world problems" isHacker={isHacker} />
               </motion.p>
             </div>
 
