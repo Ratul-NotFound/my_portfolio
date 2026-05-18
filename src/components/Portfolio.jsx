@@ -50,7 +50,7 @@ import {
   Github, Linkedin, Mail, ExternalLink, Download, Terminal, Code2,
   Sparkles, Zap, Brain, Server, Globe, ArrowRight, MapPin,
   Star, Cpu, Network, Award, TrendingUp, Coffee, Rocket,
-  Circle, ChevronRight, ChevronDown, Hand, BookOpen
+  Circle, ChevronRight, ChevronDown, Hand, BookOpen, Loader2
 } from 'lucide-react';
 
 const springConfig = { stiffness: 90, damping: 26, mass: 0.5, restDelta: 0.01 };
@@ -1813,11 +1813,41 @@ const Portfolio = () => {
   const isLight = theme === 'light';
   const isHacker = theme === 'hacker';
   const isCreative = theme === 'creative';
+  const [isDownloadingResume, setIsDownloadingResume] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState('web-app');
   const [isMounted, setIsMounted] = useState(false);
   const [activeTech, setActiveTech] = useState('all');
   const [activeProject, setActiveProject] = useState(1);
   const [activeSection, setActiveSection] = useState('hero');
+
+  const handleDownloadResume = async (e) => {
+    e.preventDefault();
+    if (isDownloadingResume) return;
+    try {
+      setIsDownloadingResume(true);
+      // Dynamically import html2pdf to bypass SSR checks
+      const html2pdf = (await import('html2pdf.js')).default;
+      const element = document.getElementById('formal-landing-resume-document');
+      const opt = {
+        margin:       [0.4, 0.4, 0.4, 0.4],
+        filename:     'Mahmud_Hasan_Ratul_CV.pdf',
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { 
+          scale: 2.2,
+          useCORS: true, 
+          letterRendering: true,
+          logging: false 
+        },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      await html2pdf().set(opt).from(element).save();
+    } catch (err) {
+      console.error('Direct CV download failed:', err);
+      window.open('/resume', '_blank');
+    } finally {
+      setIsDownloadingResume(false);
+    }
+  };
   const heroRef = useRef(null);
   const { scrollY } = useScroll();
   const heroParallaxY = useTransform(scrollY, [0, 600], [0, -80]);
@@ -2266,13 +2296,24 @@ const Portfolio = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   </a>
 
-                  <a
-                    href="/resume"
-                    className={`group inline-flex items-center gap-3 px-8 py-4 backdrop-blur-xl border rounded-xl font-semibold transition-all hover:shadow-lg hover:scale-105 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 text-[#00ff41]/70 hover:border-[#00ff41] hover:text-[#00ff41]' : isLight ? 'bg-white/70 border-slate-200 text-slate-700 hover:border-indigo-400 hover:bg-white' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500 text-white'}`}
+                  <button
+                    onClick={handleDownloadResume}
+                    disabled={isDownloadingResume}
+                    className={`group inline-flex items-center gap-3 px-8 py-4 backdrop-blur-xl border rounded-xl font-semibold transition-all hover:shadow-lg hover:scale-105 disabled:opacity-50 ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/20 text-[#00ff41]/70 hover:border-[#00ff41] hover:text-[#00ff41]' : isLight ? 'bg-white/70 border-slate-200 text-slate-700 hover:border-indigo-400 hover:bg-white' : 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-cyan-500 text-white'}`}
                   >
-                    <Download className="w-5 h-5 group-hover:animate-bounce" />
-                    <span className={isHacker ? 'font-mono' : ''}><SyntaxHighlight text="Resume" isHacker={isHacker} /></span>
-                  </a>
+                    {isDownloadingResume ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Download className="w-5 h-5 group-hover:animate-bounce" />
+                    )}
+                    <span className={isHacker ? 'font-mono' : ''}>
+                      {isDownloadingResume ? (
+                        <SyntaxHighlight text="Compiling PDF..." isHacker={isHacker} />
+                      ) : (
+                        <SyntaxHighlight text="Download CV" isHacker={isHacker} />
+                      )}
+                    </span>
+                  </button>
                 </motion.div>
 
                 <motion.div
@@ -2792,6 +2833,172 @@ const Portfolio = () => {
           </div>
         </section>
       </main>
+
+      {/* Hidden World-Class corporate CV printable document targeted for PDF compilation */}
+      <div className="no-print" style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+        <div id="formal-landing-resume-document" className="bg-white text-slate-900 p-12 max-w-[8.5in] min-h-[11in] font-serif" style={{ width: '8.5in', boxSizing: 'border-box' }}>
+          {/* Header Block with profile pic */}
+          <div className="flex justify-between items-start border-b-2 border-slate-900 pb-4 mb-6" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ flex: 1, textAlign: 'left' }}>
+              <h1 className="text-3xl font-bold text-slate-955 font-serif" style={{ fontSize: '26px', margin: '0' }}>Mahmud Hasan Ratul</h1>
+              <p className="text-sm text-slate-700 font-serif italic mt-1" style={{ fontSize: '13px', margin: '0' }}>Software Engineer & AI Researcher</p>
+              <div className="flex flex-wrap items-center gap-2.5 text-xs text-slate-600 font-sans mt-2.5 font-medium" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', fontSize: '10.5px' }}>
+                <span>Dhaka, Bangladesh</span>
+                <span>•</span>
+                <a href="mailto:m.h.ratul18@gmail.com" className="underline text-slate-600">m.h.ratul18@gmail.com</a>
+                <span>•</span>
+                <a href="https://github.com/ratul-notfound" target="_blank" rel="noreferrer" className="underline text-slate-600">github.com/ratul-notfound</a>
+                <span>•</span>
+                <a href="https://linkedin.com/in/mahmud-hasan-ratul" target="_blank" rel="noreferrer" className="underline text-slate-600">linkedin.com/in/mahmud-hasan-ratul</a>
+              </div>
+            </div>
+            
+            {/* World-class corporate circular profile headshot */}
+            <div className="shrink-0 ml-4" style={{ width: '80px', height: '80px' }}>
+              <img 
+                src="/profile.jpg" 
+                alt="Mahmud Hasan Ratul Profile Headshot" 
+                className="rounded-full border-2 border-slate-200 object-cover" 
+                style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }}
+              />
+            </div>
+          </div>
+
+          {/* Professional Summary */}
+          <section className="mb-5" style={{ textAlign: 'left' }}>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-900 pb-0.5 mb-2 font-serif" style={{ fontSize: '11px' }}>
+              Professional Summary
+            </h2>
+            <p className="text-xs text-slate-800 text-justify leading-relaxed" style={{ fontSize: '11px', margin: '0' }}>
+              Results-driven Software Engineer and AI Researcher with extensive experience building scalable, high-performance web applications, intelligent automation systems, and real-time distributed pipelines. Active technical leader skilled at optimizing product architecture, conducting developer mentoring, and executing complex software integrations from inception to launch.
+            </p>
+          </section>
+
+          {/* Core Technical Stack Category */}
+          <section className="mb-5" style={{ textAlign: 'left' }}>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-900 pb-0.5 mb-2 font-serif" style={{ fontSize: '11px' }}>
+              Core Technical Stack
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px' }}>
+              <div>
+                <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-slate-500 mb-0.5" style={{ fontSize: '9px', margin: '0' }}>Languages</h3>
+                <p className="text-xs text-slate-800 font-sans" style={{ fontSize: '10.5px', margin: '0' }}>TypeScript, JavaScript (ES6+), Python, HTML5, CSS3</p>
+              </div>
+              <div>
+                <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-slate-500 mb-0.5" style={{ fontSize: '9px', margin: '0' }}>Frameworks</h3>
+                <p className="text-xs text-slate-800 font-sans" style={{ fontSize: '10.5px', margin: '0' }}>Next.js 14, React 18, React Native, Redux, FastAPI, Node.js</p>
+              </div>
+              <div>
+                <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-slate-500 mb-0.5" style={{ fontSize: '9px', margin: '0' }}>Database & Cloud</h3>
+                <p className="text-xs text-slate-800 font-sans" style={{ fontSize: '10.5px', margin: '0' }}>MongoDB, Firebase, PostgreSQL, Redis, Vercel</p>
+              </div>
+              <div>
+                <h3 className="text-[10px] font-sans font-bold uppercase tracking-widest text-slate-500 mb-0.5" style={{ fontSize: '9px', margin: '0' }}>AI & APIs</h3>
+                <p className="text-xs text-slate-800 font-sans" style={{ fontSize: '10.5px', margin: '0' }}>Gemini Pro API, Whisper API, GPT-4, Stripe, Socket.io</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Professional Experience */}
+          <section className="mb-5" style={{ textAlign: 'left' }}>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-900 pb-0.5 mb-2.5 font-serif" style={{ fontSize: '11px' }}>
+              Professional Experience & Leadership
+            </h2>
+            <div className="space-y-3.5" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div>
+                <div className="flex justify-between items-center gap-2" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <h3 className="text-xs font-bold text-slate-950 font-serif" style={{ fontSize: '11.5px', margin: '0', fontWeight: 'bold' }}>Vice President</h3>
+                  <span className="text-xs font-sans font-medium text-slate-600" style={{ fontSize: '10.5px' }}>Jan 2023 - Present</span>
+                </div>
+                <div className="flex justify-between items-center text-xs italic text-slate-700 mt-0.5" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px' }}>
+                  <span>Daffodil International University Computer & Programming Club (DIUCPC)</span>
+                  <span className="font-sans font-medium not-italic text-[10px] text-slate-500">Dhaka, Bangladesh</span>
+                </div>
+                <ul className="list-disc pl-5 mt-1.5 space-y-0.5" style={{ listStyleType: 'disc', paddingLeft: '20px', marginTop: '5px' }}>
+                  <li className="text-xs text-slate-800 text-justify leading-normal" style={{ fontSize: '10.5px' }}>Directing technical initiatives and organizing programming contests, scaling active community members from 200 to over 500+ active developers.</li>
+                  <li className="text-xs text-slate-800 text-justify leading-normal" style={{ fontSize: '10.5px' }}>Lead organizer for 15+ national hackathons and events, managing volunteer teams and coordinating strategic alignments with industry partners.</li>
+                  <li className="text-xs text-slate-800 text-justify leading-normal" style={{ fontSize: '10.5px' }}>Conducting technical workshops on Full Stack development, code reviews, and competitive programming mentoring sessions.</li>
+                </ul>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center gap-2" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <h3 className="text-xs font-bold text-slate-955 font-serif" style={{ fontSize: '11.5px', margin: '0', fontWeight: 'bold' }}>Co-Lead Volunteer (Crowd Control Management Head)</h3>
+                  <span className="text-xs font-sans font-medium text-slate-600" style={{ fontSize: '10.5px' }}>Dec 2024</span>
+                </div>
+                <div className="flex justify-between items-center text-xs italic text-slate-700 mt-0.5" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px' }}>
+                  <span>ICPC Dhaka Regional Contest 2024</span>
+                  <span className="font-sans font-medium not-italic text-[10px] text-slate-500">Dhaka, Bangladesh</span>
+                </div>
+                <ul className="list-disc pl-5 mt-1.5 space-y-0.5" style={{ listStyleType: 'disc', paddingLeft: '20px', marginTop: '5px' }}>
+                  <li className="text-xs text-slate-800 text-justify leading-normal" style={{ fontSize: '10.5px' }}>Engineered volunteer pipelines coordinating technical room layout setup, contest system initialization, and crowd management for 100+ competing universities.</li>
+                  <li className="text-xs text-slate-800 text-justify leading-normal" style={{ fontSize: '10.5px' }}>Successfully maintained operational workflow integrity and security parameters throughout high-stakes algorithmic challenges.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Projects Category */}
+          <section className="mb-5" style={{ textAlign: 'left' }}>
+            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-900 pb-0.5 mb-2.5 font-serif" style={{ fontSize: '11px' }}>
+              Featured Engineering Projects
+            </h2>
+            <div className="grid grid-cols-2 gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px' }}>
+              <div>
+                <div className="flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <h3 className="text-xs font-bold text-slate-950 font-serif" style={{ fontSize: '11px', margin: '0', fontWeight: 'bold' }}>CV Maker AI</h3>
+                  <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-400" style={{ fontSize: '8px' }}>SaaS Product</span>
+                </div>
+                <p className="text-[10px] font-sans text-slate-500 mt-0.5" style={{ fontSize: '9px', margin: '0' }}>Stack: Next.js 14, Gemini Pro, Stripe, TypeScript</p>
+                <p className="text-xs text-slate-700 mt-1 leading-relaxed text-justify" style={{ fontSize: '10.5px', marginTop: '3px' }}>
+                  LLM-powered resume analyzer with built-in ATS optimization engine. Handles weekly analysis workflows with an average 15ms processing latency and 92% assessment accuracy.
+                </p>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <h3 className="text-xs font-bold text-slate-950 font-serif" style={{ fontSize: '11px', margin: '0', fontWeight: 'bold' }}>UniVibe</h3>
+                  <span className="text-[9px] font-sans font-bold uppercase tracking-wider text-slate-400" style={{ fontSize: '8px' }}>Web Starter</span>
+                </div>
+                <p className="text-[10px] font-sans text-slate-500 mt-0.5" style={{ fontSize: '9px', margin: '0' }}>Stack: React 18, TypeScript, Vite, ESLint</p>
+                <p className="text-xs text-slate-700 mt-1 leading-relaxed text-justify" style={{ fontSize: '10.5px', marginTop: '3px' }}>
+                  Sleek modular React web architecture template loaded with instant HMR compilation, type-safe development rules, and pre-configured deployment rules.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Honors & Certifications */}
+          <div className="grid grid-cols-2 gap-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px', textAlign: 'left' }}>
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-900 pb-0.5 mb-2 font-serif" style={{ fontSize: '11px' }}>
+                Honors & Awards
+              </h2>
+              <div className="flex justify-between items-center text-xs" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px' }}>
+                <h3 className="font-bold text-slate-955" style={{ margin: '0', fontWeight: 'bold' }}>Best Innovation Award</h3>
+                <span className="text-slate-500 text-[10px] font-sans">Nov 2023</span>
+              </div>
+              <p className="text-xs italic text-indigo-700 font-sans" style={{ fontSize: '10px', margin: '0' }}>DIU Innovation Challenge 2023</p>
+              <p className="text-[11px] text-slate-700 mt-1 leading-relaxed" style={{ fontSize: '10px', marginTop: '3px' }}>First place and a $2,000 research grant for &quot;CodeMentor AI&quot;.</p>
+            </div>
+
+            <div>
+              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 border-b border-slate-900 pb-0.5 mb-2 font-serif" style={{ fontSize: '11px' }}>
+                Certifications
+              </h2>
+              <div className="space-y-2" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div className="flex justify-between items-start text-xs gap-2" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10.5px' }}>
+                  <div>
+                    <h3 className="font-bold text-slate-950 leading-tight" style={{ margin: '0', fontWeight: 'bold' }}>Google Gemini AI Developer</h3>
+                    <p className="text-[9px] text-slate-500 font-sans" style={{ fontSize: '9px', margin: '0' }}>Google Cloud & DeepLearning.AI</p>
+                  </div>
+                  <span className="text-slate-500 text-[10px] font-sans shrink-0">Dec 2025</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <MemoFooter />
     </div>
