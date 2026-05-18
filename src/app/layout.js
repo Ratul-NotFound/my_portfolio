@@ -1,6 +1,7 @@
 import './globals.css'
 import { ThemeProvider } from '../context/ThemeContext'
 import CustomCursor from '../components/CustomCursor'
+import FloatingContactButton from '../components/FloatingContactButton'
 
 export const metadata = {
   title: 'Mahmud Hasan Ratul | Full Stack & AI Engineer',
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
       <body className="antialiased">
         <ThemeProvider>
           <CustomCursor />
+          <FloatingContactButton />
           {children}
         </ThemeProvider>
       </body>

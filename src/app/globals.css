@@ -2332,6 +2332,201 @@ body {
 
 /* Maintain proper spacing and dimensions for nav item icons */
 [data-theme='creative'] nav button svg,
+/* ── Stagger fade-up children ── */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stagger-children.in-view > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.05s; }
+.stagger-children.in-view > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.15s; }
+.stagger-children.in-view > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.25s; }
+.stagger-children.in-view > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.35s; }
+
+/* ================== CREATIVE / STUDIO ART THEME OVERRIDES ================== */
+[data-theme='creative'] body {
+  background-color: #030303 !important;
+  color: #ffffff !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  background-image: radial-gradient(rgba(0, 136, 255, 0.08) 1.5px, transparent 1.5px) !important;
+  background-size: 40px 40px !important;
+}
+
+/* Creative: Global border reset and font resets */
+[data-theme='creative'] * {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Creative: Elegant organic arts & crafts container overrides */
+[data-theme='creative'] .bg-slate-950,
+[data-theme='creative'] .bg-slate-900,
+[data-theme='creative'] .bg-slate-800,
+[data-theme='creative'] .bg-slate-900\/98,
+[data-theme='creative'] .bg-slate-900\/95,
+[data-theme='creative'] .bg-slate-900\/90,
+[data-theme='creative'] .bg-slate-900\/80,
+[data-theme='creative'] .bg-slate-900\/50,
+[data-theme='creative'] .bg-slate-900\/30 {
+  background-color: rgba(10, 10, 10, 0.8) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme='creative'] .bg-slate-800\/50,
+[data-theme='creative'] .bg-slate-800\/30 {
+  background-color: rgba(15, 15, 15, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme='creative'] .hover\:bg-slate-800:hover,
+[data-theme='creative'] .hover\:bg-slate-700:hover {
+  background-color: rgba(20, 20, 20, 0.9) !important;
+  box-shadow: 0 16px 40px rgba(0, 136, 255, 0.12), 0 4px 16px rgba(236, 72, 153, 0.06) !important;
+  border-color: rgba(0, 136, 255, 0.4) !important;
+}
+
+/* Creative: Black background overlays */
+[data-theme='creative'] .bg-black\/90,
+[data-theme='creative'] .bg-black\/70,
+[data-theme='creative'] .bg-black\/50 {
+  background-color: rgba(5, 5, 5, 0.9) !important;
+}
+
+/* Creative: text colors Basalt, Taupe & Gray */
+[data-theme='creative'] .text-white,
+[data-theme='creative'] .text-slate-200 { color: #ffffff !important; }
+[data-theme='creative'] .text-slate-300 { color: #e2e8f0 !important; }
+[data-theme='creative'] .text-slate-450,
+[data-theme='creative'] .text-slate-400 { color: #94a3b8 !important; }
+[data-theme='creative'] .text-slate-555,
+[data-theme='creative'] .text-slate-500 { color: #64748b !important; }
+[data-theme='creative'] .text-slate-600 { color: #94a3b8 !important; }
+[data-theme='creative'] .text-slate-700 { color: #cbd5e1 !important; }
+[data-theme='creative'] .text-slate-800 { color: #e2e8f0 !important; }
+[data-theme='creative'] .text-slate-900 { color: #ffffff !important; }
+
+[data-theme='creative'] .placeholder-slate-500::placeholder {
+  color: #64748b !important;
+}
+
+/* Creative: Border overrides */
+[data-theme='creative'] .border-slate-800,
+[data-theme='creative'] .border-slate-700 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme='creative'] .border-slate-600 {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Creative: Typography overrides - Elegant serif display */
+[data-theme='creative'] h1,
+[data-theme='creative'] h2,
+[data-theme='creative'] h3,
+[data-theme='creative'] h4 {
+  font-family: 'Caveat', 'Caveat Fallback', cursive !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  color: #ffffff !important;
+}
+
+/* Creative: Vibrant Connected Handwritten Accent matching reference picture calligraphic script exactly! */
+[data-theme='creative'] .cursive-accent,
+[data-theme='creative'] em {
+  font-family: 'Caveat', 'Caveat Fallback', cursive !important;
+  font-style: normal !important;
+  font-size: 1.45em !important;
+  font-weight: 700 !important;
+  letter-spacing: 0px !important;
+  text-transform: none !important;
+  color: #0088ff !important; /* Vibrant Electric Neon Blue matching reference picture exactly */
+  text-shadow: 0 0 12px rgba(0, 136, 255, 0.6), 0 0 24px rgba(0, 136, 255, 0.3) !important;
+  display: inline-block !important;
+}
+
+/* Ensure cursive-accent inside buttons or monospace text remains legible but stylized */
+[data-theme='creative'] .font-mono.cursive-accent,
+[data-theme='creative'] .font-mono .cursive-accent {
+  font-family: 'Fira Code', 'JetBrains Mono', monospace !important;
+  font-style: italic !important;
+  font-size: 0.95em !important;
+  font-weight: 500 !important;
+  letter-spacing: 0px !important;
+  transform: none !important;
+  color: #00d8b4 !important; /* Solid Electric Teal coding accents */
+  text-shadow: none !important;
+}
+
+[data-theme='creative'] .italic {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-style: italic !important;
+}
+
+/* Creative: Accent color mappings (Electric Blue, Artist Magenta & Amber Marigold) */
+[data-theme='creative'] .text-cyan-400,
+[data-theme='creative'] .text-cyan-300,
+[data-theme='creative'] .text-cyan-500 {
+  color: #0088ff !important; /* Vibrant Electric Blue */
+}
+
+[data-theme='creative'] .text-purple-400,
+[data-theme='creative'] .text-purple-300,
+[data-theme='creative'] .text-purple-500 {
+  color: #8b5cf6 !important; /* Solid Creative Purple */
+}
+
+[data-theme='creative'] .text-pink-400,
+[data-theme='creative'] .text-pink-300,
+[data-theme='creative'] .text-pink-500 {
+  color: #00d8b4 !important; /* Solid Electric Teal */
+}
+
+/* Glass override for creative mode */
+[data-theme='creative'] .glass {
+  background: rgba(10, 10, 10, 0.75) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme='creative'] .glass-hover:hover {
+  background: rgba(15, 15, 15, 0.85) !important;
+  border-color: rgba(0, 136, 255, 0.4) !important;
+  box-shadow: 0 16px 40px rgba(0, 136, 255, 0.15) !important;
+}
+
+/* Creative scrollbar */
+[data-theme='creative'] ::-webkit-scrollbar-track {
+  background: #030303 !important;
+}
+
+[data-theme='creative'] ::-webkit-scrollbar-thumb {
+  background: #0088ff !important; /* Solid Electric Blue Scrollbar Handle */
+  border: 2px solid #030303 !important;
+  border-radius: 10px !important;
+}
+
+[data-theme='creative'] .animated-gradient-text {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  color: #0088ff !important; /* Solid Electric Blue */
+}
+
+/* Handwritten font override for Creative navbar items */
+[data-theme='creative'] nav button,
+[data-theme='creative'] nav a {
+  font-family: 'Caveat', 'Caveat Fallback', cursive !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Maintain proper spacing and dimensions for nav item icons */
+[data-theme='creative'] nav button svg,
 [data-theme='creative'] nav a svg {
   width: 1rem !important;
   height: 1rem !important;
@@ -2342,4 +2537,19 @@ body {
   html, body, a, button, [role="button"], input[type="submit"], input[type="button"], select {
     cursor: none !important;
   }
+}
+
+/* Waving Hand hover keyframes for floating contact CTA */
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  15% { transform: rotate(14deg); }
+  30% { transform: rotate(-8deg); }
+  45% { transform: rotate(14deg); }
+  60% { transform: rotate(-4deg); }
+  75% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.animate-wave {
+  animation: wave 1.2s ease-in-out infinite;
 }
