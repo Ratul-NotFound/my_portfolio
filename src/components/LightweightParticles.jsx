@@ -26,7 +26,23 @@ const FLOATING_TEXTS = [
   'const AI = true',
   'sudo apt update',
   'Math.random()',
-  'useEffect(() => {}, [])'
+  'useEffect(() => {}, [])',
+  'git commit --amend',
+  '[...prev, data]',
+  'neural_weights.bin',
+  'transform: translate3d',
+  'localStorage.getItem()',
+  'Math.sin(now * 0.05)',
+  'sys.stdout.write',
+  'import { motion }',
+  'const [ref, inView]',
+  'Object.keys(model)',
+  'optimizer: "adam"',
+  'loss: 0.0042',
+  'learning_rate = 1e-4',
+  'await response.json()',
+  'export default function',
+  'const target = useRef()'
 ];
 
 export default function LightweightParticles() {
@@ -160,17 +176,17 @@ export default function LightweightParticles() {
       
       const isMobile = window.innerWidth < 768 || (window.matchMedia('(pointer: coarse)').matches);
       
-      // Extremely lightweight capped density: 
-      // Desktop: max 55 particles (beautiful density, O(N^2) link speed maintained)
-      // Mobile: max 22 particles (lag-free on mobile)
-      const maxCount = isMobile ? 22 : 55;
-      const divider = isMobile ? config.densityDivider * 1.5 : config.densityDivider;
+      // Rich and dense but highly optimized particles layout: 
+      // Desktop: max 85 particles (beautiful developer cosmos constellation)
+      // Mobile: max 35 particles (lag-free on all phones)
+      const maxCount = isMobile ? 35 : 85;
+      const divider = isMobile ? config.densityDivider * 1.1 : config.densityDivider * 0.6;
       const count = Math.min(Math.floor(area / divider), maxCount); 
       
       particles = [];
       
-      // Desktop gets 10 floating texts, mobile gets 4
-      const textCount = isMobile ? 4 : 10;
+      // Desktop gets 18 floating texts, mobile gets 8
+      const textCount = isMobile ? 8 : 18;
       const selectedTexts = [...FLOATING_TEXTS].sort(() => 0.5 - Math.random()).slice(0, textCount);
       
       for (let i = 0; i < textCount; i++) {
