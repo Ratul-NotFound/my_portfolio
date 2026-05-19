@@ -188,37 +188,36 @@ const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }
   const clampedProgress = useTransform(progress, [0, 1], [0, 1], { clamp: true });
   const safeTotal = Math.max(1, total);
   
-  // Directions of entry depending on index to create a "flying in from different parts of the screen" effect
-  const directions = [
-    { x: -350, y: -250, r: -15, s: 0.8 },  // Top-Left
-    { x: 350,  y: -250, r: 15,  s: 0.8 },  // Top-Right
-    { x: -350, y: 250,  r: -20, s: 0.8 },  // Bottom-Left
-    { x: 350,  y: 250,  r: 20,  s: 0.8 },  // Bottom-Right
-    { x: -400, y: -50,  r: -10, s: 0.85 }, // Left-Slight-Top
-    { x: 400,  y: -50,  r: 10,  s: 0.85 }, // Right-Slight-Top
-    { x: -150, y: -350, r: -12, s: 0.8 },  // Top-Slight-Left
-    { x: 150,  y: -350, r: 12,  s: 0.8 },  // Top-Slight-Right
-    { x: -200, y: 350,  r: -8,  s: 0.85 }, // Bottom-Slight-Left
-    { x: 200,  y: 350,  r: 8,   s: 0.85 }, // Bottom-Slight-Right
-    { x: -450, y: 100,  r: -25, s: 0.75 }, // Far-Left-Bottom
-    { x: 450,  y: 100,  r: 25,  s: 0.75 }  // Far-Right-Bottom
+  // Stagger dynamics: Cards fly in from 3D space, alternating zoom in (coming from background depth) and zoom out (sinking from camera/foreground)
+  const dynamics = [
+    { x: -280, y: -200, z: -250, rx: 25,  ry: -25, rz: -12, s: 0.4 },  // Rise from depth (zoom in), top-left slant
+    { x: 280,  y: -200, z: 250,  rx: -25, ry: 25,  rz: 12,  s: 1.6 },  // Sink from camera (zoom out), top-right slant
+    { x: -280, y: 200,  z: 250,  rx: 25,  ry: 25,  rz: -15, s: 1.6 },  // Sink from camera (zoom out), bottom-left slant
+    { x: 280,  y: 200,  z: -250, rx: -25, ry: -25, rz: 15,  s: 0.4 },  // Rise from depth (zoom in), bottom-right slant
+    { x: -350, y: 0,    z: -180, rx: 0,   ry: -35, rz: -5,  s: 0.5 },  // Swing in from left depth (zoom in)
+    { x: 350,  y: 0,    z: 180,  rx: 0,   ry: 35,  rz: 5,   s: 1.5 },  // Drop down from right foreground (zoom out)
+    { x: 0,    y: -300, z: -300, rx: 35,  ry: 0,   rz: -8,  s: 0.3 },  // Zoom up from top background (zoom in)
+    { x: 0,    y: 300,  z: 300,  rx: -35, ry: 0,   rz: 8,   s: 1.7 },  // Zoom down from bottom foreground (zoom out)
   ];
 
-  const dir = directions[index % directions.length];
+  const dyn = dynamics[index % dynamics.length];
 
   // Wide staggered scroll window to ensure they arrive gradually and settle perfectly in order
   const start = (index / safeTotal) * 0.45;
   const end = Math.min(1.0, start + 0.50);
 
-  const scale = useTransform(clampedProgress, [start, end], [dir.s, 1]);
+  const scale = useTransform(clampedProgress, [start, end], [dyn.s, 1]);
   const opacity = useTransform(clampedProgress, [start, end], [0.0, 1]);
-  const y = useTransform(clampedProgress, [start, end], [dir.y, 0]);
-  const x = useTransform(clampedProgress, [start, end], [dir.x, 0]);
-  const rotateZ = useTransform(clampedProgress, [start, end], [dir.r, 0]);
+  const x = useTransform(clampedProgress, [start, end], [dyn.x, 0]);
+  const y = useTransform(clampedProgress, [start, end], [dyn.y, 0]);
+  const z = useTransform(clampedProgress, [start, end], [dyn.z, 0]);
+  const rotateX = useTransform(clampedProgress, [start, end], [dyn.rx, 0]);
+  const rotateY = useTransform(clampedProgress, [start, end], [dyn.ry, 0]);
+  const rotateZ = useTransform(clampedProgress, [start, end], [dyn.rz, 0]);
 
   return (
     <motion.div
-      style={{ scale, opacity, x, y, rotateZ }}
+      style={{ scale, opacity, x, y, z, rotateX, rotateY, rotateZ }}
       className={className}
     >
       {children}
@@ -236,7 +235,11 @@ const TechGrid = ({ skills, isHacker, isLight, isCreative }) => {
   const smoothProgress = useSpring(scrollYProgress, springConfig);
 
   return (
-    <div ref={ref} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+    <div 
+      ref={ref} 
+      className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4"
+      style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+    >
       {skills.map((skill, i) => (
         <ScrollSkillCard
           key={i}
