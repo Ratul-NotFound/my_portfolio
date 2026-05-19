@@ -1994,10 +1994,10 @@ const Portfolio = () => {
   );
 
   const snappyProjectsProgress = useSpring(projectsScrollProgress, {
-    stiffness: 180,
-    damping: 32,
-    mass: 0.4,
-    restDelta: 0.008
+    stiffness: 280,
+    damping: 38,
+    mass: 0.25,
+    restDelta: 0.005
   });
 
   const activeProjectRef = useRef(1);
