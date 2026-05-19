@@ -184,6 +184,54 @@ const ScrollHeading = ({ children, className }) => {
   );
 };
 
+const RulerTick = ({ index, total, progress, isHacker, isLight, isCreative }) => {
+  const tickProgress = index / total;
+  // A narrow window of influence (0.08) to make the focus feel sharp, magnetic, and tactile
+  const scaleY = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [1, 2.0, 1], { clamp: true });
+  const opacity = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [0.25, 1.0, 0.25], { clamp: true });
+  
+  const isMajor = index % 5 === 0;
+  const num = isMajor ? `0${index / 5 + 1}` : null;
+
+  // Dynamically select target glow colors based on the active theme
+  const getGlowColor = () => {
+    if (isHacker) return '#00ff41';
+    if (isCreative) return '#ec4899';
+    if (isLight) return '#4f46e5';
+    return '#22d3ee';
+  };
+
+  const glowColor = getGlowColor();
+
+  return (
+    <div className="flex flex-col items-center justify-center h-full relative w-3 select-none">
+      {isMajor ? (
+        <div className="flex flex-col items-center gap-1 translate-y-[-2px]">
+          <motion.span 
+            style={{ opacity }}
+            className={`font-mono text-[9px] md:text-[10px] font-black transition-colors ${
+              isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'
+            }`}
+          >
+            {num}
+          </motion.span>
+          <motion.div 
+            style={{ scaleY, opacity, backgroundColor: glowColor }}
+            className={`w-[2px] h-3 rounded-full ${
+              isHacker ? 'shadow-[0_0_6px_#00ff41]' : isCreative ? 'shadow-[0_0_6px_#ec4899]' : isLight ? 'shadow-[0_0_4px_rgba(79,70,229,0.3)]' : 'shadow-[0_0_6px_rgba(34,211,238,0.5)]'
+            }`}
+          />
+        </div>
+      ) : (
+        <motion.div 
+          style={{ scaleY, opacity, backgroundColor: glowColor }}
+          className={`w-[1px] h-1.5 rounded-full`}
+        />
+      )}
+    </div>
+  );
+};
+
 const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }) => {
   const clampedProgress = useTransform(progress, [0, 1], [0, 1], { clamp: true });
   const safeTotal = Math.max(1, total);
@@ -2712,35 +2760,25 @@ const Portfolio = () => {
 
             {/* Horizontal Measuring Scale (under the cards) */}
             <div className="pb-4 w-full max-w-xs sm:max-w-md px-6 shrink-0 z-50 pointer-events-none mt-8 md:mt-12">
-              <div className={`relative h-14 rounded-2xl flex items-center justify-between px-6 border backdrop-blur-md shadow-2xl overflow-hidden ${
+              <div className={`relative h-16 rounded-2xl flex items-center justify-between px-6 border backdrop-blur-md shadow-2xl overflow-hidden ${
                 isHacker ? 'bg-black/60 border-[#00ff41]/20' : isCreative ? 'bg-[#0a0a0a]/80 border-white/10' : isLight ? 'bg-slate-50/80 border-slate-200' : 'bg-slate-900/60 border-slate-800'
               }`}>
-                {/* Tick Marks & Numbers */}
+                {/* Sci-Fi hologram grid scanline overlay for futuristic tech feel */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none opacity-25" />
+
+                {/* Tick Marks & Numbers (Dynamic Bulging & Glow Wave) */}
                 <div className="absolute inset-0 flex justify-between items-center px-6">
-                  {Array.from({ length: 21 }).map((_, i) => {
-                    const isMajor = i % 5 === 0;
-                    const num = isMajor ? `0${i / 5 + 1}` : null;
-                    return (
-                      <div key={i} className="flex flex-col items-center justify-center h-full">
-                        {isMajor ? (
-                          <div className="flex flex-col items-center gap-1">
-                            <span className={`font-mono text-[9px] md:text-[10px] font-bold ${
-                              isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-700' : 'text-slate-350'
-                            }`}>
-                              {num}
-                            </span>
-                            <div className={`w-[2px] h-3 rounded-full ${
-                              isHacker ? 'bg-[#00ff41]/60' : isLight ? 'bg-slate-400' : 'bg-slate-600'
-                            }`} />
-                          </div>
-                        ) : (
-                          <div className={`w-[1px] h-1.5 rounded-full ${
-                            isHacker ? 'bg-[#00ff41]/20' : isLight ? 'bg-slate-300' : 'bg-slate-700/60'
-                          }`} />
-                        )}
-                      </div>
-                    );
-                  })}
+                  {Array.from({ length: 21 }).map((_, i) => (
+                    <RulerTick
+                      key={i}
+                      index={i}
+                      total={20}
+                      progress={snappyProjectsProgress}
+                      isHacker={isHacker}
+                      isLight={isLight}
+                      isCreative={isCreative}
+                    />
+                  ))}
                 </div>
 
                 {/* Sliding Glowing Pointer Indicator */}
@@ -2751,14 +2789,14 @@ const Portfolio = () => {
                       left: pointerPercentage
                     }}
                   >
-                    {/* Glowing highlight pointer */}
+                    {/* Glowing highlight pointer pointing down */}
                     <div className={`w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[6px] ${
-                      isHacker ? 'border-t-[#00ff41] drop-shadow-[0_0_8px_#00ff41]' : isCreative ? 'border-t-[#0088ff] drop-shadow-[0_0_8px_#0088ff]' : isLight ? 'border-t-indigo-600' : 'border-t-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]'
+                      isHacker ? 'border-t-[#00ff41] drop-shadow-[0_0_8px_#00ff41]' : isCreative ? 'border-t-[#ec4899] drop-shadow-[0_0_8px_#ec4899]' : isLight ? 'border-t-indigo-600' : 'border-t-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]'
                     }`} />
                     
                     {/* Glowing highlight bar running down behind active tick */}
-                    <div className={`w-[2px] h-10 ${
-                      isHacker ? 'bg-gradient-to-b from-[#00ff41] to-transparent' : isCreative ? 'bg-gradient-to-b from-[#0088ff] to-transparent' : isLight ? 'bg-gradient-to-b from-indigo-600 to-transparent' : 'bg-gradient-to-b from-cyan-400 to-transparent'
+                    <div className={`w-[2px] h-12 ${
+                      isHacker ? 'bg-gradient-to-b from-[#00ff41] to-transparent' : isCreative ? 'bg-gradient-to-b from-[#ec4899] to-transparent' : isLight ? 'bg-gradient-to-b from-indigo-600 to-transparent' : 'bg-gradient-to-b from-cyan-400 to-transparent'
                     }`} />
                   </motion.div>
                 </div>
