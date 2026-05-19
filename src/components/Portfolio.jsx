@@ -2688,34 +2688,31 @@ const Portfolio = () => {
               })}
             </div>
 
-            {/* Desktop Vertical Measuring Scale (Elevator Indicator) */}
-            <div className="absolute right-[4%] xl:right-[10%] top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center justify-center z-50 pointer-events-none">
-              <div className={`relative w-12 h-96 rounded-full flex flex-col items-center justify-between py-8 border backdrop-blur-md shadow-2xl overflow-hidden ${
+            {/* Horizontal Measuring Scale (under the cards) */}
+            <div className="pb-4 w-full max-w-xs sm:max-w-md px-6 shrink-0 z-50 pointer-events-none mt-8 md:mt-12">
+              <div className={`relative h-14 rounded-2xl flex items-center justify-between px-6 border backdrop-blur-md shadow-2xl overflow-hidden ${
                 isHacker ? 'bg-black/60 border-[#00ff41]/20' : isCreative ? 'bg-[#0a0a0a]/80 border-white/10' : isLight ? 'bg-slate-50/80 border-slate-200' : 'bg-slate-900/60 border-slate-800'
               }`}>
                 {/* Tick Marks & Numbers */}
-                <div className="absolute inset-0 flex flex-col justify-between items-center py-8">
+                <div className="absolute inset-0 flex justify-between items-center px-6">
                   {Array.from({ length: 21 }).map((_, i) => {
                     const isMajor = i % 5 === 0;
                     const num = isMajor ? `0${i / 5 + 1}` : null;
                     return (
-                      <div key={i} className="flex items-center justify-center w-full h-[8px]">
+                      <div key={i} className="flex flex-col items-center justify-center h-full">
                         {isMajor ? (
-                          <div className="flex items-center gap-2 w-full justify-center px-2">
-                            <div className={`w-3 h-[2px] rounded-full shrink-0 ${
-                              isHacker ? 'bg-[#00ff41]/40' : isLight ? 'bg-slate-400' : 'bg-slate-600'
-                            }`} />
-                            <span className={`font-mono text-[10px] font-bold w-4 text-center shrink-0 ${
+                          <div className="flex flex-col items-center gap-1">
+                            <span className={`font-mono text-[9px] md:text-[10px] font-bold ${
                               isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-700' : 'text-slate-350'
                             }`}>
                               {num}
                             </span>
-                            <div className={`w-3 h-[2px] rounded-full shrink-0 ${
-                              isHacker ? 'bg-[#00ff41]/40' : isLight ? 'bg-slate-400' : 'bg-slate-600'
+                            <div className={`w-[2px] h-3 rounded-full ${
+                              isHacker ? 'bg-[#00ff41]/60' : isLight ? 'bg-slate-400' : 'bg-slate-600'
                             }`} />
                           </div>
                         ) : (
-                          <div className={`w-3 h-[1px] rounded-full ${
+                          <div className={`w-[1px] h-1.5 rounded-full ${
                             isHacker ? 'bg-[#00ff41]/20' : isLight ? 'bg-slate-300' : 'bg-slate-700/60'
                           }`} />
                         )}
@@ -2724,68 +2721,8 @@ const Portfolio = () => {
                   })}
                 </div>
 
-                {/* Sliding Glowing Pointer Indicator (Double pointer ears sliding up/down) */}
-                <div className="absolute inset-y-8 left-0 right-0 pointer-events-none">
-                  <motion.div
-                    className="absolute left-0 right-0 -translate-y-1/2 flex justify-between items-center px-[2px]"
-                    style={{
-                      top: pointerPercentage
-                    }}
-                  >
-                    {/* Left Pointer Ear */}
-                    <div className={`w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[6px] ${
-                      isHacker ? 'border-l-[#00ff41] drop-shadow-[0_0_8px_#00ff41]' : isCreative ? 'border-l-[#ec4899] drop-shadow-[0_0_8px_#ec4899]' : isLight ? 'border-l-indigo-600' : 'border-l-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]'
-                    }`} />
-                    
-                    {/* Center highlight dot */}
-                    <div className={`w-1.5 h-1.5 rounded-full ${
-                      isHacker ? 'bg-[#00ff41] shadow-[0_0_8px_#00ff41]' : isCreative ? 'bg-[#0088ff] shadow-[0_0_8px_#0088ff]' : isLight ? 'bg-indigo-600' : 'bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]'
-                    }`} />
-
-                    {/* Right Pointer Ear */}
-                    <div className={`w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[6px] ${
-                      isHacker ? 'border-r-[#00ff41] drop-shadow-[0_0_8px_#00ff41]' : isCreative ? 'border-r-[#ec4899] drop-shadow-[0_0_8px_#ec4899]' : isLight ? 'border-r-indigo-600' : 'border-r-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]'
-                    }`} />
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Horizontal Measuring Scale (under the card) */}
-            <div className="pb-4 w-full max-w-xs px-6 shrink-0 z-50 pointer-events-none mt-6 md:mt-10 md:hidden">
-              <div className={`relative h-12 rounded-2xl flex items-center justify-between px-4 border backdrop-blur-md shadow-lg overflow-hidden ${
-                isHacker ? 'bg-black/60 border-[#00ff41]/20' : isCreative ? 'bg-[#0a0a0a]/80 border-white/10' : isLight ? 'bg-slate-50/80 border-slate-200' : 'bg-slate-900/60 border-slate-800'
-              }`}>
-                {/* Tick Marks & Numbers */}
-                <div className="absolute inset-0 flex justify-between items-center px-4">
-                  {Array.from({ length: 17 }).map((_, i) => {
-                    const isMajor = i % 4 === 0;
-                    const num = isMajor ? `0${i / 4 + 1}` : null;
-                    return (
-                      <div key={i} className="flex flex-col items-center justify-center h-full">
-                        {isMajor ? (
-                          <div className="flex flex-col items-center gap-1">
-                            <span className={`font-mono text-[8px] font-bold ${
-                              isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-700' : 'text-slate-350'
-                            }`}>
-                              {num}
-                            </span>
-                            <div className={`w-[1.5px] h-2 rounded-full ${
-                              isHacker ? 'bg-[#00ff41]/60' : isLight ? 'bg-slate-400' : 'bg-slate-600'
-                            }`} />
-                          </div>
-                        ) : (
-                          <div className={`w-[1px] h-1 rounded-full ${
-                            isHacker ? 'bg-[#00ff41]/25' : isLight ? 'bg-slate-300' : 'bg-slate-700/60'
-                          }`} />
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
                 {/* Sliding Glowing Pointer Indicator */}
-                <div className="absolute inset-x-4 top-0 bottom-0 pointer-events-none">
+                <div className="absolute inset-x-6 top-0 bottom-0 pointer-events-none">
                   <motion.div
                     className="absolute -top-[1px] -translate-x-1/2 flex flex-col items-center"
                     style={{
@@ -2795,6 +2732,11 @@ const Portfolio = () => {
                     {/* Glowing highlight pointer */}
                     <div className={`w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[6px] ${
                       isHacker ? 'border-t-[#00ff41] drop-shadow-[0_0_8px_#00ff41]' : isCreative ? 'border-t-[#0088ff] drop-shadow-[0_0_8px_#0088ff]' : isLight ? 'border-t-indigo-600' : 'border-t-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]'
+                    }`} />
+                    
+                    {/* Glowing highlight bar running down behind active tick */}
+                    <div className={`w-[2px] h-10 ${
+                      isHacker ? 'bg-gradient-to-b from-[#00ff41] to-transparent' : isCreative ? 'bg-gradient-to-b from-[#0088ff] to-transparent' : isLight ? 'bg-gradient-to-b from-indigo-600 to-transparent' : 'bg-gradient-to-b from-cyan-400 to-transparent'
                     }`} />
                   </motion.div>
                 </div>
