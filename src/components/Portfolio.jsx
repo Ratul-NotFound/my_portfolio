@@ -187,8 +187,11 @@ const ScrollHeading = ({ children, className }) => {
 const RulerTick = ({ index, total, progress, isHacker, isLight, isCreative }) => {
   const tickProgress = index / total;
   // A narrow window of influence (0.08) to make the focus feel sharp, magnetic, and tactile
-  const scaleY = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [1, 2.0, 1], { clamp: true });
-  const opacity = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [0.25, 1.0, 0.25], { clamp: true });
+  const scaleY = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [1, 2.4, 1], { clamp: true });
+  const scaleX = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [1, 1.5, 1], { clamp: true });
+  const opacity = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [0.2, 1.0, 0.2], { clamp: true });
+  const numScale = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [0.85, 1.25, 0.85], { clamp: true });
+  const numY = useTransform(progress, [tickProgress - 0.08, tickProgress, tickProgress + 0.08], [0, -3, 0], { clamp: true });
   
   const isMajor = index % 5 === 0;
   const num = isMajor ? `0${index / 5 + 1}` : null;
@@ -208,7 +211,7 @@ const RulerTick = ({ index, total, progress, isHacker, isLight, isCreative }) =>
       {isMajor ? (
         <div className="flex flex-col items-center gap-1 translate-y-[-2px]">
           <motion.span 
-            style={{ opacity }}
+            style={{ opacity, scale: numScale, y: numY }}
             className={`font-mono text-[9px] md:text-[10px] font-black transition-colors ${
               isHacker ? 'text-[#00ff41]' : isLight ? 'text-slate-800' : 'text-white'
             }`}
@@ -216,7 +219,7 @@ const RulerTick = ({ index, total, progress, isHacker, isLight, isCreative }) =>
             {num}
           </motion.span>
           <motion.div 
-            style={{ scaleY, opacity, backgroundColor: glowColor }}
+            style={{ scaleY, scaleX, opacity, backgroundColor: glowColor }}
             className={`w-[2px] h-3 rounded-full ${
               isHacker ? 'shadow-[0_0_6px_#00ff41]' : isCreative ? 'shadow-[0_0_6px_#ec4899]' : isLight ? 'shadow-[0_0_4px_rgba(79,70,229,0.3)]' : 'shadow-[0_0_6px_rgba(34,211,238,0.5)]'
             }`}
@@ -365,21 +368,21 @@ const ShufflingProjectWrapper = ({ children, index, total, progress, activeProje
     const cardRotate = useTransform(deckPosition, [-1, 0, 1], [xDir * 8, 0, 0]);
     const opacity = useTransform(deckPosition, [-1, 0, 1, 2, 3, 4], [0, 1.0, 0.75, 0.5, 0.25, 0.25]);
 
-    // Dynamic static computed Z-Index to avoid main-thread compositing thrashes
-    const activeIndex = activeProject - 1;
-    let computedZIndex = 10;
-    if (index === activeIndex) {
-        computedZIndex = 40; // Active top card
-    } else if (index < activeIndex) {
-        computedZIndex = 50; // Slide-out exit card stays on top of everything
-    } else {
-        computedZIndex = 30 - (index - activeIndex) * 5; // Stacked behind cards
-    }
+    // Synchronously compute z-index using Framer Motion callback transform to resolve main-thread state lags
+    const zIndex = useTransform(deckPosition, (value) => {
+        if (value < -0.5) {
+            return 50; // Slide-out exit card stays on top of everything
+        } else if (value >= -0.5 && value < 0.5) {
+            return 40; // Active top card
+        } else {
+            return Math.max(10, 30 - Math.floor(value) * 5); // Stacked behind cards
+        }
+    });
 
     return (
         <motion.div
             style={{
-                zIndex: computedZIndex,
+                zIndex,
                 x: cardX,
                 y: cardY,
                 z: cardZ,
@@ -2026,9 +2029,9 @@ const Portfolio = () => {
   );
 
   const snappyProjectsProgress = useSpring(projectsScrollProgress, {
-    stiffness: 280,
-    damping: 38,
-    mass: 0.25,
+    stiffness: 140,
+    damping: 28,
+    mass: 0.4,
     restDelta: 0.005
   });
 
