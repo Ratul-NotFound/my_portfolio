@@ -18,15 +18,15 @@
   }
 
   [data-theme='light'] {
-    --bg-main: 248, 250, 252;       /* Soft Slate 50 background `#f8fafc` */
+    --bg-main: 250, 250, 253;       /* Luxury Pearl Ivory-White `#fafafc` */
     --surface-1: 255, 255, 255;     /* Pure Stark White card surfaces `#ffffff` */
-    --surface-2: 241, 245, 249;     /* Slate 100 deep sections `#f1f5f9` */
-    --border: 226, 232, 240;        /* Sleek Slate 200 borders `#e2e8f0` */
+    --surface-2: 244, 246, 251;     /* Soft Luxury Lavender-tinted Grey */
+    --border: 226, 235, 246;        /* Elegant Blue-tinted Silver Border */
     --text-primary: 15, 23, 42;     /* High-contrast Slate 900 headers `#0f172a` */
-    --text-secondary: 71, 85, 105;  /* Slate 600 body copy `#475569` */
+    --text-secondary: 51, 65, 85;   /* Highly Readable Deep Slate 700 */
     --muted: 148, 163, 184;         /* Slate 400 helper text `#94a3b8` */
     --accent-cyan: 79, 70, 229;     /* Solid Royal Indigo accent `#4f46e5` */
-    --accent-purple: 124, 58, 237;   /* Solid Royal Violet accent `#7c3aed` */
+    --accent-purple: 147, 51, 234;   /* Deep Royal Purple `#9333ea` */
   }
 
   [data-theme='hacker'] {
@@ -2552,4 +2552,128 @@ body {
 
 .animate-wave {
   animation: wave 1.2s ease-in-out infinite;
+}
+
+/* ========================================================
+   LIGHT THEME ULTIMATE COLOR & CONTRAST UPGRADE OVERRIDES
+   ======================================================== */
+
+/* Luxury Pearlescent Page Background */
+[data-theme='light'] body {
+  background: linear-gradient(135deg, #f0f3fd 0%, #fcfcff 50%, #eefaf4 100%) !important;
+}
+
+/* Premium Frosted Glass Cards with Satin Shadows & Deep-Silver Borders */
+[data-theme='light'] .bg-slate-950,
+[data-theme='light'] .bg-slate-900,
+[data-theme='light'] .bg-slate-900\/98,
+[data-theme='light'] .bg-slate-900\/95,
+[data-theme='light'] .bg-slate-900\/90,
+[data-theme='light'] .bg-slate-900\/80,
+[data-theme='light'] .bg-slate-900\/50,
+[data-theme='light'] .bg-slate-900\/30,
+[data-theme='light'] .bg-slate-800,
+[data-theme='light'] .bg-slate-800\/50,
+[data-theme='light'] .bg-slate-800\/30,
+[data-theme='light'] .bg-slate-700,
+[data-theme='light'] .bg-slate-700\/50,
+[data-theme='light'] .rounded-2xl,
+[data-theme='light'] .rounded-3xl,
+[data-theme='light'] .rounded-xl {
+  background-color: rgba(255, 255, 255, 0.74) !important;
+  backdrop-filter: blur(28px) saturate(190%) brightness(1.02) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.02) !important;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.03), 
+              0 2px 8px rgba(15, 23, 42, 0.02),
+              inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(226, 235, 246, 0.8) !important;
+}
+
+/* Elegant Hover States with Indigo-tinted Glow Outline */
+[data-theme='light'] .hover\:bg-slate-800:hover,
+[data-theme='light'] .hover\:bg-slate-700:hover,
+[data-theme='light'] .hover\:scale-105:hover .rounded-2xl,
+[data-theme='light'] .hover\:scale-105:hover .rounded-3xl,
+[data-theme='light'] .group:hover .rounded-2xl,
+[data-theme='light'] .group:hover .rounded-3xl {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 20px 40px rgba(79, 70, 229, 0.06), 
+              0 4px 12px rgba(79, 70, 229, 0.02),
+              inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+  border-color: rgba(79, 70, 229, 0.3) !important;
+}
+
+/* Black translucent background cards */
+[data-theme='light'] .bg-black\/90 { background-color: rgba(15, 23, 42, 0.9) !important; }
+[data-theme='light'] .bg-black\/70 { background-color: rgba(30, 41, 59, 0.85) !important; }
+[data-theme='light'] .bg-black\/50 { background-color: rgba(51, 65, 85, 0.7) !important; }
+[data-theme='light'] .hover\:bg-black\/90:hover { background-color: rgba(15, 23, 42, 0.95) !important; }
+
+/* Crisp, Contrast-Rich Typography (Deep Slate and Charcoal) */
+[data-theme='light'] .text-white { color: #0f172a !important; }        /* Deep Slate 900 */
+[data-theme='light'] .text-slate-100 { color: #1e293b !important; }  /* Deep Slate 800 */
+[data-theme='light'] .text-slate-200 { color: #334155 !important; }  /* Deep Slate 700 */
+[data-theme='light'] .text-slate-300 { color: #475569 !important; }  /* Deep Slate 600 */
+[data-theme='light'] .text-slate-400 { color: #64748b !important; }  /* Slate 500 */
+[data-theme='light'] .text-slate-500 { color: #64748b !important; }
+[data-theme='light'] .text-slate-600 { color: #334155 !important; }
+[data-theme='light'] .text-slate-700 { color: #1e293b !important; }
+[data-theme='light'] .text-slate-800 { color: #0f172a !important; }
+
+/* Rich Accent Color Contrast Settings */
+[data-theme='light'] .text-cyan-400,
+[data-theme='light'] .text-cyan-350,
+[data-theme='light'] .text-cyan-300 {
+  color: #4f46e5 !important; /* Deep Royal Indigo */
+}
+[data-theme='light'] .text-purple-400,
+[data-theme='light'] .text-purple-500 {
+  color: #7c3aed !important; /* Deep Royal Purple */
+}
+[data-theme='light'] .text-pink-400,
+[data-theme='light'] .text-pink-500 {
+  color: #ec4899 !important; /* Deep Rose Pink */
+}
+
+/* Beautiful High-Contrast Gradient Bridge Overrides */
+[data-theme='light'] .from-cyan-400 {
+  --tw-gradient-from: #4f46e5 !important; /* Royal Indigo */
+  --tw-gradient-to: rgb(79 70 229 / 0) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme='light'] .via-purple-500 {
+  --tw-gradient-to: rgb(124 58 237 / 0) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #7c3aed, var(--tw-gradient-to) !important; /* Violet Secondary */
+}
+[data-theme='light'] .to-pink-500 {
+  --tw-gradient-to: #ec4899 !important; /* Rose Pink */
+}
+[data-theme='light'] .from-cyan-500 {
+  --tw-gradient-from: #0f62fe !important; /* Sapphire Blue Primary */
+  --tw-gradient-to: rgb(15 98 254 / 0) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme='light'] .to-purple-500 {
+  --tw-gradient-to: #6366f1 !important; /* Modern Royal Indigo */
+}
+[data-theme='light'] .from-pink-500 {
+  --tw-gradient-from: #d946ef !important; /* Magenta Fuchsia Primary */
+  --tw-gradient-to: rgb(217 70 239 / 0) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+[data-theme='light'] .via-red-500 {
+  --tw-gradient-to: rgb(239 68 68 / 0) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #ef4444, var(--tw-gradient-to) !important;
+}
+[data-theme='light'] .to-yellow-500 {
+  --tw-gradient-to: #ea580c !important; /* Deep Rich Orange */
+}
+
+/* Light Theme: Additional generic borders and cards styling */
+[data-theme='light'] .border-slate-800,
+[data-theme='light'] .border-slate-700 {
+  border-color: rgba(226, 235, 246, 0.7) !important;
+}
+[data-theme='light'] .border-slate-600 {
+  border-color: rgba(226, 235, 246, 0.85) !important;
 }
