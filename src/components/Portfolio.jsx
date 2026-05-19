@@ -185,7 +185,7 @@ const ScrollHeading = ({ children, className }) => {
 };
 
 const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }) => {
-  const clampedProgress = useTransform(progress, (p) => Math.min(1, Math.max(0, p)));
+  const clampedProgress = useTransform(progress, [0, 1], [0, 1], { clamp: true });
   const safeTotal = Math.max(1, total);
   // Wider stagger spread (0.38) for distinct one-by-one reveals, with a snappy duration (0.09)
   const start = 0.02 + (index / safeTotal) * 0.38;
@@ -224,9 +224,9 @@ const TechGrid = ({ skills, isHacker, isLight, isCreative }) => {
           index={i}
           total={skills.length}
           progress={smoothProgress}
-          className={`group/card relative p-6 backdrop-blur-xl border rounded-2xl transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isCreative ? 'bg-[#0a0a0a]/80 border-white/10 hover:border-[#0088ff]/40 hover:shadow-[#0088ff]/10 shadow-sm' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
+          className={`group/card relative p-6 border rounded-2xl transition-[border-color,box-shadow,background-color] duration-300 hover:scale-105 hover:shadow-2xl cursor-default overflow-hidden ${isHacker ? 'bg-[#000a02]/80 border-[#00ff41]/10 hover:border-[#00ff41]/40 hover:shadow-[0_0_15px_rgba(0,255,65,0.08)]' : isCreative ? 'bg-[#0a0a0a]/80 border-white/10 hover:border-[#0088ff]/40 hover:shadow-[#0088ff]/10 shadow-sm' : isLight ? 'bg-white/70 border-slate-200 hover:border-indigo-400 hover:shadow-indigo-200/50 shadow-sm' : 'bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 hover:shadow-cyan-500/10'}`}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-all duration-500"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-purple-500/0 group-hover/card:from-cyan-500/5 group-hover/card:to-purple-500/5 transition-[background-image] duration-300"></div>
 
           <div className="relative z-10 flex flex-col items-center gap-4">
             <div className="relative w-16 h-16 flex items-center justify-center">

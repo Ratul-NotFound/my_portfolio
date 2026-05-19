@@ -70,21 +70,21 @@ export default function LightweightParticles() {
               'rgba(0, 204, 50, 0.12)',  // Subdued Green
               'rgba(0, 102, 25, 0.08)'   // Ultra Dim Ambient Matrix Green
             ],
-            lineColor: 'rgba(0, 255, 65, 0.02)', // Extremely subtle links
+            lineColorPrefix: 'rgba(0, 255, 65, ',
             maxDistance: 85,
             densityDivider: 10000, // More dots, but very light weight!
           };
         case 'creative':
           return {
             particleColors: ['#0088ff', '#ec4899'],
-            lineColor: 'rgba(0, 136, 255, 0.05)',
+            lineColorPrefix: 'rgba(0, 136, 255, ',
             maxDistance: 95,
             densityDivider: 16000,
           };
         case 'light':
           return {
             particleColors: ['#4f46e5', '#6366f1', '#0f172a'],
-            lineColor: 'rgba(79, 70, 229, 0.04)',
+            lineColorPrefix: 'rgba(79, 70, 229, ',
             maxDistance: 80,
             densityDivider: 20000,
           };
@@ -92,7 +92,7 @@ export default function LightweightParticles() {
         default:
           return {
             particleColors: ['#06b6d4', '#8b5cf6', '#3b82f6'],
-            lineColor: 'rgba(6, 182, 212, 0.05)',
+            lineColorPrefix: 'rgba(6, 182, 212, ',
             maxDistance: 90,
             densityDivider: 32000,
           };
@@ -407,7 +407,7 @@ export default function LightweightParticles() {
             if (theme === 'creative') {
               ctx.strokeStyle = `rgba(0, 136, 255, ${alpha})`;
             } else {
-              ctx.strokeStyle = config.lineColor.replace(/[\d\.]+\)$/, `${alpha})`);
+              ctx.strokeStyle = `${config.lineColorPrefix}${alpha})`;
             }
             
             ctx.stroke();
@@ -431,7 +431,7 @@ export default function LightweightParticles() {
             if (theme === 'creative') {
               ctx.strokeStyle = `rgba(236, 72, 153, ${alpha})`;
             } else {
-              ctx.strokeStyle = config.lineColor.replace(/[\d\.]+\)$/, `${alpha})`);
+              ctx.strokeStyle = `${config.lineColorPrefix}${alpha})`;
             }
             ctx.stroke();
           }
