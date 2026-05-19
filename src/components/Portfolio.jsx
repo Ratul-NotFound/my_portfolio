@@ -462,6 +462,35 @@ function SectionTitleLine({ isHacker, isLight, isCreative }) {
   );
 }
 
+const CursorTracker = ({ avatarX, avatarY, themeColors, isHacker, isLight }) => {
+  const refX = useRef(null);
+  const refY = useRef(null);
+
+  useMotionValueEvent(avatarX, "change", (latest) => {
+    if (refX.current) refX.current.textContent = latest.toFixed(0);
+  });
+
+  useMotionValueEvent(avatarY, "change", (latest) => {
+    if (refY.current) refY.current.textContent = latest.toFixed(0);
+  });
+
+  return (
+    <motion.div
+      style={{
+        left: avatarX,
+        top: avatarY,
+        x: '20px',
+        y: '-20px',
+      }}
+      className={`absolute pointer-events-none z-20 font-mono text-[9px] px-1.5 py-0.5 rounded border backdrop-blur-sm ${
+        isHacker ? 'bg-black/80 border-[#00ff41]/35 text-[#00ff41]' : isLight ? 'bg-white/80 border-slate-200 text-indigo-650' : 'bg-slate-900/80 border-cyan-500/35 text-cyan-400'
+      }`}
+    >
+      X: <span ref={refX} className="font-bold">0</span> Y: <span ref={refY} className="font-bold">0</span>
+    </motion.div>
+  );
+};
+
 // ── HoloProfileCard (Interactive 3D Sci-Fi Profile) ──
 function HoloProfileCard({ isLight, isHacker, isCreative }) {
   const [activeTab, setActiveTab] = useState('avatar');
@@ -473,6 +502,31 @@ function HoloProfileCard({ isLight, isHacker, isCreative }) {
   
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 150, damping: 20 });
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 20 });
+
+  // Avatar-specific tracking motion values
+  const avatarX = useMotionValue(0);
+  const avatarY = useMotionValue(0);
+  const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
+
+  const handleAvatarMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    avatarX.set(e.clientX - rect.left);
+    avatarY.set(e.clientY - rect.top);
+  };
+
+  const imgX = useTransform(avatarX, (value) => {
+    if (!cardRef.current) return 0;
+    const rect = cardRef.current.querySelector('.cursor-crosshair')?.getBoundingClientRect();
+    if (!rect) return 0;
+    return ((value / rect.width) - 0.5) * 12;
+  });
+
+  const imgY = useTransform(avatarY, (value) => {
+    if (!cardRef.current) return 0;
+    const rect = cardRef.current.querySelector('.cursor-crosshair')?.getBoundingClientRect();
+    if (!rect) return 0;
+    return ((value / rect.height) - 0.5) * 12;
+  });
   
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -494,6 +548,7 @@ function HoloProfileCard({ isLight, isHacker, isCreative }) {
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
+    setIsHoveringAvatar(false);
   };
 
   const themeColors = {
@@ -595,13 +650,38 @@ function HoloProfileCard({ isLight, isHacker, isCreative }) {
           {activeTab === 'avatar' && (
             <motion.div
               key="avatar"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.4 }}
-              className="relative aspect-square lg:max-w-[380px] md:max-w-[320px] max-w-[260px] mx-auto w-full rounded-2xl overflow-hidden border-4"
+              initial={{ 
+                opacity: 0, 
+                scale: 0.88, 
+                rotateY: 45, 
+                filter: 'hue-rotate(90deg) brightness(1.6) blur(6.6px)' 
+              }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1, 
+                rotateY: 0, 
+                filter: 'hue-rotate(0deg) brightness(1.0) blur(0px)' 
+              }}
+              exit={{ 
+                opacity: 0, 
+                scale: 0.88, 
+                rotateY: -45, 
+                filter: 'hue-rotate(-90deg) brightness(1.6) blur(6.6px)' 
+              }}
+              transition={{ 
+                type: "spring", 
+                stiffness: 100, 
+                damping: 18, 
+                mass: 0.8 
+              }}
+              onMouseMove={handleAvatarMouseMove}
+              onMouseEnter={() => setIsHoveringAvatar(true)}
+              onMouseLeave={() => setIsHoveringAvatar(false)}
+              className="relative aspect-square lg:max-w-[380px] md:max-w-[320px] max-w-[260px] mx-auto w-full rounded-2xl overflow-hidden border-4 cursor-none"
               style={{
-                borderColor: isHacker ? 'rgba(0, 255, 65, 0.15)' : isCreative ? 'rgba(255, 255, 255, 0.08)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)'
+                borderColor: isHacker ? 'rgba(0, 255, 65, 0.15)' : isCreative ? 'rgba(255, 255, 255, 0.08)' : isLight ? '#e2e8f0' : 'rgba(255,255,255,0.06)',
+                perspective: '1000px',
+                transformStyle: 'preserve-3d'
               }}
             >
               {/* Spinning compass HUD overlays inside the image frame */}
@@ -619,15 +699,46 @@ function HoloProfileCard({ isLight, isHacker, isCreative }) {
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               />
 
-              <img
+              <motion.img
                 src="/profile.jpg"
                 alt="Mahmud Hasan Ratul"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
+                style={{ x: imgX, y: imgY }}
+                className="w-full h-full object-cover scale-105 pointer-events-none"
                 onError={(e) => {
                   e.target.src = "/profile.jpg";
                 }}
               />
-              <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]/80' : isCreative ? 'from-[#030303]/80' : isLight ? 'from-white/70' : 'from-[#0d1323]/80'} via-transparent to-transparent opacity-60`} />
+              <div className={`absolute inset-0 bg-gradient-to-t ${isHacker ? 'from-[#000600]/80' : isCreative ? 'from-[#030303]/80' : isLight ? 'from-white/70' : 'from-[#0d1323]/80'} via-transparent to-transparent opacity-60 pointer-events-none`} />
+
+              {/* Interactive Target Reticle Tracker Overlay */}
+              {isHoveringAvatar && (
+                <>
+                  {/* Target brackets wrapping the cursor */}
+                  <motion.div
+                    style={{
+                      left: avatarX,
+                      top: avatarY,
+                      x: '-50%',
+                      y: '-50%',
+                    }}
+                    className="absolute pointer-events-none z-20 w-12 h-12 flex items-center justify-center"
+                  >
+                    <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2" style={{ borderColor: themeColors.accent }} />
+                    <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2" style={{ borderColor: themeColors.accent }} />
+                    <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2" style={{ borderColor: themeColors.accent }} />
+                    <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: themeColors.accent }} />
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: themeColors.accent }} />
+                  </motion.div>
+
+                  <CursorTracker 
+                    avatarX={avatarX} 
+                    avatarY={avatarY} 
+                    themeColors={themeColors} 
+                    isHacker={isHacker} 
+                    isLight={isLight} 
+                  />
+                </>
+              )}
             </motion.div>
           )}
 
