@@ -393,7 +393,7 @@ const ShufflingProjectWrapper = ({ children, index, total, progress, activeProje
                 backfaceVisibility: 'hidden',
                 willChange: 'transform, opacity'
             }}
-            className="absolute inset-0 m-auto h-[390px] max-h-[70vh] w-[94vw] md:w-[850px]"
+            className="absolute inset-0 m-auto h-[310px] sm:h-[390px] max-h-[70vh] w-[94vw] md:w-[850px]"
         >
             {children}
         </motion.div>
@@ -1617,13 +1617,32 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
       <div className="relative w-full h-[110px] flex items-center justify-center overflow-hidden">
         {/* Left Hand (Ratul's Hand) */}
         <motion.div
-          animate={{
-            x: isConnected ? -8 : -50,
-            opacity: isConnected ? 1 : 0.5,
-            scale: isConnected ? 1.05 : 0.95,
-            rotate: isConnected ? 0 : 20
-          }}
-          transition={{ type: "spring", stiffness: 180, damping: 20 }}
+          animate={
+            isConnected
+              ? {
+                  x: 32,
+                  y: [0, -4, 4, -4, 4, 0],
+                  opacity: 1,
+                  scale: 1.05,
+                  rotate: [0, -4, 4, -4, 4, 0]
+                }
+              : {
+                  x: -50,
+                  y: 0,
+                  opacity: 0.5,
+                  scale: 0.95,
+                  rotate: 20
+                }
+          }
+          transition={
+            isConnected
+              ? {
+                  x: { type: "spring", stiffness: 180, damping: 20 },
+                  y: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
+                  rotate: { repeat: Infinity, duration: 0.7, ease: "easeInOut" }
+                }
+              : { type: "spring", stiffness: 180, damping: 20 }
+          }
           className={`absolute flex items-center gap-1 ${
             isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#0088ff]' : isLight ? 'text-indigo-600' : 'text-cyan-400'
           }`}
@@ -1634,13 +1653,32 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
 
         {/* Right Hand (Visitor's Hand) */}
         <motion.div
-          animate={{
-            x: isConnected ? 8 : 50,
-            opacity: isConnected ? 1 : 0.5,
-            scale: isConnected ? 1.05 : 0.95,
-            rotate: isConnected ? 0 : -20
-          }}
-          transition={{ type: "spring", stiffness: 180, damping: 20 }}
+          animate={
+            isConnected
+              ? {
+                  x: -32,
+                  y: [0, -4, 4, -4, 4, 0],
+                  opacity: 1,
+                  scale: 1.05,
+                  rotate: [0, 4, -4, 4, -4, 0]
+                }
+              : {
+                  x: 50,
+                  y: 0,
+                  opacity: 0.5,
+                  scale: 0.95,
+                  rotate: -20
+                }
+          }
+          transition={
+            isConnected
+              ? {
+                  x: { type: "spring", stiffness: 180, damping: 20 },
+                  y: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
+                  rotate: { repeat: Infinity, duration: 0.7, ease: "easeInOut" }
+                }
+              : { type: "spring", stiffness: 180, damping: 20 }
+          }
           className={`absolute flex items-center gap-1 ${
             isHacker ? 'text-[#00ff41]' : isCreative ? 'text-[#00d8b4]' : isLight ? 'text-purple-600' : 'text-purple-400'
           }`}
@@ -2535,7 +2573,7 @@ const Portfolio = () => {
 
         {/* Projects Section */}
         <section id="projects" ref={projectsRef} className="relative bg-transparent" style={{ height: `${projects.length * 100 + 100}vh` }}>
-          <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden py-4 md:py-8 z-10">
+          <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center py-4 md:py-8 z-10 overflow-x-hidden">
             <div className="text-center mb-2 md:mb-4 shrink-0 pointer-events-none">
               <SectionBadge icon={Rocket} label="Case Studies" isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
               <SectionTitleLine isHacker={isHacker} isLight={isLight} isCreative={isCreative} />
@@ -2552,7 +2590,7 @@ const Portfolio = () => {
             </div>
 
             <div 
-              className="relative w-full h-[400px] md:h-[450px] flex items-center justify-center shrink-0"
+              className="relative w-full h-[320px] sm:h-[400px] md:h-[450px] flex items-center justify-center shrink-0"
               style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
             >
               {projects.map((project, index) => {
@@ -2762,7 +2800,7 @@ const Portfolio = () => {
             </div>
 
             {/* Horizontal Measuring Scale (under the cards) */}
-            <div className="pb-4 w-full max-w-xs sm:max-w-md px-6 shrink-0 z-50 pointer-events-none mt-8 md:mt-12">
+            <div className="pb-4 w-full max-w-xs sm:max-w-md px-6 shrink-0 z-50 pointer-events-none mt-4 md:mt-12">
               <div className={`relative h-16 rounded-2xl flex items-center justify-between px-6 border backdrop-blur-md shadow-2xl overflow-hidden ${
                 isHacker ? 'bg-black/60 border-[#00ff41]/20' : isCreative ? 'bg-[#0a0a0a]/80 border-white/10' : isLight ? 'bg-slate-50/80 border-slate-200' : 'bg-slate-900/60 border-slate-800'
               }`}>
