@@ -272,7 +272,7 @@ const ShufflingProjectWrapper = ({ children, index, total, progress, activeProje
     const xDir = index % 2 === 0 ? -1 : 1;
 
     // Clamp the scroll progress between 0 and 1 to prevent spring overshoot from sliding out the last card
-    const clampedProgress = useTransform(progress, p => Math.min(1.0, Math.max(0.0, p)));
+    const clampedProgress = useTransform(progress, [0, 1], [0, 1], { clamp: true });
 
     const startVal = index;
     const endVal = index - (total - 1);
@@ -284,54 +284,16 @@ const ShufflingProjectWrapper = ({ children, index, total, progress, activeProje
         [startVal, endVal, endVal]
     );
 
-    // GPU-accelerated individual transformations to run on the compositor thread
-    const cardScale = useTransform(deckPosition, (pos) => {
-        if (pos >= 0) {
-            return 1.0 - Math.min(3, pos) * 0.04;
-        }
-        return 1.0;
-    });
+    // GPU-accelerated declarative transforms compiled directly by Framer Motion for compositor efficiency
+    const cardScale = useTransform(deckPosition, [-1, 0, 1, 2, 3, 4], [1.0, 1.0, 0.96, 0.92, 0.88, 0.88]);
+    const cardY = useTransform(deckPosition, [-1, 0, 1, 2, 3, 4], [0, 0, 12, 24, 36, 36]);
+    const cardZ = useTransform(deckPosition, [-1, 0, 1, 2, 3, 4], [10, 0, -20, -40, -60, -60]);
 
-    const cardY = useTransform(deckPosition, (pos) => {
-        if (pos >= 0) {
-            return Math.min(3, pos) * 12;
-        }
-        return 0;
-    });
-
-    const cardZ = useTransform(deckPosition, (pos) => {
-        if (pos >= 0) {
-            return Math.min(3, pos) * -20;
-        }
-        return 10;
-    });
-
-    const cardXRaw = useTransform(deckPosition, (pos) => {
-        if (pos >= 0) {
-            return 0;
-        }
-        const exitP = Math.min(1.0, Math.abs(pos));
-        return xDir * exitP * 100;
-    });
+    const cardXRaw = useTransform(deckPosition, [-1, 0, 1], [xDir * 100, 0, 0]);
     const cardX = useTransform(cardXRaw, x => `${x}vw`);
 
-    const cardRotate = useTransform(deckPosition, (pos) => {
-        if (pos >= 0) {
-            return 0;
-        }
-        const exitP = Math.min(1.0, Math.abs(pos));
-        return xDir * exitP * 8;
-    });
-
-    // Opacity: cards at the back are partially transparent, top card is fully opaque, exited card is hidden
-    const opacity = useTransform(deckPosition, (pos) => {
-        if (pos >= 0) {
-            return 1.0 - Math.min(3, pos) * 0.25;
-        } else {
-            const exitP = Math.abs(pos);
-            return Math.max(0, 1.0 - exitP);
-        }
-    });
+    const cardRotate = useTransform(deckPosition, [-1, 0, 1], [xDir * 8, 0, 0]);
+    const opacity = useTransform(deckPosition, [-1, 0, 1, 2, 3, 4], [0, 1.0, 0.75, 0.5, 0.25, 0.25]);
 
     // Dynamic static computed Z-Index to avoid main-thread compositing thrashes
     const activeIndex = activeProject - 1;
@@ -2534,7 +2496,7 @@ const Portfolio = () => {
                     <motion.div 
                       whileHover={{ y: -8, scale: 1.015 }}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                      className={`group relative backdrop-blur-xl border rounded-3xl overflow-hidden transition-[border-color,box-shadow] duration-300 hover:shadow-2xl w-full h-full ${isHacker ? 'border-[#00ff41]/20 hover:border-[#00ff41]/60' : isLight ? 'border-slate-200 shadow-xl' : 'border-slate-700 shadow-cyan-500/10'}`}
+                      className={`group relative border rounded-3xl overflow-hidden transition-[border-color,box-shadow] duration-300 hover:shadow-2xl w-full h-full ${isHacker ? 'border-[#00ff41]/20 hover:border-[#00ff41]/60' : isLight ? 'border-slate-200 shadow-xl' : 'border-slate-700 shadow-cyan-500/10'}`}
                       style={{ backgroundColor: isHacker ? "#000a02" : isLight ? "#ffffff" : "#0f172a" }}
                     >
                       {isVisible ? (
