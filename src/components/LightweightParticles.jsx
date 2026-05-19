@@ -307,9 +307,9 @@ export default function LightweightParticles() {
       const isMobile = window.innerWidth < 768 || (window.matchMedia('(pointer: coarse)').matches);
       
       // Rich and dense but highly optimized particles layout: 
-      // Desktop: max 85 particles (beautiful developer cosmos constellation)
-      // Mobile: max 35 particles (lag-free on all phones)
-      const maxCount = isMobile ? 35 : 85;
+      // Desktop: max 65 particles (beautiful developer cosmos constellation)
+      // Mobile: max 25 particles (lag-free on all phones)
+      const maxCount = isMobile ? 25 : 65;
       const divider = isMobile ? config.densityDivider * 1.1 : config.densityDivider * 0.6;
       const count = Math.min(Math.floor(area / divider), maxCount); 
       
@@ -338,11 +338,8 @@ export default function LightweightParticles() {
     };
 
     const resizeCanvas = () => {
-      const parent = canvas.parentElement;
-      if (!parent) return;
-      
-      canvas.width = parent.clientWidth || window.innerWidth;
-      canvas.height = parent.clientHeight || window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
       
       initParticles();
     };
@@ -455,7 +452,7 @@ export default function LightweightParticles() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-1000"
+      className="fixed inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-1000"
       style={{ opacity: 0.85 }}
     />
   );

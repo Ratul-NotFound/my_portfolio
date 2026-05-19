@@ -108,7 +108,7 @@ const ScrollAnimatedCard = ({ children, className, index = 0 }) => {
   return (
     <motion.div
       ref={ref}
-      style={{ scale, opacity, y }}
+      style={{ scale, opacity, y, willChange: 'transform, opacity' }}
       className={className}
     >
       {children}
@@ -152,7 +152,7 @@ const ScrollProjectCard = ({ children, className, onMouseEnter, onMouseLeave, on
       onMouseLeave={onMouseLeave}
       onMouseMove={onMouseMove}
       animate={animate}
-      style={{ ...style, scale, opacity, y }}
+      style={{ ...style, scale, opacity, y, willChange: 'transform, opacity' }}
       className={className}
     >
       {children}
@@ -176,7 +176,7 @@ const ScrollHeading = ({ children, className }) => {
   return (
     <motion.h2
       ref={ref}
-      style={{ y, opacity, rotateX, transformOrigin: 'bottom center', transformStyle: 'preserve-3d' }}
+      style={{ y, opacity, rotateX, transformOrigin: 'bottom center', transformStyle: 'preserve-3d', willChange: 'transform, opacity' }}
       className={className}
     >
       {children}
@@ -268,7 +268,7 @@ const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }
 
   return (
     <motion.div
-      style={{ scale, opacity, x, y, z, rotateX, rotateY, rotateZ }}
+      style={{ scale, opacity, x, y, z, rotateX, rotateY, rotateZ, willChange: 'transform, opacity' }}
       className={className}
     >
       {children}
@@ -1749,8 +1749,8 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
             isConnected
               ? {
                   x: { type: "spring", stiffness: 180, damping: 20 },
-                  y: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
-                  rotate: { repeat: Infinity, duration: 0.7, ease: "easeInOut" }
+                  y: { repeat: 2, duration: 0.7, ease: "easeInOut" },
+                  rotate: { repeat: 2, duration: 0.7, ease: "easeInOut" }
                 }
               : { type: "spring", stiffness: 180, damping: 20 }
           }
@@ -1785,8 +1785,8 @@ const HandshakeConnector = ({ isHacker, isLight, isCreative }) => {
             isConnected
               ? {
                   x: { type: "spring", stiffness: 180, damping: 20 },
-                  y: { repeat: Infinity, duration: 0.7, ease: "easeInOut" },
-                  rotate: { repeat: Infinity, duration: 0.7, ease: "easeInOut" }
+                  y: { repeat: 2, duration: 0.7, ease: "easeInOut" },
+                  rotate: { repeat: 2, duration: 0.7, ease: "easeInOut" }
                 }
               : { type: "spring", stiffness: 180, damping: 20 }
           }
