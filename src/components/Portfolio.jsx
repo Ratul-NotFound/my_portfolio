@@ -187,15 +187,34 @@ const ScrollHeading = ({ children, className }) => {
 const ScrollSkillCard = ({ children, className, index = 0, total = 1, progress }) => {
   const clampedProgress = useTransform(progress, [0, 1], [0, 1], { clamp: true });
   const safeTotal = Math.max(1, total);
-  // Wider stagger spread (0.38) for distinct one-by-one reveals, with a snappy duration (0.09)
-  const start = 0.02 + (index / safeTotal) * 0.38;
-  const end = Math.min(1, start + 0.09);
+  
+  // Directions of entry depending on index to create a "flying in from different parts of the screen" effect
+  const directions = [
+    { x: -350, y: -250, r: -15, s: 0.8 },  // Top-Left
+    { x: 350,  y: -250, r: 15,  s: 0.8 },  // Top-Right
+    { x: -350, y: 250,  r: -20, s: 0.8 },  // Bottom-Left
+    { x: 350,  y: 250,  r: 20,  s: 0.8 },  // Bottom-Right
+    { x: -400, y: -50,  r: -10, s: 0.85 }, // Left-Slight-Top
+    { x: 400,  y: -50,  r: 10,  s: 0.85 }, // Right-Slight-Top
+    { x: -150, y: -350, r: -12, s: 0.8 },  // Top-Slight-Left
+    { x: 150,  y: -350, r: 12,  s: 0.8 },  // Top-Slight-Right
+    { x: -200, y: 350,  r: -8,  s: 0.85 }, // Bottom-Slight-Left
+    { x: 200,  y: 350,  r: 8,   s: 0.85 }, // Bottom-Slight-Right
+    { x: -450, y: 100,  r: -25, s: 0.75 }, // Far-Left-Bottom
+    { x: 450,  y: 100,  r: 25,  s: 0.75 }  // Far-Right-Bottom
+  ];
 
-  const scale = useTransform(clampedProgress, [start, end], [0.94, 1]);
-  const opacity = useTransform(clampedProgress, [start, end], [0.05, 1]);
-  const y = useTransform(clampedProgress, [start, end], [30, 0]);
-  const x = useTransform(clampedProgress, [start, end], [-25, 0]);
-  const rotateZ = useTransform(clampedProgress, [start, end], [-0.8, 0]);
+  const dir = directions[index % directions.length];
+
+  // Wide staggered scroll window to ensure they arrive gradually and settle perfectly in order
+  const start = (index / safeTotal) * 0.45;
+  const end = Math.min(1.0, start + 0.50);
+
+  const scale = useTransform(clampedProgress, [start, end], [dir.s, 1]);
+  const opacity = useTransform(clampedProgress, [start, end], [0.0, 1]);
+  const y = useTransform(clampedProgress, [start, end], [dir.y, 0]);
+  const x = useTransform(clampedProgress, [start, end], [dir.x, 0]);
+  const rotateZ = useTransform(clampedProgress, [start, end], [dir.r, 0]);
 
   return (
     <motion.div
