@@ -42,7 +42,7 @@ export default function Footer() {
   const socialLinks = [
     { icon: Github, href: 'https://github.com/ratul-notfound', label: 'GitHub', color: isHacker ? 'hover:text-[#00ff41]' : isCreative ? 'hover:text-[#0088ff]' : isLight ? 'hover:text-slate-900' : 'hover:text-white' },
     { icon: Linkedin, href: 'https://linkedin.com/in/mahmud-hasan-ratul', label: 'LinkedIn', color: isHacker ? 'hover:text-[#00ff41]' : isCreative ? 'hover:text-[#ec4899]' : isLight ? 'hover:text-blue-600' : 'hover:text-blue-400' },
-    { icon: Mail, href: 'mailto:m.h.ratul18@gmail.com', label: 'Email', color: isHacker ? 'hover:text-[#00ff41]' : isCreative ? 'hover:text-[#0088ff]' : isLight ? 'hover:text-indigo-600' : 'hover:text-cyan-400' }
+    { icon: Mail, href: 'mailto:mhratul.dev@gmail.com', label: 'Email', color: isHacker ? 'hover:text-[#00ff41]' : isCreative ? 'hover:text-[#0088ff]' : isLight ? 'hover:text-indigo-600' : 'hover:text-cyan-400' }
   ];
 
   const containerVariants = {
